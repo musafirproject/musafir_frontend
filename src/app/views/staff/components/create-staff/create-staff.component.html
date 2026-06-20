@@ -1,0 +1,648 @@
+<div class="card">
+  <div class="card-body">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a cu class="nav-link" [ngClass]="{'active': currentTab === 'profile', 'cursor-pointer': true}"
+          (click)="selectTab('profile')">{{'UC.profile' | translate}}</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'permanentAddress' , 'cursor-pointer': true}"
+          (click)="selectTab('permanentAddress')">{{'UC.permanent_address' | translate}}</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'currentAddress' , 'cursor-pointer': true}"
+          (click)="selectTab('currentAddress')">{{'UC.current_address' | translate}}</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'documents' , 'cursor-pointer': true}"
+          (click)="selectTab('documents')">{{'UC.documents' | translate}}</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content mt-3">
+
+      <!-- Profile Tab -->
+      <div *ngIf="currentTab === 'profile'" class="tab-pane fade show active">
+        <div class="mb-3 d-flex justify-content-between">
+          <h4 class="text-muted">{{'UC.complete_staff_profile' | translate}}</h4>
+        </div>
+
+        <br>
+
+        <form [formGroup]="staffForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-4">
+              <label class="form-label">{{'UC.hotel' | translate}}</label>
+              <ng-select class="mt-2" [items]="hotels" bindLabel="title" bindValue="id" formControlName="hotel"
+                [(ngModel)]="selectedhotel" [ngClass]="{
+                  'is-invalid': staffForm.get('hotel')?.invalid
+                                && (staffForm.get('hotel')?.touched
+                                    || staffForm.get('hotel')?.dirty)
+                }">
+              </ng-select>
+              <div class="text-danger small mt-1" *ngIf="staffForm.get('hotel')?.errors
+                       && (staffForm.get('hotel')?.touched
+                           || staffForm.get('hotel')?.dirty)">
+                <span *ngIf="staffForm.get('hotel')?.hasError('required')">
+                  {{ 'UC.hotel_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{'UC.gender' | translate}}</label>
+              <select class="form-select" [(ngModel)]="selectedGender" required formControlName="gender" [ngClass]="{
+                  'is-invalid': staffForm.get('gender')?.invalid
+                                && (staffForm.get('gender')?.touched
+                                    || staffForm.get('gender')?.dirty)
+                }">
+                <option value="" disabled>{{'GC.gender' | translate}}</option>
+                <option *ngFor="let gender of genders" [value]="gender.value">
+                  {{ currentLang == 'en_US'
+                  ? gender.label
+                  : currentLang == 'ps_AF'
+                  ? gender.ps
+                  : gender.dr }}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="staffForm.get('gender')?.errors
+                       && (staffForm.get('gender')?.touched
+                           || staffForm.get('gender')?.dirty)">
+                <span *ngIf="staffForm.get('gender')?.hasError('required')">
+                  {{ 'UC.gender_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Staff Type -->
+            <div class="col-md-4">
+              <label class="form-label">{{'UC.staff_type' | translate}}</label>
+              <select class="form-select" [(ngModel)]="selectedStaffType" required formControlName="staff_type"
+                [ngClass]="{
+                  'is-invalid': staffForm.get('staff_type')?.invalid
+                                && (staffForm.get('staff_type')?.touched
+                                    || staffForm.get('staff_type')?.dirty)
+                }">
+                <option value="" disabled>{{'UC.staff_type' | translate}}</option>
+                <option *ngFor="let type of staffTypes" [value]="type.value">
+                  {{ currentLang == 'en_US'
+                  ? type.label
+                  : currentLang == 'ps_AF'
+                  ? type.ps
+                  : type.dr }}
+                </option>
+              </select>
+              <div class="invalid-feedback" *ngIf="staffForm.get('staff_type')?.errors
+                       && (staffForm.get('staff_type')?.touched
+                           || staffForm.get('staff_type')?.dirty)">
+                <span *ngIf="staffForm.get('staff_type')?.hasError('required')">
+                  {{ 'UC.staff_type_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- First / Last Name -->
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.first_name' | translate}}</label>
+              <input type="text" class="form-control" formControlName="first_name"
+                placeholder="{{'UC.first_name' | translate}}" [ngClass]="{
+                  'is-invalid': staffForm.get('first_name')?.invalid
+                                && (staffForm.get('first_name')?.touched
+                                    || staffForm.get('first_name')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('first_name')?.errors
+                       && (staffForm.get('first_name')?.touched
+                           || staffForm.get('first_name')?.dirty)">
+                <span *ngIf="staffForm.get('first_name')?.hasError('required')">
+                  {{ 'UC.first_name_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.last_name' | translate}}</label>
+              <input type="text" class="form-control" formControlName="last_name"
+                placeholder="{{'UC.last_name' | translate}}" [ngClass]="{
+                  'is-invalid': staffForm.get('last_name')?.invalid
+                                && (staffForm.get('last_name')?.touched
+                                    || staffForm.get('last_name')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('last_name')?.errors
+                       && (staffForm.get('last_name')?.touched
+                           || staffForm.get('last_name')?.dirty)">
+                <span *ngIf="staffForm.get('last_name')?.hasError('required')">
+                  {{ 'UC.last_name_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Father / Grandfather Name (only for NATIONAL) -->
+          <div class="form-group row mb-3" *ngIf="staffForm.get('staff_type')?.value === 'NATIONAL'">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.father_name' | translate}}</label>
+              <input type="text" class="form-control" formControlName="father_name"
+                placeholder="{{'UC.father_name' | translate}}" [ngClass]="{
+                  'is-invalid': staffForm.get('father_name')?.invalid
+                                && (staffForm.get('father_name')?.touched
+                                    || staffForm.get('father_name')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('father_name')?.errors
+                       && (staffForm.get('father_name')?.touched
+                           || staffForm.get('father_name')?.dirty)">
+                <span *ngIf="staffForm.get('father_name')?.hasError('required')">
+                  {{ 'UC.father_name_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.grand_father_name' | translate}}</label>
+              <input type="text" class="form-control" formControlName="grand_father_name"
+                placeholder="{{'UC.grand_father_name' | translate}}" [ngClass]="{
+                  'is-invalid': staffForm.get('grand_father_name')?.invalid
+                                && (staffForm.get('grand_father_name')?.touched
+                                    || staffForm.get('grand_father_name')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('grand_father_name')?.errors
+                       && (staffForm.get('grand_father_name')?.touched
+                           || staffForm.get('grand_father_name')?.dirty)">
+                <span *ngIf="staffForm.get('grand_father_name')?.hasError('required')">
+                  {{ 'UC.grand_father_name_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Email / Phone -->
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.email' | translate}}</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="{{'UC.email' | translate}}"
+                [ngClass]="{
+                  'is-invalid': staffForm.get('email')?.invalid
+                                && (staffForm.get('email')?.touched
+                                    || staffForm.get('email')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('email')?.errors
+                       && (staffForm.get('email')?.touched
+                           || staffForm.get('email')?.dirty)">
+                <span *ngIf="staffForm.get('email')?.hasError('required')">
+                  {{ 'UC.email_required' | translate }}
+                </span>
+                <span *ngIf="staffForm.get('email')?.hasError('email')">
+                  {{ 'UC.invalid_email' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.phone' | translate}}</label>
+              <input type="tel" class="form-control" formControlName="phone" placeholder="+93 700 00 0000"
+                inputmode="tel" autocomplete="tel" maxlength="15" (focus)="prefillAfCode()"
+                (input)="onPhoneInput($event)" [ngClass]="{
+                  'is-invalid': staffForm.get('phone')?.invalid
+                                && (staffForm.get('phone')?.touched
+                                    || staffForm.get('phone')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('phone')?.errors
+                       && (staffForm.get('phone')?.touched
+                           || staffForm.get('phone')?.dirty)">
+                <span *ngIf="staffForm.get('phone')?.hasError('required')">
+                  {{ 'UC.phone_required' | translate }}
+                </span>
+                <span *ngIf="staffForm.get('phone')?.hasError('pattern')">
+                  {{ 'UC.invalid_phone' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- NID (only NATIONAL) -->
+          <div class="form-group row mb-3" *ngIf="staffForm.get('staff_type')?.value === 'NATIONAL'">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.nid' | translate}}</label>
+              <input type="text" class="form-control" formControlName="tazkira" placeholder="0000-0000-00000"
+                (input)="onTazkiraInput($event)" inputmode="numeric" autocomplete="off" maxlength="17" [ngClass]="{
+                  'is-invalid': staffForm.get('tazkira')?.invalid
+                                && (staffForm.get('tazkira')?.touched
+                                    || staffForm.get('tazkira')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('tazkira')?.errors
+                       && (staffForm.get('tazkira')?.touched
+                           || staffForm.get('tazkira')?.dirty)">
+                <span *ngIf="staffForm.get('tazkira')?.hasError('required')">
+                  {{ 'UC.nid_required' | translate }}
+                </span>
+                <span *ngIf="staffForm.get('tazkira')?.hasError('pattern')">
+                  {{ 'UC.invalid_nid' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Passport / Visa fields (only INTERNATIONAL) -->
+          <div class="form-group row mb-3" *ngIf="staffForm.get('staff_type')?.value === 'INTERNATIONAL'">
+            <div class="col-md-4">
+              <label class="form-label">{{ 'UC.passport_no' | translate }}</label>
+              <input type="text" class="form-control" formControlName="passport_no"
+                placeholder="{{ 'UC.passport_no' | translate }}" [ngClass]="{
+                  'is-invalid': staffForm.get('passport_no')?.invalid
+                                && (staffForm.get('passport_no')?.touched
+                                    || staffForm.get('passport_no')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('passport_no')?.errors
+                       && (staffForm.get('passport_no')?.touched
+                           || staffForm.get('passport_no')?.dirty)">
+                <span *ngIf="staffForm.get('passport_no')?.hasError('required')">
+                  {{ 'UC.passport_no_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ 'UC.visa_no' | translate }}</label>
+              <input type="text" class="form-control" formControlName="visa_no"
+                placeholder="{{ 'UC.visa_no' | translate }}" [ngClass]="{
+                  'is-invalid': staffForm.get('visa_no')?.invalid
+                                && (staffForm.get('visa_no')?.touched
+                                    || staffForm.get('visa_no')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('visa_no')?.errors
+                       && (staffForm.get('visa_no')?.touched
+                           || staffForm.get('visa_no')?.dirty)">
+                <span *ngIf="staffForm.get('visa_no')?.hasError('required')">
+                  {{ 'UC.visa_no_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">{{ 'UC.visa_expiration_date' | translate }}</label>
+                 <input type="text" class="form-control" placeholder="{{'UC.visa_expiration_date' | translate}}"
+                formControlName="visa_expiration_date" bsDatepicker [ngClass]="{
+                  'is-invalid': staffForm.get('visa_expiration_date')?.invalid
+                                && (staffForm.get('visa_expiration_date')?.touched
+                                    || staffForm.get('visa_expiration_date')?.dirty)
+                }">
+              <div class="invalid-feedback" *ngIf="staffForm.get('visa_expiration_date')?.errors
+                       && (staffForm.get('visa_expiration_date')?.touched
+                           || staffForm.get('visa_expiration_date')?.dirty)">
+                <span *ngIf="staffForm.get('visa_expiration_date')?.hasError('required')">
+                  {{ 'UC.visa_expiration_date_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Position (always shown) -->
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.occupation' | translate}}</label>
+              <input type="text" class="form-control" formControlName="position"
+                placeholder="{{'UC.occupation' | translate}}" [ngClass]="{
+                  'is-invalid': staffForm.get('position')?.invalid
+                                && (staffForm.get('position')?.touched
+                                    || staffForm.get('position')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="staffForm.get('position')?.errors
+                       && (staffForm.get('position')?.touched
+                           || staffForm.get('position')?.dirty)">
+                <span *ngIf="staffForm.get('position')?.hasError('required')">
+                  {{ 'UC.position_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Image Upload + Preview + Loader -->
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.profile_image' | translate}}</label>
+              <input
+                type="file"
+                accept="image/*"
+                class="form-control"
+                (change)="onProfileImageSelected($event)"
+              />
+
+              <!-- Uploading spinner -->
+              <div *ngIf="isUploadingProfileImage" class="mt-2 d-flex align-items-center text-muted">
+                <div class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></div>
+                <small>{{ 'UC.image_uploading' | translate }}</small>
+              </div>
+
+              <!-- Success message -->
+              <div
+                *ngIf="profileImageUploadSuccess && !isUploadingProfileImage"
+                class="mt-2 text-success d-flex align-items-center"
+              >
+                <i class="feather icon-check-circle me-1"></i>
+                <small>{{ 'UC.image_uploaded' | translate }}</small>
+              </div>
+
+              <!-- Error message -->
+              <div *ngIf="profileImageUploadError && !isUploadingProfileImage" class="mt-2 text-danger">
+                <small>{{ profileImageUploadError }}</small>
+              </div>
+            </div>
+
+            <div class="col-md-6" *ngIf="profileImagePreview">
+              <label class="form-label">{{'UC.preview' | translate}}</label>
+              <div class="mt-2">
+                <img
+                  [src]="profileImagePreview"
+                  alt="Profile image preview"
+                  class="img-thumbnail"
+                  style="max-height: 150px;"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div *ngIf="profile" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">
+              {{'UC.save' | translate}}
+            </button>
+            <button class="btn btn-outline-danger" (click)="close()">
+              {{'UC.close' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Permanent Address Tab -->
+      <div *ngIf="currentTab == 'permanentAddress'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'UC.permanent_address_details' | translate}}</h4>
+        <br>
+
+        <form [formGroup]="permanentAddressForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.city' | translate}}</label>
+              <ng-select class="mt-2" [items]="cities" bindLabel="province" bindValue="id" formControlName="city"
+                [ngClass]="{
+                  'is-invalid': permanentAddressForm.get('city')?.invalid
+                                && (permanentAddressForm.get('city')?.touched
+                                    || permanentAddressForm.get('city')?.dirty)
+                }">
+              </ng-select>
+              <div class="text-danger small mt-1" *ngIf="permanentAddressForm.get('city')?.errors
+                       && (permanentAddressForm.get('city')?.touched
+                           || permanentAddressForm.get('city')?.dirty)">
+                <span *ngIf="permanentAddressForm.get('city')?.hasError('required')">
+                  {{ 'UC.city_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.district' | translate}}</label>
+              <input type="text" class="form-control" formControlName="district"
+                placeholder="{{'UC.district' | translate}}" [ngClass]="{
+                  'is-invalid': permanentAddressForm.get('district')?.invalid
+                                && (permanentAddressForm.get('district')?.touched
+                                    || permanentAddressForm.get('district')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="permanentAddressForm.get('district')?.errors
+                       && (permanentAddressForm.get('district')?.touched
+                           || permanentAddressForm.get('district')?.dirty)">
+                <span *ngIf="permanentAddressForm.get('district')?.hasError('required')">
+                  {{ 'UC.district_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.village' | translate}}</label>
+              <input type="text" class="form-control" formControlName="village"
+                placeholder="{{'UC.village' | translate}}" [ngClass]="{
+                  'is-invalid': permanentAddressForm.get('village')?.invalid
+                                && (permanentAddressForm.get('village')?.touched
+                                    || permanentAddressForm.get('village')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="permanentAddressForm.get('village')?.errors
+                       && (permanentAddressForm.get('village')?.touched
+                           || permanentAddressForm.get('village')?.dirty)">
+                <span *ngIf="permanentAddressForm.get('village')?.hasError('required')">
+                  {{ 'UC.village_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.address' | translate}}</label>
+              <input type="text" class="form-control" formControlName="addr" placeholder="{{'UC.address' | translate}}"
+                [ngClass]="{
+                  'is-invalid': permanentAddressForm.get('addr')?.invalid
+                                && (permanentAddressForm.get('addr')?.touched
+                                    || permanentAddressForm.get('addr')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="permanentAddressForm.get('addr')?.errors
+                       && (permanentAddressForm.get('addr')?.touched
+                           || permanentAddressForm.get('addr')?.dirty)">
+                <span *ngIf="permanentAddressForm.get('addr')?.hasError('required')">
+                  {{ 'UC.address_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div *ngIf="permanentAddress" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">
+              {{'UC.save' | translate}}
+            </button>
+            <button class="btn btn-outline-danger" (click)="close()">
+              {{'UC.close' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Address Tab -->
+      <div *ngIf="currentTab === 'currentAddress'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'UC.current_address_details' | translate}}</h4>
+        <br>
+
+        <form [formGroup]="currentAddressForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.city' | translate}}</label>
+              <ng-select class="mt-2" [items]="cities" bindLabel="province" bindValue="id" formControlName="city"
+                [ngClass]="{
+                  'is-invalid': currentAddressForm.get('city')?.invalid
+                                && (currentAddressForm.get('city')?.touched
+                                    || currentAddressForm.get('city')?.dirty)
+                }">
+              </ng-select>
+              <div class="text-danger small mt-1" *ngIf="currentAddressForm.get('city')?.errors
+                       && (currentAddressForm.get('city')?.touched
+                           || currentAddressForm.get('city')?.dirty)">
+                <span *ngIf="currentAddressForm.get('city')?.hasError('required')">
+                  {{ 'UC.city_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.district' | translate}}</label>
+              <input type="text" class="form-control" formControlName="district"
+                placeholder="{{'UC.district' | translate}}" [ngClass]="{
+                  'is-invalid': currentAddressForm.get('district')?.invalid
+                                && (currentAddressForm.get('district')?.touched
+                                    || currentAddressForm.get('district')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="currentAddressForm.get('district')?.errors
+                       && (currentAddressForm.get('district')?.touched
+                           || currentAddressForm.get('district')?.dirty)">
+                <span *ngIf="currentAddressForm.get('district')?.hasError('required')">
+                  {{ 'UC.district_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.village' | translate}}</label>
+              <input type="text" class="form-control" formControlName="village"
+                placeholder="{{'UC.village' | translate}}" [ngClass]="{
+                  'is-invalid': currentAddressForm.get('village')?.invalid
+                                && (currentAddressForm.get('village')?.touched
+                                    || currentAddressForm.get('village')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="currentAddressForm.get('village')?.errors
+                       && (currentAddressForm.get('village')?.touched
+                           || currentAddressForm.get('village')?.dirty)">
+                <span *ngIf="currentAddressForm.get('village')?.hasError('required')">
+                  {{ 'UC.village_required' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{'UC.address' | translate}}</label>
+              <input type="text" class="form-control" formControlName="addr" placeholder="{{'UC.address' | translate}}"
+                [ngClass]="{
+                  'is-invalid': currentAddressForm.get('addr')?.invalid
+                                && (currentAddressForm.get('addr')?.touched
+                                    || currentAddressForm.get('addr')?.dirty)
+                }" />
+              <div class="invalid-feedback" *ngIf="currentAddressForm.get('addr')?.errors
+                       && (currentAddressForm.get('addr')?.touched
+                           || currentAddressForm.get('addr')?.dirty)">
+                <span *ngIf="currentAddressForm.get('addr')?.hasError('required')">
+                  {{ 'UC.address_required' | translate }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div *ngIf="currentAddress" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">
+              {{'UC.save' | translate}}
+            </button>
+            <button class="btn btn-outline-danger" (click)="close()">
+              {{'UC.close' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Tab -->
+      <div *ngIf="currentTab === 'documents'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{ 'UC.uplod_docs_msg' | translate }}</h4>
+        <br />
+
+        <div class="form-group row mb-3">
+          <div class="col-md-8">
+            <label class="form-label">{{ 'UC.uplod_docs_msg' | translate }}</label>
+            <div class="row">
+              <!-- Dropdown for document type -->
+              <div class="col-md-3">
+                <select class="form-select" [(ngModel)]="selectedDocType" required name="docType" #docType="ngModel"
+                  [ngClass]="{
+              'is-invalid': docType.invalid && docType.touched
+            }">
+                  <option value="" disabled>
+                    {{ 'UC.doc_type' | translate }}
+                  </option>
+
+                  <!-- Filtered options based on staff_type -->
+                  <ng-container *ngFor="let type of documentTypes">
+                    <option *ngIf="
+                  (staffForm?.get('staff_type')?.value === 'NATIONAL' &&
+                    type.value === 'TAZKIRA') ||
+                  (staffForm?.get('staff_type')?.value === 'INTERNATIONAL' &&
+                    (type.value === 'PASSPORT' || type.value === 'VISA'))
+                " [value]="type.value">
+                      {{
+                      currentLang == 'en_US'
+                      ? type.label
+                      : currentLang == 'ps_AF'
+                      ? type.ps
+                      : type.dr
+                      }}
+                    </option>
+                  </ng-container>
+                </select>
+
+                <div class="invalid-feedback" *ngIf="docType.invalid && docType.touched">
+                  {{ 'UC.doc_type_required' | translate }}
+                </div>
+              </div>
+
+              <!-- File input field -->
+              <div class="col-md-6">
+                <input type="file" class="form-control" (change)="onFileSelected($event)" required name="docFile"
+                  #docFile="ngModel" [(ngModel)]="dummyDocModel" [ngClass]="{
+              'is-invalid': docFile.invalid && docFile.touched
+            }" />
+                <div class="invalid-feedback" *ngIf="docFile.invalid && docFile.touched">
+                  {{ 'UC.doc_file_required' | translate }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Display the uploaded file name -->
+        <div *ngIf="uploadedFiles.length > 0" class="form-group row mb-3">
+          <div class="col-md-9">
+            <label class="form-label">{{ 'UC.uploaded_docs' | translate }}</label>
+            <div class="uploaded-files-list">
+              <span *ngFor="let file of uploadedFiles" class="badge bg-success me-2">
+                {{ file.document_type }}: {{ file.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="document" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">
+              {{ 'UC.final_save' | translate }}
+            </button>
+            <button class="btn btn-outline-danger" (click)="close()">
+              {{ 'UC.close' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

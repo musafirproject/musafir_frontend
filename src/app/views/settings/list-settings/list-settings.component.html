@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="text-center mt-4">
+    <h3>{{ 'SL.setting_msg' | translate }}</h3>
+  </div>
+
+  <div class="mt-5">
+    <!-- add justify-content-center to center the columns -->
+    <div class="row justify-content-center g-3">
+      <div
+        class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center"
+        *ngFor="let item of category"
+      >
+        <!-- limit card width and center it -->
+        <div
+          class="card card-clickable w-100"
+          style="max-width: 320px;"
+          [ngClass]="{ active: item.title === selectedCategory }"
+          (click)="openConfig(item.path)"
+        >
+          <div class="card-body text-center">
+            <div
+              class="d-inline-block rounded-circle"
+              [ngStyle]="{ 'background-color': hexToRGB(item.color, 0.1) }"
+            >
+              <i
+                class="h1 mb-0 p-3"
+                [ngClass]="item.icon"
+                [ngStyle]="{ color: item.color }"
+              ></i>
+            </div>
+            <h5 class="mt-3 mb-0">{{ ('PRMENU.' + item.title) | translate }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

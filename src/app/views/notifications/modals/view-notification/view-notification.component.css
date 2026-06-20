@@ -1,0 +1,40 @@
+/* General table styling */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+  }
+  
+  .table-bordered {
+    border: 1px solid #dee2e6;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Padding for table cells */
+  .table th, .table td {
+    padding: 1rem;
+    vertical-align: middle;
+  }
+  
+  /* Styling for the list items */
+  .table-container ul {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .table-container li {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Ensure that the footer button is centered */
+  tfoot {
+    margin-top: 1rem;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  

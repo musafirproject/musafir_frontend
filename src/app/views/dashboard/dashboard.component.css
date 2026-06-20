@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box; /* Ensure padding and borders are included in the element's total width */
+}
+
+body {
+    overflow-x: hidden; /* Prevent horizontal scrolling on the entire page */
+    margin: 0; /* Remove default body margin */
+}
+
+.container-fluid {
+    padding: 0; /* Remove all padding from the container */
+}
+
+.row {
+    margin: 0; /* Remove margins from rows */
+}
+
+.card {
+    overflow: hidden; /* Prevent overflow on the card */
+}
+
+.chart-container {
+    overflow-x: auto; /* Allow horizontal scrolling for chart container only */
+    width: 100%; /* Full width of the card */
+    white-space: nowrap; /* Prevent wrapping of chart content */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .chart-container {
+        min-width: 300px; /* Adjust minimum width for smaller devices */
+    }
+}
+
+
+.filter-select { min-width: 160px; max-width: 220px; }
+
+/* src/app/pages/dashboard/dashboard.component.scss */
+.card-title { margin-bottom: .75rem; }
+.placeholder-block {
+  height: 240px;
+  background: repeating-linear-gradient(45deg, #f3f4f6, #f3f4f6 10px, #ffffff 10px, #ffffff 20px);
+  border-radius: .5rem;
+}
+

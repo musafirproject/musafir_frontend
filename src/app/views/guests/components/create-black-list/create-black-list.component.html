@@ -1,0 +1,74 @@
+<div class="card">
+    <div class="card-body">
+        <div class="tab-content mt-3">
+            <!-- Profile Tab -->
+            <div class="tab-pane fade show active">
+                <div class="mb-3 d-flex  justify-content-between">
+                    <h4 class="text-muted">{{'UC.black_list_notification' | translate}}</h4>
+                </div>
+                <br>
+                <form [formGroup]="blackListForm">
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.first_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="name" placeholder="{{'UC.first_name' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.last_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="last_name" placeholder="{{'UC.last_name' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.father_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="father_name" placeholder="{{'UC.father_name' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.grand_father_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="grand_father_name" placeholder="{{'UC.grand_father_name' | translate}}">
+                        </div>
+                    </div>
+                 
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.nid' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="nid" placeholder="0000-0000-00000">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+              <label class="form-label">{{ 'GC.phone' | translate }}</label>
+              <input type="tel" class="form-control" formControlName="phone" placeholder="+93 700 00 0000"
+                inputmode="tel" autocomplete="tel" maxlength="15" (focus)="prefillAfCode()"
+                (input)="onPhoneInput($event)" />
+              <small class="text-danger" *ngIf="blackListForm?.get('phone')?.invalid && blackListForm?.get('phone')?.touched">
+                {{ 'GL.invalid_format' | translate }} (+93 700 00 0000)
+              </small>
+            </div>
+                    </div>
+                    <div class="form-group row mb-3">
+
+                        <div class="col-md-12">
+                            <label class="form-label">{{'GC.passport' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="passport" placeholder="{{'GC.passport' | translate}}">
+                        </div>
+                    </div>
+
+
+
+
+                </form>
+
+                <div  class="row mb-3 mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-outline-primary me-2" type="submit" (click)="createBlackListNotification()">{{'UC.final_save' | translate}}</button>
+                      <button class="btn btn-outline-danger" (click)="close()">{{'UC.close' | translate}}</button>
+                    </div>
+                  </div>
+
+
+            </div>
+
+        </div>
+        <!-- Form actions -->
+
+    </div>
+</div>

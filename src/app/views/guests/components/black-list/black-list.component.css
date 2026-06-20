@@ -1,0 +1,416 @@
+/* Mobile-first responsive styles */
+.card-body {
+  padding: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  .card-body {
+    padding: 1.5rem !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .card-body {
+    padding: 2rem !important;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 767.98px) {
+  .btn span:not(.d-sm-inline) {
+    display: none !important;
+  }
+
+  .input-group-sm {
+    font-size: 0.875rem;
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .search-panel .card-body {
+    padding: 1rem !important;
+  }
+
+  .mobile-blacklist-card {
+    background: #fff5f5;
+    transition: all 0.2s;
+    border-radius: 8px;
+    border: 1px solid #dc3545 !important;
+  }
+
+  .mobile-blacklist-card:hover {
+    background: #ffeaea;
+  }
+
+  /* Touch-friendly buttons */
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    min-height: 38px;
+  }
+
+  .dropdown-toggle::after {
+    margin-left: 0.25rem;
+  }
+
+  /* Danger theme adjustments */
+  .btn-outline-danger {
+    border-width: 1px;
+  }
+}
+
+/* Hide desktop on mobile, hide mobile on desktop */
+@media (max-width: 767.98px) {
+  .blacklist-table {
+    display: none !important;
+  }
+
+  .mobile-blacklist-card {
+    display: block !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-blacklist-card {
+    display: none !important;
+  }
+
+  .blacklist-table {
+    display: block !important;
+  }
+}
+
+/* Common styles */
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.search-panel {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Danger theme styling */
+.search-panel.border-danger {
+  border-color: #dc3545 !important;
+}
+
+.card-header.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Avatar placeholder for blacklist */
+.avatar-placeholder.bg-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+/* Badge styling */
+.badge {
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545;
+}
+
+.badge-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.badge-dot.bg-danger {
+  background-color: #dc3545;
+}
+
+/* Table styling */
+.table-responsive {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-responsive.border-danger {
+  border-color: #dc3545 !important;
+}
+
+/* Desktop table styles */
+@media (min-width: 768px) {
+  .blacklist-table .datatable-header-cell {
+    background-color: #fff5f5;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dc3545;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .blacklist-table .datatable-body-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    font-size: 0.875rem;
+  }
+
+  .blacklist-table .datatable-row-even {
+    background-color: #fff5f5;
+  }
+
+  .blacklist-table .datatable-row-odd {
+    background-color: #ffffff;
+  }
+
+  .blacklist-table .datatable-row:hover {
+    background-color: #ffeaea;
+    transition: background-color 0.2s;
+  }
+}
+
+/* Form controls */
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.input-group-text .text-danger {
+  color: #dc3545 !important;
+}
+
+.form-select, .form-control {
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+  font-size: 0.875rem;
+}
+
+.form-select:focus, .form-control:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Dropdown styling */
+.dropdown-menu {
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  z-index: 1050 !important;
+  font-size: 0.875rem;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #dc3545;
+  color: white !important;
+}
+
+/* Pagination */
+.page-link {
+  border-radius: 6px;
+  margin: 0 2px;
+  border: 1px solid #dee2e6;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  min-width: 38px;
+  text-align: center;
+}
+
+.page-item.active .page-link {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* Button styling */
+.btn {
+  border-radius: 6px;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  min-height: 38px;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+/* Fix for ngx-datatable dropdowns */
+.ngx-datatable {
+  position: relative;
+}
+
+.datatable-body {
+  overflow: visible !important;
+}
+
+.datatable-body-row {
+  position: relative;
+}
+
+/* Ensure dropdowns work properly */
+.dropdown {
+  position: static !important;
+}
+
+.dropdown-menu {
+  position: absolute !important;
+}
+
+/* Print styles */
+@media print {
+  .btn, .badge, .dropdown, .card-header, .search-panel, .pagination {
+    display: none !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .card-body {
+    padding: 0 !important;
+  }
+
+  .mobile-blacklist-card {
+    border: 1px solid #000 !important;
+    background: none !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .search-panel {
+    animation: none;
+  }
+
+  .blacklist-table .datatable-row:hover {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .border-danger {
+    border-width: 2px !important;
+  }
+
+  .btn-outline-danger {
+    border-width: 2px;
+  }
+}
+
+/* Mobile card content adjustments */
+.mobile-blacklist-card {
+  font-size: 0.875rem;
+}
+
+.mobile-blacklist-card .small,
+.mobile-blacklist-card small {
+  font-size: 0.75rem;
+}
+
+.mobile-blacklist-card .fw-bold {
+  font-weight: 600;
+}
+
+.mobile-blacklist-card .fw-medium {
+  font-weight: 500;
+}
+
+.mobile-blacklist-card .text-danger {
+  color: #dc3545 !important;
+}
+
+/* Responsive grid for mobile cards */
+@media (max-width: 767.98px) {
+  .mobile-blacklist-card .row {
+    --bs-gutter-x: 0.5rem;
+    --bs-gutter-y: 0.5rem;
+  }
+}
+
+/* Warning icon styles */
+.mobile-blacklist-card .feather-alert-triangle {
+  font-size: 0.875rem;
+}
+
+/* Custom scrollbar for table */
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #dc3545;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #c82333;
+}
+
+/* Text truncation for desktop */
+.text-truncate-desktop {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Alert styling for blacklisted items */
+.blacklist-alert {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background-color: #fff5f5;
+  border-left: 4px solid #dc3545;
+  font-size: 0.875rem;
+}
+
+/* Zebra striping for desktop table */
+.blacklist-table .datatable-row-wrapper:nth-child(even) .datatable-body-cell {
+  background-color: #fff5f5;
+}
+
+.blacklist-table .datatable-row-wrapper:nth-child(odd) .datatable-body-cell {
+  background-color: #ffffff;
+}

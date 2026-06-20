@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal" (click)="close()"></button>
+</div>
+<div class="modal-body text-center p-4">
+  <div class="d-flex justify-content-center mb-3">
+    <div class="alert alert-warning d-flex align-items-center justify-content-center rounded-circle border border-warning mx-auto" role="alert">
+      <span class="alert-icon">?</span>
+    </div>
+  </div>
+  <h4 class="text-danger mb-3">{{'UC.activate_user'| translate}}</h4>
+  <p class="mb-3">{{'UC.activate_msg' | translate}}</p>
+  <button type="button" class="btn btn-success" (click)="activate()">{{'UC.continue' | translate}}</button>
+</div>

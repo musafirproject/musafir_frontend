@@ -1,0 +1,71 @@
+<div class="card">
+  <div class="card-header">
+    <h3>{{'Details of Notification'}}</h3>
+  </div>
+  <div class="card-body row">
+    <div class="col-md-6">
+      <table class="table-responsive">
+        <tbody>
+          <tr>
+            <th class="py-4">{{'ID'}}</th>
+            <td class="py-4">{{notificationData?.id}}</td>
+          </tr>
+          <tr>
+            <th class="py-4">{{'Title'}}</th>
+            <td class="py-4">{{notificationData.title}}</td>
+          </tr>
+          <tr>
+            <th class="py-4">{{'Type'}}</th>
+            <td class="py-4">{{notificationData.notification_type}}</td>
+          </tr>
+
+
+          <tr>
+            <th class="py-4">{{'Message'}}</th>
+            <td class="py-4">
+              <span [innerHtml]="notificationData?.description"></span>
+            </td>
+          </tr>
+     
+
+
+        </tbody>
+        <tfoot>
+          <div class="mt-3">
+            <button class="btn btn-outline-danger" (click)="close()">Close</button>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="col-md-3" style="max-height: 350px; overflow-y: auto;">
+      <table class="table table-responsive">
+        <tbody>
+          <h4>Delivered To</h4>
+          <tr *ngFor="let item of seenByUsers">
+            <li style="list-style-type: none;">
+              <i class="las la-check text-dark"></i> <span style="padding-right: 5px;">
+                {{item.user?.first_name}} {{item.user?.last_name}}</span>
+            </li>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-3" style="max-height: 350px; overflow-y: auto;">
+      <table class="table table-responsive">
+        <tbody>
+          <h4>Seen By</h4>
+          <tr *ngFor="let item of seenByUsers">
+            <li style="list-style-type: none;" *ngIf="item?.is_seen == 1">
+              <i class="las la-check-double text-success"></i> <span style="padding-right: 5px;">
+                {{item.user?.first_name}} {{item.user?.last_name}}</span>
+            </li>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </div>
+</div>

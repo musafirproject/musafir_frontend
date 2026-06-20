@@ -1,0 +1,97 @@
+.hotel-image-cell {
+    width: 50%; /* Adjust the width for the image in the table for larger screens */
+}
+
+.hotel-image, .hotel-image-mobile {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Adjust margin/padding for mobile image if needed */
+.hotel-image-mobile {
+    margin-top: 20px;
+}
+
+
+.avatar-64 { width: 64px; height: 64px; object-fit: cover; }
+/* makes the icon-only button render tightly */
+.btn.btn-sm.btn-outline-secondary svg { display: block; }
+
+
+/* Reserve space to avoid layout shift (choose aspect ratio you like) */
+.lazy-box {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* The box reserves space; tweak aspect ratio to taste */
+.lazy-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;     /* or 16/9 */
+  background: #f6f7f9;     /* subtle backdrop for letterboxing */
+  border-radius: .5rem;
+  overflow: hidden;
+}
+
+/* Show the WHOLE image inside the box */
+.hotel-image,
+.hotel-image-mobile {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* ← was cover */
+  object-position: center;
+  background: #f6f7f9;      /* fills the side/top bars */
+  border-radius: .5rem;
+}
+
+/* Fallback for old browsers without aspect-ratio support */
+@supports not (aspect-ratio: 1 / 1) {
+  .lazy-stage { height: 260px; }        /* pick a fixed height for desktop */
+  .d-lg-none .lazy-stage { height: 220px; } /* and a smaller one for mobile */
+}
+
+
+/* Centered trigger button before load */
+.lazy-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 180px;       /* matches expected image box height */
+  border-radius: .5rem;
+}
+
+/* Spinner overlay */
+.lazy-skeleton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-64 { width: 64px; height: 64px; }
+
+.avatar-static {
+  display: inline-block;
+  background-color: #f3f4f6;           /* light bg */
+  border: 1px solid #e5e7eb;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 70%;                /* icon scale inside circle */
+  /* inline SVG (no extra request) */
+  background-image: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox=\'0 0 24 24\' fill=\'%2399a3ad\'>\
+<path d=\"M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z\"/>\
+<path d=\"M4 20.5a8 8 0 1 1 16 0v.5H4v-.5Z\"/>\
+</svg>');
+}
+
+/* Optional hover accent */
+.card.border-secondary:hover {
+  box-shadow: 0 0.5rem 1rem rgba(13,110,253,.15);
+}

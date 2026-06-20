@@ -1,0 +1,371 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="table-responsive">
+          <h5 class="text-muted">{{ 'HV.hotel_details' | translate }}</h5>
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <th>{{ 'HV.name' | translate }}</th>
+                <td>{{ hotels?.title }}</td>
+
+                <!-- DESKTOP/TABLET IMAGE (lazy: click to load) -->
+                <td rowspan="9" class="hotel-image-cell d-none d-lg-table-cell">
+                  <div class="lazy-stage">
+                    <!-- Button before load -->
+                    <button *ngIf="!showHotelImage" type="button"
+                      class="lazy-trigger btn btn-outline-primary w-100 h-100" (click)="loadHotelImage()"
+                      aria-label="{{ 'HV.load_image' | translate }}">
+                      <i class="feather icon-image me-2"></i>{{ 'HV.load_image' | translate }}
+                    </button>
+
+                    <!-- Spinner while downloading -->
+                    <div *ngIf="showHotelImage && loadingImage && !imageLoaded" class="lazy-skeleton">
+                      <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+                      <span class="ms-2">{{ 'HV.loading' | translate }}</span>
+                    </div>
+
+                    <!-- Actual image (src only after click) -->
+                    <img class="hotel-image" [attr.src]="showHotelImage ? (hotels.image | signedUrl | async) : null"
+                      alt="{{ hotels?.title }}" width="800" height="600" (load)="onImageLoad()" (error)="onImageError()"
+                      [class.d-none]="!imageLoaded" />
+
+                    <!-- Error fallback -->
+                    <div *ngIf="imageError" class="text-muted small mt-2">
+                      {{ 'GL.image_failed' | translate }}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ 'HV.city' | translate }}</th>
+                <td>
+                  <span *ngIf="currentLang==='en_US'">{{ hotels?.city?.title }}</span>
+                  <span *ngIf="currentLang!='en_US'">{{ hotels?.city?.province }}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ 'HV.type' | translate }}</th>
+                <td>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'HOTEL'">
+                    {{ 'GL.hotel' | translate }}</span>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'HOSTEL'">
+                    {{ 'GL.hostel' | translate }}</span>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'GUEST_HOUSE'">
+                    {{ 'GL.guest_house' | translate }}</span>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'MUSAFIR_KHANA'">
+                    {{ 'GL.musafir_khana' | translate }}</span>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'HOUSE'">
+                    {{ 'GL.house' | translate }}</span>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'RENT_ROOM'">
+                    {{ 'GL.rent_room' | translate }}</span>
+                  <span class="text-capitalize" *ngIf="hotels?.hotel_type === 'COMPANY'">
+                    {{ 'GL.company' | translate }}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ 'HV.email' | translate }}</th>
+                <td>{{ hotels?.email }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'HV.phone' | translate }}</th>
+                <td>{{ hotels?.phone }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'HV.website' | translate }}</th>
+                <td>{{ hotels?.website }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'HV.address' | translate }}</th>
+                <td>{{ hotels?.address }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'HV.description' | translate }}</th>
+                <td>{{ hotels?.description }}</td>
+              </tr>
+              <tr>
+                <th>{{ 'HV.created_at' | translate }}</th>
+                <td>{{ hotels?.created_at | date }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOBILE/TABLET IMAGE (lazy: click to load) -->
+    <div class="row mt-4 d-lg-none">
+      <div class="col-12">
+        <div class="lazy-stage">
+          <!-- Button before load -->
+          <button *ngIf="!showHotelImage" type="button" class="lazy-trigger btn btn-outline-primary w-100 h-100"
+            (click)="loadHotelImage()" aria-label="{{ '3h4v13H1V3zm10load_image' | translate }}">
+            <i class="feather icon-image me-2"></i>{{ 'HV.load_image' | translate }}
+          </button>
+
+          <!-- Spinner while downloading -->
+          <div *ngIf="showHotelImage && loadingImage && !imageLoaded" class="lazy-skeleton">
+            <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></div>
+            <span class="ms-2">{{ 'HV.loading' | translate }}</span>
+          </div>
+
+          <!-- Actual image (src only after click) -->
+          <img class="hotel-image-mobile" [attr.src]="showHotelImage ? (hotels.image | signedUrl | async) : null"
+            alt="{{ hotels?.title }}" width="800" height="600" (load)="onImageLoad()" (error)="onImageError()"
+            [class.d-none]="!imageLoaded" />
+
+          <!-- Error fallback -->
+          <div *ngIf="imageError" class="text-muted small mt-2">
+            {{ 'GL.image_failed' | translate }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+      <button class="btn btn-outline-danger" type="button" (click)="close()">
+        {{ 'HU.close' | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ========================================= -->
+<!-- Guest Users                               -->
+<!-- ========================================= -->
+<div class="card">
+  <div class="card-body">
+    <div class="row ">
+      <div class="col-12">
+        <h5 class="text-muted">{{ 'HV.residence_users' | translate }}</h5>
+      </div>
+
+      <div class="col-12" *ngIf="!residenceUsers?.length">
+        <span class="text-muted small">{{ 'HV.no_data' | translate }}</span>
+      </div>
+
+      <!-- Responsive grid: 1 / 2 / 3 / 4 cards per row -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3">
+        <div class="col" *ngFor="let u of residenceUsers">
+          <div class="card btn-outline-primary h-100 position-relative border border-secondary border-2">
+            <!-- Copy button top-right -->
+            <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2"
+              (click)="copyToClipboard(u?.user?.email)" [disabled]="!u?.user?.email"
+              aria-label="{{ 'GL.copy_email' | translate }}" title="{{ 'GL.copy_email' | translate }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                  d="M10 1.5A1.5 1.5 0 0 1 11.5 3v7A1.5 1.5 0 0 1 10 11.5H5A1.5 1.5 0 0 1 3.5 10V3A1.5 1.5 0 0 1 5 1.5h5z" />
+                <path
+                  d="M4 4h-.5A1.5 1.5 0 0 0 2 5.5v7A1.5 1.5 0 0 0 3.5 14h7A1.5 1.5 0 0 0 12 12.5V12H5.5A1.5 1.5 0 0 1 4 10.5z" />
+              </svg>
+            </button>
+
+            <div class="card-body d-flex gap-3 align-items-start">
+              <img class="rounded-circle avatar-64 flex-shrink-0"
+                [src]="(u?.user?.image | signedUrl | async) || defaultAvatar"
+                [alt]="(u?.user?.first_name || '') + ' ' + (u?.user?.last_name || '')" />
+              <div class="flex-grow-1">
+                <div class="fw-semibold">{{ u?.user?.first_name }} {{ u?.user?.last_name }}</div>
+
+                <div class="mt-2 small">
+                  <div class="mb-1">
+                    <span class="text-muted">{{ 'HV.email' | translate }}:</span>
+                    <span class="ms-1">{{ u?.user?.email || ('HV.email_unknown' | translate) }}</span>
+                  </div>
+                  <div class="mb-1">
+                    <span class="text-muted">{{ 'HV.phone' | translate }}:</span>
+                    <span class="ms-1">{{ u?.user?.phone || ('HV.phone_unknown' | translate) }}</span>
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <small class="text-muted" *ngIf="u?.hotel?.title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" class="me-1"
+                      aria-hidden="true">
+                      <path fill="currentColor" d="M6 0h4v16H6V0zM1 3h4v13H1V3zm10 5h4v8h-4V8z" />
+                    </svg>
+                    {{ u?.hotel?.title }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /col -->
+      </div><!-- /row-cols -->
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ========================================= -->
+<!-- Guest Staffs                              -->
+<!-- ========================================= -->
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <h5 class="text-muted">{{ 'HV.residence_staffs' | translate }}</h5>
+      </div>
+
+      <div class="col-12" *ngIf="!residenceStaffs?.length">
+        <span class="text-muted small">{{ 'HV.no_data' | translate }}</span>
+      </div>
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3">
+        <div class="col" *ngFor="let s of residenceStaffs">
+          <div class="card h-100 position-relative border border-secondary border-2">
+            <!-- Copy button top-right -->
+            <button type="button" class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2"
+              (click)="copyToClipboard(s?.email)" [disabled]="!s?.email" aria-label="{{ 'GL.copy_email' | translate }}"
+              title="{{ 'GL.copy_email' | translate }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                  d="M10 1.5A1.5 1.5 0 0 1 11.5 3v7A1.5 1.5 0 0 1 10 11.5H5A1.5 1.5 0 0 1 3.5 10V3A1.5 1.5 0 0 1 5 1.5h5z" />
+                <path
+                  d="M4 4h-.5A1.5 1.5 0 0 0 2 5.5v7A1.5 1.5 0 0 0 3.5 14h7A1.5 1.5 0 0 0 12 12.5V12H5.5A1.5 1.5 0 0 1 4 10.5z" />
+              </svg>
+            </button>
+
+            <div class="card-body d-flex gap-3 align-items-start">
+              <i class="rounded-circle avatar-64 flex-shrink-0 avatar-static" role="img"
+                aria-label="{{ (s?.first_name || 'Staff') + ' ' + (s?.last_name || '') }}"></i>
+
+              <div class="flex-grow-1">
+                <div class="fw-semibold">{{ s?.first_name }} {{ s?.last_name }}</div>
+
+                <div class="mt-2 small">
+                  <div class="mb-1">
+                    <span class="text-muted">{{ 'HV.email' | translate }}:</span>
+                    <span class="ms-1">{{ s?.email || ('HV.email_unknown' | translate) }}</span>
+                  </div>
+                  <div class="mb-1">
+                    <span class="text-muted">{{ 'HV.phone' | translate }}:</span>
+                    <span class="ms-1">{{ s?.phone || ('HV.phone_unknown' | translate) }}</span>
+                  </div>
+                  <div class="mb-1">
+                    <span class="text-muted">{{ 'HV.tazkira' | translate }}:</span>
+                    <span class="ms-1">{{ s?.tazkira || ('HV.nid_unknown' | translate) }}</span>
+                  </div>
+
+                  <div class="mb-1">
+                    <span class="text-muted">{{ 'HV.position' | translate }}:</span>
+                    <span class="ms-1">{{ s?.position || ('HV.position_unknown' | translate) }}</span>
+                  </div>
+                  <ng-container [ngSwitch]="s?.is_approved">
+                    <span *ngSwitchCase="true" class="ms-1 text-success d-inline-flex align-items-center"
+                      title="{{ 'HV.approved' | translate }}" aria-label="{{ 'HV.approved' | translate }}">
+                      <i class="feather icon-check-circle me-1"></i>
+                      {{ 'HV.approved' | translate }}
+                    </span>
+
+                    <!-- Not approved -->
+                    <span *ngSwitchCase="false" class="ms-1 text-danger d-inline-flex align-items-center"
+                      title="{{ 'HV.not_approved' | translate }}" aria-label="{{ 'HV.not_approved' | translate }}">
+                      <i class="feather icon-x-circle me-1"></i>
+                      {{ 'HV.not_approved' | translate }}
+                    </span>
+                  </ng-container>
+                </div>
+
+                <div class="mt-2">
+                  <small class="text-muted" *ngIf="s?.hotel?.title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" class="me-1"
+                      aria-hidden="true">
+                      <path fill="currentColor" d="M6 0h4v16H6V0zM1 3h4v13H1V3zm10 5h4v8h-4V8z" />
+                    </svg>
+                    {{ s?.hotel?.title }}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /col -->
+      </div><!-- /row-cols -->
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ========================================= -->
+<!-- Quick Filters: Guests by Period           -->
+<!-- ========================================= -->
+<div class="card" *ngIf="role !== 'guest_care'">
+  <div class="card-body">
+    <div class="col-12">
+      <h5 class="text-muted">{{ 'HV.residence_guests' | translate }}</h5>
+    </div>
+    <div class="row g-3 mt-3">
+      <!-- Last 24 hours -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm border-0 cursor-pointer border border-secondary border-2" role="button"
+          tabindex="0" (click)="goToResidenceGuests('24h')" (keydown.enter)="goToResidenceGuests('24h')">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="rounded-circle p-3 bg-light">
+              <i class="feather icon-clock"></i>
+            </div>
+            <div>
+              <div class="fw-bold">{{ 'HV.last_24h' | translate }}</div>
+              <small class="text-muted">{{ 'HV.view_guests' | translate }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last week -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm border-0 cursor-pointer border border-secondary border-2" role="button"
+          tabindex="0" (click)="goToResidenceGuests('7d')" (keydown.enter)="goToResidenceGuests('7d')">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="rounded-circle p-3 bg-light">
+              <i class="feather icon-calendar"></i>
+            </div>
+            <div>
+              <div class="fw-bold">{{ 'HV.last_7d' | translate }}</div>
+              <small class="text-muted">{{ 'HV.view_guests' | translate }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- This month -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm border-0 cursor-pointer border border-secondary border-2" role="button"
+          tabindex="0" (click)="goToResidenceGuests('month')" (keydown.enter)="goToResidenceGuests('month')">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="rounded-circle p-3 bg-light">
+              <i class="feather icon-pie-chart"></i>
+            </div>
+            <div>
+              <div class="fw-bold">{{ 'HV.this_month' | translate }}</div>
+              <small class="text-muted">{{ 'HV.view_guests' | translate }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- This year -->
+      <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card h-100 shadow-sm border-0 cursor-pointer border border-secondary border-2" role="button"
+          tabindex="0" (click)="goToResidenceGuests('year')" (keydown.enter)="goToResidenceGuests('year')">
+          <div class="card-body d-flex align-items-center gap-3">
+            <div class="rounded-circle p-3 bg-light">
+              <i class="feather icon-bar-chart-2"></i>
+            </div>
+            <div>
+              <div class="fw-bold">{{ 'HV.this_year' | translate }}</div>
+              <small class="text-muted">{{ 'HV.view_guests' | translate }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

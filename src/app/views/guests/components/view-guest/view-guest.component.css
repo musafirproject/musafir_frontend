@@ -1,0 +1,213 @@
+  /* Mobile-first responsive styles */
+  @media (max-width: 767.98px) {
+    .card-body {
+      padding: 1rem !important;
+    }
+
+    .btn span:not(.d-sm-inline) {
+      display: none !important;
+    }
+
+    .info-item {
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      padding: 1rem !important;
+    }
+
+    .stat-icon {
+      font-size: 1.75rem !important;
+    }
+
+    .stat-value {
+      font-size: 1.5rem !important;
+    }
+
+    .p-4 {
+      padding: 1rem !important;
+    }
+
+    .fs-5 {
+      font-size: 1.1rem !important;
+    }
+
+    .fs-6 {
+      font-size: 1rem !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .info-item {
+      margin-bottom: 2rem;
+    }
+  }
+
+  /* Common styles */
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .badge {
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-weight: 500;
+  }
+
+  .bg-pink {
+    background-color: #f06292 !important;
+  }
+
+  .bg-purple {
+    background-color: #9c27b0 !important;
+  }
+
+  .bg-purple.bg-opacity-10 {
+    background-color: rgba(156, 39, 176, 0.1) !important;
+  }
+
+  .bg-pink.bg-opacity-10 {
+    background-color: rgba(240, 98, 146, 0.1) !important;
+  }
+
+  .info-item label {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .info-item div {
+    font-size: 1.1rem;
+  }
+
+  .stat-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .stat-icon {
+    font-size: 2rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Document card hover effect */
+  .file-preview {
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+
+  .file-preview:hover {
+    border-color: #4dabf7;
+    background-color: #e3f2fd;
+  }
+
+  /* Improved form labels */
+  .form-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* Better spacing for document sections */
+  .address-details,
+  .occupation-details,
+  .passport-details,
+  .visa-details {
+    font-size: 1rem;
+  }
+
+  /* Modal styles */
+  .modal-content {
+    border-radius: 16px;
+  }
+
+  .modal-body img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Animation for modal */
+  .modal.fade .modal-dialog {
+    transform: translateY(-30px) scale(0.95);
+    transition: transform 0.3s ease-out;
+  }
+
+  .modal.show .modal-dialog {
+    transform: translateY(0) scale(1);
+  }
+
+  /* Responsive grid adjustments */
+  @media (max-width: 575.98px) {
+    .border-end, .border-bottom {
+      border: none !important;
+    }
+
+    .col-12.border-end.border-bottom {
+      border-bottom: 1px solid #dee2e6 !important;
+    }
+
+    .col-12.border-end.border-bottom:last-child {
+      border-bottom: none !important;
+    }
+  }
+
+  /* Better typography */
+  h4, h5, h6 {
+    font-weight: 600;
+  }
+
+  .fw-semibold {
+    font-weight: 600;
+  }
+
+  /* Improved empty states */
+  .card-body.text-center {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+
+  /* Print styles */
+  @media print {
+    .btn, .badge, .modal, .card-header, .file-preview, .stat-card {
+      display: none !important;
+    }
+
+    .card {
+      border: none !important;
+      box-shadow: none !important;
+      margin-bottom: 20px !important;
+    }
+
+    .card-body {
+      padding: 0 !important;
+    }
+
+    .info-item {
+      margin-bottom: 15px !important;
+      page-break-inside: avoid;
+    }
+
+    .row {
+      display: block !important;
+    }
+
+    .col-12, .col-md-6, .col-lg-4, .col-lg-3, .col-lg-8 {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: none !important;
+    }
+  }

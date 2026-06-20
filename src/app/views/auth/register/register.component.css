@@ -1,0 +1,187 @@
+.progress-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.progress-bar-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.progress-bar-step .circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.progress-bar-step .label {
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.progress-bar-step.active .circle {
+  background-color: #659992;
+}
+
+.progress-bar-step.active .label {
+  font-weight: bold;
+  color: #659992;
+}
+
+.progress-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(0% + 15px);
+  width: calc(100% - 30px);
+  height: 4px;
+  background-color: #e0e0e0;
+  z-index: 1;
+  transform: translateY(-50%);
+  border-radius: 2px;
+}
+
+.progress-container .progress-bar-step.active ~ .progress-bar-step::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc(100% - 30px);
+  height: 4px;
+  background-color: #00bcd4;
+  z-index: 0;
+  transform: translateY(-50%);
+  border-radius: 2px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col-md-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.form-control {
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  color: #007bff; /* Link color */
+}
+
+/* Tooltip text */
+.tooltiptext {
+  visibility: hidden;
+  width: 300px; /* Adjust width as needed */
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black text */
+  text-align: left; /* Align text to the left */
+  border: 1px solid #ccc; /* Border for the tooltip */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above the tooltip trigger */
+  left: 50%;
+  margin-left: -150px; /* Center the tooltip */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Shadow for the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent; /* Arrow color */
+}
+
+/* Show the tooltip text when hovering */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Tooltip list styling */
+.tooltip-list {
+  list-style-type: disc; /* Bullets for the list */
+  margin: 0;
+  padding-left: 20px; /* Adjust padding for bullets */
+}
+
+.header-nav-item-select {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.toggle-wrapper {
+  cursor: pointer;
+}
+/* Custom tooltip styles */
+.tooltip {
+  background-color: #659992 !important;
+  color: #659992 !important;
+  border: 1px solid #007bff;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.tooltip .tooltip-arrow {
+  border-top-color: #007bff !important;
+}
+
+.tooltip-inner {
+  background-color: #659992 !important;
+  color: #659992 !important;
+  border: 1px solid #007bff !important;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+

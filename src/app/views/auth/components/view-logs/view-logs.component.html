@@ -1,0 +1,77 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title mb-0">{{'LG.action_details' | translate}}</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Responsive Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>{{'LG.id' |translate}}</th>
+                                    <td>{{ data.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.action_type' |translate}}</th>
+                                    <td>{{ data.action_type }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.time_stamp' |translate}}</th>
+                                    <td>{{ data.timestamp }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.model_name' |translate}}</th>
+                                    <td>{{ data.model_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.description' |translate}}</th>
+                                    <td>{{ data.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.ip_address' |translate}}</th>
+                                    <td>{{ data.ip_address }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.user_name' | translate}}</th>
+                                    <td>{{ data.user.first_name }} {{ data.user.last_name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.role' |translate}}</th>
+                                    <td>{{ data.user.role.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.email' |translate}}</th>
+                                    <td>{{ data.user.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.phone' |translate}}</th>
+                                    <td>{{ data.user.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{'LG.new_value' |translate}}</th>
+                                    <td>
+                                        <pre>{{ data.new_values | json }}</pre>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="data.old_values">
+                                    <th>{{'LG.old_value' |translate}}</th>
+                                    <td>
+                                        <pre>{{ data.old_values | json }}</pre>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer with Close Button -->
+        <div class="card-footer text-end">
+            <button class="btn btn-outline-danger" (click)="close()">{{'LG.close' |translate}}</button>
+
+        </div>
+    </div>
+</div>

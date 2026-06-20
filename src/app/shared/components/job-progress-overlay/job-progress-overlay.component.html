@@ -1,0 +1,24 @@
+<div class="overlay" *ngIf="(jobs$ | async) as jobs" [class.hidden]="!jobs.length">
+  <div class="card">
+    <div class="header">Reports</div>
+    <div class="list" *ngFor="let j of jobs; trackBy: trackById">
+      <div class="row">
+        <div class="label">{{ j.label }}</div>
+        <div class="state" [class.ok]="j.state==='finished'" [class.err]="j.state==='failed'">
+          {{ j.state }}
+        </div>
+      </div>
+
+      <div class="progress">
+        <div class="bar"
+             [style.width.%]="j.percent ?? 100"
+             [class.indeterminate]="j.percent===null"></div>
+      </div>
+
+      <div class="meta">
+        <span>{{ j.message }}</span>
+        <a *ngIf="j.fileUrl && j.state==='finished'" [href]="j.fileUrl" target="_blank" rel="noopener">Download</a>
+      </div>
+    </div>
+  </div>
+</div>

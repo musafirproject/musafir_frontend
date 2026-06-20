@@ -1,0 +1,23 @@
+<div>
+    <h4>Social Connect</h4>
+    <p>Connect your social account to to intergrate certain features.</p>
+</div>
+<div class="mt-4">
+    <div *ngFor="let item of socialNetwork; let last = last">
+        <ng-template #action>
+            <button 
+                class="btn btn-sm" 
+                [ngClass]="item.connected? 'btn-secondary' : 'btn-primary'">
+                {{item.connected? 'Disconnect' : 'Connect'}}
+            </button>
+        </ng-template>
+        <row-content
+            [title]="item.title"
+            [description]="item.description"
+            [img]="'/assets/images/thumbs/' + item.img"
+            [border]="!last"
+            [handler]="action"
+        >
+        </row-content>
+    </div>
+</div>

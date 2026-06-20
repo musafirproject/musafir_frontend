@@ -1,0 +1,439 @@
+<div class="container-fluid p-0">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-2 p-md-3 p-lg-4">
+      <!-- Header Section - Mobile First -->
+      <div class="d-flex flex-column gap-2 mb-3">
+        <div class="mb-1">
+          <h4 class="h5 fw-bold text-primary mb-0">
+            {{ 'HL.hotel_list' | translate }}
+          </h4>
+          <p class="text-muted small d-none d-md-block mb-0 mt-1">
+            {{ 'HL.hotel_list_description' | translate }}
+          </p>
+        </div>
+
+        <!-- Top Controls - Right aligned, mobile first -->
+        <div class="d-flex justify-content-end">
+          <!-- Buttons container: full-width on mobile, shrink/right-align on larger screens -->
+          <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 w-100 w-sm-auto justify-content-end">
+            <!-- Search Toggle -->
+            <button type="button"
+              class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 flex-grow-1 flex-sm-grow-0"
+              (click)="toggleSearchFields()">
+              <i class="feather icon-search"></i>
+              <span class="d-none d-sm-inline">
+                {{ 'GL.search_btn' | translate }}
+              </span>
+            </button>
+
+            <!-- Create Button -->
+            <button *appHasAnyRole="['super_admin', 'sub_admin']; currentRole: role" type="button"
+              class="btn btn-primary btn-sm d-flex align-items-center gap-1 flex-grow-1 flex-sm-grow-0"
+              (click)="createHotel()">
+              <i class="feather icon-plus"></i>
+              <span class="d-none d-sm-inline">
+                {{ 'HL.create' | translate }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Advanced Search Panel -->
+      <div *ngIf="showSearchFields" class="search-panel card mb-3 border-primary">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2 py-md-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="feather icon-search"></i>
+            <h5 class="mb-0 fs-6">{{ 'HL.advanced_search' | translate }}</h5>
+          </div>
+          <button class="btn btn-sm btn-light p-1" (click)="toggleSearchFields()">
+            <i class="feather icon-x"></i>
+          </button>
+        </div>
+
+        <div class="card-body p-2 p-md-3">
+          <form [formGroup]="searchForm" class="row g-2 g-md-3">
+            <!-- Hotel Information -->
+            <div class="col-12">
+              <h6 class="border-bottom pb-1 mb-2 text-primary fs-6">
+                <i class="feather icon-home me-2"></i>{{ 'HL.hotel_info' | translate }}
+              </h6>
+            </div>
+
+            <!-- Name & Contact -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <label class="form-label small fw-bold mb-1">{{ 'HL.name' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-home small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="title"
+                  placeholder="{{ 'HL.name' | translate }}">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-4">
+              <label class="form-label small fw-bold mb-1">{{'HU.phone' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-phone small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="phone" placeholder="+93 700 00 0000">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-4">
+              <label class="form-label small fw-bold mb-1">{{'HU.email' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-mail small"></i>
+                </span>
+                <input type="email" class="form-control py-2" formControlName="email"
+                  placeholder="{{'HU.email' | translate}}">
+              </div>
+            </div>
+
+            <!-- Type & Location -->
+            <div class="col-12 mt-3">
+              <h6 class="border-bottom pb-1 mb-2 text-primary fs-6">
+                <i class="feather icon-map-pin me-2"></i>{{ 'HL.location_type' | translate }}
+              </h6>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-4">
+              <label class="form-label small fw-bold mb-1">{{'HU.type' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-tag small"></i>
+                </span>
+                <select class="form-select py-2" formControlName="hotel_type">
+                  <option value="" selected>{{'HL.select_type' | translate}}</option>
+                  <option *ngFor="let type of hotel_types" [value]="type.value">
+                    {{ currentLang == 'en_US' ? type.label : currentLang == 'ps_AF' ? type.ps : type.dr }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Add City filter if available -->
+            <div class="col-12 col-sm-6 col-lg-4" *ngIf="cities?.length">
+              <label class="form-label small fw-bold mb-1">{{'HL.city' | translate}}</label>
+              <ng-select class="form-control-sm" [items]="cities" formControlName="city" bindLabel="title"
+                bindValue="id" placeholder="{{'HL.select_city' | translate}}">
+              </ng-select>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-12 mt-3 pt-2 border-top">
+              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-end">
+                <button
+                  class="btn btn-primary btn-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0"
+                  type="submit" (click)="advanceSearch()">
+                  <i class="feather icon-search"></i>
+                  {{ 'GL.search' | translate }}
+                </button>
+                <button
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0"
+                  (click)="reset()">
+                  <i class="feather icon-refresh-cw"></i>
+                  {{ 'GL.reset' | translate }}
+                </button>
+                <button
+                  class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0"
+                  (click)="toggleSearchFields()">
+                  <i class="feather icon-x"></i>
+                  {{ 'GC.close' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Data Table - Mobile Responsive -->
+      <div class="table-responsive rounded border">
+        <!-- Mobile Card View -->
+        <div *ngIf="isSmallScreen" class="d-flex flex-column gap-2 p-2">
+          <div *ngFor="let row of hotelData" class="mobile-hotel-card p-3 border rounded bg-white">
+            <!-- Hotel Header -->
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div class="d-flex align-items-center">
+                <div
+                  class="avatar-placeholder bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-2"
+                  style="width: 36px; height: 36px;">
+                  <i class="feather icon-home"></i>
+                </div>
+                <div>
+                  <div class="fw-bold text-dark">{{row['title']}}</div>
+                  <small class="text-muted">#{{row['id']}}</small>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary border-0" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false" >
+                  <i class="feather icon-more-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index: 1050;">
+                  <li>
+                    <a class="dropdown-item" (click)="viewWebConfig(row['id'])">
+                      <i class="feather icon-eye me-2"></i>{{ 'HL.view' | translate }}
+                    </a>
+                  </li>
+                  <li *appHasAnyRole="['super_admin', 'sub_admin']; currentRole: role">
+                    <a class="dropdown-item" (click)="editWebConfig(row['id'])">
+                      <i class="feather icon-edit me-2"></i>{{ 'HL.edit' | translate }}
+                    </a>
+                  </li>
+                  <li *ngIf="role=='super_admin'">
+                    <a class="dropdown-item text-danger" (click)="openModal(row['id'])">
+                      <i class="feather icon-trash-2 me-2"></i>{{ 'HL.delete' | translate }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Hotel Details -->
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'HL.city' | translate }}</small>
+                <div class="fw-medium">
+                  <span *ngIf="currentLang==='en_US'">{{row['city']?.title || 'N/A'}}</span>
+                  <span *ngIf="currentLang!='en_US'">{{row['city']?.province || 'N/A'}}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'HL.hotel_type' | translate }}</small>
+                <div>
+                  <span *ngIf="row['hotel_type'] === 'HOTEL'" class="badge bg-primary">
+                    {{ 'GL.hotel' | translate }}
+                  </span>
+                  <span *ngIf="row['hotel_type'] === 'HOSTEL'" class="badge bg-info">
+                    {{ 'GL.hostel' | translate }}
+                  </span>
+                  <span *ngIf="row['hotel_type'] === 'GUEST_HOUSE'" class="badge bg-success">
+                    {{ 'GL.guest_house' | translate }}
+                  </span>
+                  <span *ngIf="row['hotel_type'] === 'MUSAFIR_KHANA'" class="badge bg-warning">
+                    {{ 'GL.musafir_khana' | translate }}
+                  </span>
+                  <span *ngIf="row['hotel_type'] === 'HOUSE'" class="badge bg-secondary">
+                    {{ 'GL.house' | translate }}
+                  </span>
+                  <span *ngIf="row['hotel_type'] === 'RENT_ROOM'" class="badge bg-purple">
+                    {{ 'GL.rent_room' | translate }}
+                  </span>
+                  <span *ngIf="row['hotel_type'] === 'COMPANY'" class="badge bg-dark">
+                    {{ 'GL.company' | translate }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'HL.phone' | translate }}</small>
+                <div class="fw-medium">{{ row['phone'] || 'N/A' }}</div>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'HL.email' | translate }}</small>
+                <div class="fw-medium text-truncate">{{ row['email'] || 'N/A' }}</div>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mt-2 pt-2 border-top">
+              <small class="text-muted d-block">{{ 'HL.address' | translate }}</small>
+              <div class="fw-medium small">{{ row['address'] || 'N/A' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Table View -->
+        <ngx-datatable *ngIf="!isSmallScreen" #table class="hotel-table" [rows]="hotelData" [columnMode]="'force'"
+          [headerHeight]="50" [footerHeight]="120" [selected]="selected" [rowHeight]="'auto'" [scrollbarV]="false"
+          [scrollbarH]="false">
+
+          <!-- ID Column -->
+          <ngx-datatable-column name="{{'HL.id' | translate}}" [width]="70" [minWidth]="70">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <span class="badge bg-light text-dark fw-bold">#{{row['id']}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Name Column -->
+          <ngx-datatable-column name="{{'HL.name' | translate}}" [width]="200" [minWidth]="150">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex align-items-center">
+                <div
+                  class="avatar-placeholder bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                  style="width: 40px; height: 40px;">
+                  <i class="feather icon-home"></i>
+                </div>
+                <div>
+                  <div class="fw-bold text-dark">{{row['title']}}</div>
+                  <div class="small text-muted">{{row['address'] | slice:0:30}}...</div>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- City Column -->
+          <ngx-datatable-column name="{{'HL.city' | translate}}" [width]="120" [minWidth]="100">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="fw-medium">
+                <span *ngIf="currentLang==='en_US'">{{row['city']?.title || '—'}}</span>
+                <span *ngIf="currentLang!='en_US'">{{row['city']?.province || '—'}}</span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Hotel Type Column -->
+          <ngx-datatable-column name="{{'HL.hotel_type' | translate}}" [width]="120" [minWidth]="100">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div>
+                <span *ngIf="row['hotel_type'] === 'HOTEL'" class="badge bg-primary">
+                  {{ 'GL.hotel' | translate }}
+                </span>
+                <span *ngIf="row['hotel_type'] === 'HOSTEL'" class="badge bg-info">
+                  {{ 'GL.hostel' | translate }}
+                </span>
+                <span *ngIf="row['hotel_type'] === 'GUEST_HOUSE'" class="badge bg-success">
+                  {{ 'GL.guest_house' | translate }}
+                </span>
+                <span *ngIf="row['hotel_type'] === 'MUSAFIR_KHANA'" class="badge bg-warning">
+                  {{ 'GL.musafir_khana' | translate }}
+                </span>
+                <span *ngIf="row['hotel_type'] === 'HOUSE'" class="badge bg-secondary">
+                  {{ 'GL.house' | translate }}
+                </span>
+                <span *ngIf="row['hotel_type'] === 'RENT_ROOM'" class="badge bg-purple">
+                  {{ 'GL.rent_room' | translate }}
+                </span>
+                <span *ngIf="row['hotel_type'] === 'COMPANY'" class="badge bg-dark">
+                  {{ 'GL.company' | translate }}
+                </span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Contact Info -->
+          <ngx-datatable-column name="{{'HL.contact' | translate}}" [width]="180" [minWidth]="150">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div>
+                <div class="small text-muted">{{ 'HL.email' | translate }}</div>
+                <div class="fw-medium text-truncate">{{ row['email'] || '—' }}</div>
+                <div class="small text-muted mt-2">{{ 'HL.phone' | translate }}</div>
+                <div class="fw-medium">{{ row['phone'] || '—' }}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Actions Column -->
+          <ngx-datatable-column name="{{'HL.actions' | translate}}" [width]="120" [minWidth]="100">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex gap-1">
+                <!-- View Button -->
+                <button class="btn btn-sm btn-outline-primary"
+                  (click)="viewWebConfig(row['id'])" title="{{ 'HL.view' | translate }}">
+                  <i class="feather icon-eye"></i>
+                </button>
+
+                <!-- More Actions Dropdown -->
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false" >
+                    <i class="feather icon-more-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index: 1050;">
+                    <li>
+                      <a class="dropdown-item" (click)="viewWebConfig(row['id'])">
+                        <i class="feather icon-eye me-2"></i>{{ 'HL.view' | translate }}
+                      </a>
+                    </li>
+                    <li *appHasAnyRole="['super_admin', 'sub_admin']; currentRole: role">
+                      <a class="dropdown-item" (click)="editWebConfig(row['id'])">
+                        <i class="feather icon-edit me-2"></i>{{ 'HL.edit' | translate }}
+                      </a>
+                    </li>
+                    <li *ngIf="role=='super_admin'">
+                      <a class="dropdown-item text-danger" (click)="openModal(row['id'])">
+                        <i class="feather icon-trash-2 me-2"></i>{{ 'HL.delete' | translate }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+        </ngx-datatable>
+
+        <!-- Pagination -->
+        <div class="card-footer bg-light py-2 py-md-3" *ngIf="showPagination">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <!-- Items Per Page -->
+            <div class="d-flex align-items-center gap-1 order-2 order-md-1">
+              <span class="text-muted small">{{ 'HL.show' | translate }}</span>
+              <select class="form-control" (change)="itemsPerPage($event)">
+                <option *ngFor="let size of pageSizeOptions" [value]="size">{{size}}</option>
+              </select>
+              <span class="text-muted small text-nowrap">{{ 'HL.per_page' | translate }}</span>
+            </div>
+
+            <!-- Page Info -->
+            <div class="text-center order-1 order-md-2">
+              <span class="text-muted small">
+                {{ 'HL.page' | translate }} {{currentPage}} {{ 'HL.of' | translate }} {{totalPages}}
+              </span>
+              <div class="small text-muted">
+                {{ 'HL.residence_total_records' | translate }}: {{totalItems}}
+              </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation" class="order-3">
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item" [ngClass]="{disabled: currentPage === 1}">
+                  <a class="page-link" style="cursor: pointer;" (click)="firstPage()"
+                    title="{{ 'HL.first_page' | translate }}">
+                    <i class="feather icon-chevrons-left"></i>
+                  </a>
+                </li>
+                <li class="page-item" [ngClass]="{ disabled: currentPage === 1 }">
+                  <a class="page-link" style="cursor: pointer;" (click)="previous()"
+                    title="{{ 'HL.previous_page' | translate }}">
+                    <i class="feather icon-chevron-left"></i>
+                  </a>
+                </li>
+
+                <li *ngFor="let page of getPaginationArray()" class="page-item"
+                  [ngClass]="{ active: currentPage === page }">
+                  <a *ngIf="page !== '...'" class="page-link" style="cursor: pointer;" (click)="setPage(page)">{{ page
+                    }}</a>
+                  <span *ngIf="page === '...'" class="page-link">{{ page }}</span>
+                </li>
+
+                <li class="page-item" [ngClass]="{ disabled: currentPage === totalPages }">
+                  <a class="page-link" style="cursor: pointer;" (click)="next()"
+                    title="{{ 'HL.next_page' | translate }}">
+                    <i class="feather icon-chevron-right"></i>
+                  </a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled: currentPage === totalPages}">
+                  <a class="page-link" style="cursor: pointer;" (click)="lastPage()"
+                    title="{{ 'HL.last_page' | translate }}">
+                    <i class="feather icon-chevrons-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,354 @@
+.checkout-btn {
+    background-color: #569992;
+    color: white;
+    width: 30px; /* Adjust width for box shape */
+    height: 30px; /* Adjust height for box shape */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px; /* Optional: If you want slightly rounded corners */
+    border: none;
+  }
+
+  .checkout-btn i {
+    font-size: 18px; /* Adjust icon size */
+  }
+  .checkin-btn {
+    background-color: #e65705;
+    color: white;
+    width: 30px; /* Adjust width for box shape */
+    height: 30px; /* Adjust height for box shape */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px; /* Optional: If you want slightly rounded corners */
+    border: none;
+  }
+
+  .checkin-btn i {
+    font-size: 18px; /* Adjust icon size */
+  }
+
+
+  .search-fields {
+    padding: 1rem; /* Add padding inside the form container */
+  }
+  .search-fields .form-group {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* Custom Outline Button in Orange */
+.btn-outline-orange {
+  color: #ff9800; /* Orange color */
+  border-color: #ff9800; /* Orange border */
+  background-color: transparent;
+}
+
+/* Hover effect to fill background with orange */
+.btn-outline-orange:hover {
+  color: #fff; /* White text on hover */
+  background-color: #ff9800; /* Fill with orange on hover */
+  border-color: #ff9800;
+}
+
+/* Optional: Custom Outline Button in Yellow */
+.btn-outline-yellow {
+  color: #ffc107; /* Yellow color */
+  border-color: #ffc107; /* Yellow border */
+  background-color: transparent;
+}
+
+/* Hover effect to fill background with yellow */
+.btn-outline-yellow:hover {
+  color: #fff; /* White text on hover */
+  background-color: #ffc107; /* Fill with yellow on hover */
+  border-color: #ffc107;
+}
+
+.blacklisted-cell {
+  background-color: #6c757d; /* Subtle gray background */
+  color: #ffffff; /* White text for contrast */
+  padding: 5px 10px; /* Add some spacing for a neat look */
+  border-radius: 5px; /* Slightly rounded corners for a modern design */
+  display: inline-block; /* Keep the styling contained to the text */
+  font-weight: bold; /* Emphasize the text */
+  text-align: center; /* Center the text */
+}
+
+
+
+
+.custom-tabs {
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.custom-tabs .tab-link {
+  border-radius: 30px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  margin-right: 8px;
+  color: #495057;
+  background-color: #f8f9fa;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.custom-tabs .tab-link:hover {
+  background-color: #e2e6ea;
+}
+
+.custom-tabs .tab-link.active {
+  background-color: #659992;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(13, 110, 253, 0.4);
+}
+
+.custom-tabs .blacklist-tab.active {
+  background-color: #212529 !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(33, 37, 41, 0.4);
+}
+
+.badge {
+  font-size: 0.75rem;
+  border-radius: 10px;
+}
+
+/* Responsive filters layout */
+@media (max-width: 768px) {
+  .d-flex.flex-wrap.gap-2 {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .custom-tabs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .custom-tabs .tab-link {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767.98px) {
+  /* Make the table a bit wider than the screen to force horizontal scroll */
+  .table-responsive .guest-table {
+    min-width: 720px;
+  }
+
+  /* Fix that hardcoded padding in the footer on small devices */
+  .card-footer .col-md-4[style] {
+    padding-left: 0 !important;
+  }
+
+  .card-footer .pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .card-footer select.form-select {
+    width: 100%;
+  }
+}
+
+
+
+  /* Mobile-first responsive styles */
+  @media (max-width: 767.98px) {
+    .card-body {
+      padding: 1rem !important;
+    }
+
+    .btn span:not(.d-sm-inline) {
+      display: none !important;
+    }
+
+    .input-group-sm {
+      font-size: 0.875rem;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+    }
+
+    .search-panel .card-body {
+      padding: 1rem !important;
+    }
+
+    .mobile-guest-card {
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .mobile-guest-card:hover {
+      background: #f8f9fa;
+    }
+
+    /* Hide desktop columns on mobile */
+    .guest-table:not(.mobile-card) .datatable-header-cell,
+    .guest-table:not(.mobile-card) .datatable-body-cell {
+      display: none !important;
+    }
+
+    /* Show only mobile card column */
+    .guest-table .mobile-card {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    /* Hide mobile card on desktop */
+    .mobile-card {
+      display: none !important;
+    }
+  }
+
+  /* Common styles */
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .search-panel {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .avatar-placeholder {
+    background-color: #e3f2fd;
+  }
+
+  .badge {
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+
+  .bg-pink {
+    background-color: #f06292 !important;
+  }
+
+  .table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .guest-table .datatable-header-cell {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    padding: 0.75rem 1rem;
+  }
+
+  .guest-table .datatable-body-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+  }
+
+  .guest-table .datatable-row-even {
+    background-color: #f8f9fa;
+  }
+
+  .guest-table .datatable-row-odd {
+    background-color: #ffffff;
+  }
+
+  .guest-table .datatable-row:hover {
+    background-color: #e9ecef;
+    transition: background-color 0.2s;
+  }
+
+  .input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+  }
+
+  .form-select, .form-control {
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+  }
+
+  .form-select:focus, .form-control:focus {
+    border-color: #4dabf7;
+    box-shadow: 0 0 0 0.2rem rgba(77, 171, 247, 0.25);
+  }
+
+  .dropdown-menu {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    z-index: 1050 !important;
+  }
+
+  .page-link {
+    border-radius: 6px;
+    margin: 0 2px;
+    border: 1px solid #dee2e6;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .page-item.active .page-link {
+    background-color: #659992;
+    border-color: #659992;
+  }
+
+  .btn {
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  /* Fix for ngx-datatable dropdowns */
+  .ngx-datatable {
+    position: relative;
+  }
+
+  .datatable-body {
+    overflow: visible !important;
+  }
+
+  .datatable-body-row {
+    position: relative;
+  }
+
+  /* Ensure dropdowns work properly */
+  .dropdown {
+    position: static !important;
+  }
+
+  .dropdown-menu {
+    position: absolute !important;
+  }

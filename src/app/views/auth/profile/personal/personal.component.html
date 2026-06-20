@@ -1,0 +1,111 @@
+<div class="mb-4 d-md-flex align-items-center justify-content-between">
+    <div>
+        <h4>{{'UP.personal_info' | translate}}</h4>
+        <p>{{'UP.personal_info_msg' | translate}}</p>
+    </div>
+    <button *ngIf="!edit" (click)="onEdit()" class="btn btn-outline-primary">{{'UP.edit_profile' | translate}}</button>
+</div>
+<div class="row">
+   
+    <div class="col-md" *ngIf="!edit">
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th class="py-4">{{'UP.first_name' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.first_name}}</td>
+                </tr>
+                <tr>
+                    <th class="py-4">{{'UP.last_name' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.last_name}}</td>
+                </tr>
+                <tr>
+                    <th class="py-4">{{'UP.father_name' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.father_name}}</td>
+                </tr>
+                <tr>
+                    <th class="py-4">{{'UP.grand_father_name' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.grand_father_name}}</td>
+                </tr>
+                <tr>
+                    <th class="py-4">{{'UP.email' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.email}}</td>
+                </tr>
+                <tr>
+                    <th class="py-4">{{'UP.phone' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.phone}}</td>
+                </tr>
+                <tr>
+                    <th class="py-4">{{'UP.occupation' | translate}}</th>
+                    <td class="py-4">{{formGroup.value.occupation}}</td>
+                </tr>
+ 
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12" *ngIf="edit">
+        <form [formGroup]="formGroup" >
+            <div class="row">
+                <div class="col form-group mb-">
+                    <label class="form-label">{{'UP.first_name' | translate}}</label>
+                    <input type="text" class="form-control" placeholder="{{'UP.first_name' | translate}}" formControlName="first_name">
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col form-group mb-3">
+                    <label class="form-label">{{'UP.last_name' |translate}}</label>
+                    <input type="text" class="form-control" placeholder="{{'UP.last_name' |translate}}" formControlName="last_name">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col form-group mb-3">
+                    <label class="form-label">{{'UP.father_name' | translate}}</label>
+                    <input type="text" class="form-control" placeholder="{{'UP.father_name' | translate}}" formControlName="father_name">
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col form-group mb-3">
+                    <label class="form-label">{{'UP.grand_father_name' | translate}}</label>
+                    <input type="text" class="form-control" placeholder="{{'UP.grand_father_name' | translate}}" formControlName="grand_father_name">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col form-group mb-3">
+                    <label class="form-label">{{'UP.email' | translate}}</label>
+                    <input type="email" class="form-control" placeholder="{{'UP.email' | translate}}" formControlName="email">
+                </div>
+
+                
+            </div>
+            <div class="row">
+
+                <div class="col form-group mb-3">
+                    <label class="form-label">{{'UP.phone' | translate}}</label>
+                    <input type="text" class="form-control" placeholder="+93 700 00 0000" formControlName="phone">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col form-group mb-3">
+                    <label class="form-label">{{'UP.occupation' | translate}}</label>
+                    <input type="email" class="form-control" placeholder="{{'UP.occupation' | translate}}" formControlName="occupation">
+                </div>
+
+
+
+            </div>
+
+
+
+            <div class="text-end">
+                <button class="btn btn-outline-danger me-2" (click)="onEdit()">{{'UP.close' | translate}}</button>
+                <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'UP.update' | translate}}</button>
+
+
+
+                
+            </div>
+        </form>
+    </div>
+</div>

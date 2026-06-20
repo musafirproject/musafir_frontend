@@ -1,0 +1,76 @@
+<div class="container">
+    <h3 class="text-center">
+        <span class="text-capitalize">{{'UC.residence' | translate}}</span>
+    </h3>
+    <div class="mt-4 mx-auto" style="max-width: 1000px;">
+        <div class="d-flex align-items-center justify-content-center">
+            <!-- Search Box -->
+            <div class="input-affix mb-3 flex-grow-1" style="max-width: 600px;">
+                <i class="prefix-icon prefix-icon-lg feather icon-search"></i>
+                <input
+                    type="text"
+                    placeholder="{{'GL.search' | translate}}" 
+                    [(ngModel)]="searchValue" 
+                    class="form-control form-control-lg"
+                    (keyup)="onSearch($event)" 
+                >
+            </div>
+            <div class="ms-3 mb-3 d-flex align-items-center select-all-container">
+                <input 
+                    type="checkbox" 
+                    id="selectAll" 
+                    [(ngModel)]="selectAll" 
+                    (change)="onSelectAll()" 
+                    class="form-check-input styled-checkbox"
+                >
+                <label for="selectAll" class="form-check-label ms-2">{{'GL.select_all' | translate}}</label>
+            </div>
+            <!-- Button -->
+            <button class="btn btn-primary btn-lg ms-3 mb-3" (click)="onAddHotel()">{{'UL.assign' | translate}}</button>
+        </div>
+    </div>
+    <div class="mt-4">
+        <div class="row">
+            <!-- Smaller cards with 6 per row -->
+            <div class="col-6 col-md-2 " *ngFor="let hotel of filteredHotels">
+                <div 
+                    class="card hotel-card mb-3 "
+                    (click)="onSelectHotel(hotel.id)"
+                    [class.selected]="selectedHotelIds.includes(hotel.id)"
+                >
+                    <div class="card-body text-center" >
+                        <!-- Icon Section -->
+                        <div class="hotel-icon">
+                            <i 
+                                class="la la-bed icon-size"
+                                [ngClass]="{
+                                    'black-icon': hotel.hotel_type === 'HOTEL',
+                                    'orange-icon': hotel.hotel_type === 'HOSTEL',
+                                    'yellow-icon': hotel.hotel_type === 'GUEST_HOUSE',
+                                    'teal-icon': hotel.hotel_type === 'MUSAFIR_KHANA',
+                                    'purple-icon': hotel.hotel_type === 'HOUSE',
+                                    'red-icon': hotel.hotel_type === 'RENT_ROOM',
+                                    'orange-dark-icon': hotel.hotel_type === 'COMPANY'
+                                }"
+                            ></i>
+                        </div>
+                        <!-- Hotel Info -->
+                        <h6 class="card-title text-truncate" title="{{ hotel.title }}">{{ hotel.title }}</h6>
+                        <p class="card-text">
+                            <small>
+                                <strong *ngIf="hotel.hotel_type==='HOTEL'">{{'GL.hotel' |translate}}</strong>
+                                <strong *ngIf="hotel.hotel_type==='HOSTEL'">{{'GL.hostel' |translate}}</strong>
+                                <strong *ngIf="hotel.hotel_type==='GUEST_HOUSE'">{{'GL.guest_house' |translate}}</strong>
+                                <strong *ngIf="hotel.hotel_type==='MUSAFIR_KHANA'">{{'GL.musafir_khana' |translate}}</strong>
+                                <strong *ngIf="hotel.hotel_type==='HOUSE'">{{'GL.house' |translate}}</strong>
+                                <strong *ngIf="hotel.hotel_type==='RENT_ROOM'">{{'GL.rent_room' |translate}}</strong>
+                                <strong *ngIf="hotel.hotel_type==='COMPANY'">{{'GL.compnay' |translate}}</strong>
+                            </small><br>
+                            <small><strong>{{ hotel.city.title }}</strong></small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

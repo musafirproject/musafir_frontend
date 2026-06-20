@@ -1,0 +1,14 @@
+<form [formGroup]="registerForm" >
+    <div class="text-center">
+    </div>
+    <div class="form-group mb-3">
+        <label class="form-label">Email</label>
+        <input 
+            type="email" 
+            class="form-control no-validation-icon no-success-validation" 
+            formControlName="email"
+        >
+    </div>
+    <button class="btn btn-primary d-block w-100"  (click)="forgotPassword()" >Send</button>
+    <br>
+</form>

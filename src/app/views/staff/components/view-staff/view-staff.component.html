@@ -1,0 +1,569 @@
+<!-- Staff Profile View Component -->
+<div class="staff-view-container">
+  <!-- Header Section -->
+  <div class="staff-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="page-title mb-2">{{'UV.staff_profile_info' | translate}}</h1>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <span class="status-badge" [ngClass]="{
+            'status-approved': staffData.is_approved,
+            'status-pending': !staffData.is_approved
+          }">
+            {{ staffData.is_approved ? ('UL.approved' | translate) : ('UL.pending' | translate) }}
+          </span>
+          <span class="staff-type-badge">{{ staffData.staff_type }}</span>
+          <span class="text-muted">{{ staffData.created_at | date:'mediumDate' }}</span>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button *ngIf="!staffData.is_approved && role=='guest_caret'"
+                class="btn btn-success btn-activate"
+                (click)="activate()">
+          <i class="fas fa-check-circle me-2"></i>
+          {{'UV.activate' | translate}}
+        </button>
+        <button class="btn btn-outline-secondary btn-close" (click)="close()">
+          <i class="fas fa-times me-2"></i>
+          <!-- {{'UV.close' | translate}} -->
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="row g-4">
+    <!-- Left Column: Personal Information -->
+    <div class="col-xl-8">
+      <div class="card personal-info-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-user me-2"></i>
+            {{'UV.personal_information' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Desktop Table View -->
+            <div class="col-md-12 d-none d-md-block">
+              <div class="table-responsive">
+                <table class="table info-table">
+                  <tbody>
+                    <tr>
+                      <th scope="row">{{'UV.first_name' | translate}}</th>
+                      <td>{{staffData.first_name}}</td>
+                      <th scope="row">{{'UV.last_name' | translate}}</th>
+                      <td>{{staffData.last_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.father_name' | translate}}</th>
+                      <td>{{staffData.father_name}}</td>
+                      <th scope="row">{{'UV.grand_father_name' | translate}}</th>
+                      <td>{{staffData.grand_father_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.email' | translate}}</th>
+                      <td>{{staffData.email}}</td>
+                      <th scope="row">{{'UV.phone' | translate}}</th>
+                      <td>{{staffData.phone}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.nid' | translate}}</th>
+                      <td>{{staffData.tazkira}}</td>
+                      <th scope="row">{{'UC.gender' | translate}}</th>
+                      <td>
+                        <span class="gender-badge" [ngClass]="staffData.gender?.toLowerCase()">
+                          {{ staffData.gender === 'MALE' ? ('GL.male' | translate) : ('GL.female' | translate) }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.occupation' | translate}}</th>
+                      <td>{{staffData.position}}</td>
+                      <th scope="row">{{'UC.staff_type' | translate}}</th>
+                      <td>{{ ('STAFF_TYPE.' + (staffData?.staff_type || '')) | translate }}</td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Mobile Card View -->
+            <div class="col-12 d-md-none">
+              <div class="info-card-list">
+                <div class="info-card-item">
+                  <label>{{'UV.first_name' | translate}}</label>
+                  <p>{{staffData.first_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.last_name' | translate}}</label>
+                  <p>{{staffData.last_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.father_name' | translate}}</label>
+                  <p>{{staffData.father_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.grand_father_name' | translate}}</label>
+                  <p>{{staffData.grand_father_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.email' | translate}}</label>
+                  <p class="text-primary">{{staffData.email}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.phone' | translate}}</label>
+                  <p>{{staffData.phone}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.nid' | translate}}</label>
+                  <p>{{staffData.tazkira}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UC.gender' | translate}}</label>
+                  <p>
+                    <span class="gender-badge" [ngClass]="staffData.gender?.toLowerCase()">
+                      {{ staffData.gender === 'MALE' ? ('GL.male' | translate) : ('GL.female' | translate) }}
+                    </span>
+                  </p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.occupation' | translate}}</label>
+                  <p>{{staffData.position}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotel Information Card -->
+      <div class="card hotel-info-card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-hotel me-2"></i>
+            {{'UV.hotel_assignment' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="hotel-info-content">
+            <div class="hotel-details">
+              <h4>{{ staffData.hotel?.title }}</h4>
+              <p class="text-muted mb-3">Assigned Hotel</p>
+              <a [routerLink]="['/settings/hotel', staffData.hotel?.id, 'view']"
+                 class="btn btn-outline-primary btn-hotel-view">
+                <i class="fas fa-external-link-alt me-2"></i>
+                {{'UV.view_hotel_details' | translate}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Quick Stats & Actions -->
+    <div class="col-xl-4">
+      <div class="card summary-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-chart-bar me-2"></i>
+            {{'UV.quick_summary' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="summary-stats">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ staffAddresses?.length || 0 }}</h4>
+                <p>{{'UV.addresses' | translate}}</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ staffMedia?.length || 0 }}</h4>
+                <p>{{'UV.documents' | translate}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="card quick-actions-card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="fas fa-bolt me-2"></i>
+            {{'UV.quick_actions' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" (click)="scrollToSection('addresses')">
+              <i class="fas fa-map-marker-alt me-2"></i>
+              {{'UV.view_addresses' | translate}}
+            </button>
+            <button class="btn btn-outline-primary" (click)="scrollToSection('documents')">
+              <i class="fas fa-file-pdf me-2"></i>
+              {{'UV.view_documents' | translate}}
+            </button>
+            <button *ngIf="staffData.email" class="btn btn-outline-info">
+              <i class="fas fa-envelope me-2"></i>
+              {{'UV.email_staff' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Addresses Section -->
+  <div class="section-divider" id="addresses">
+    <h2 class="section-title">
+      <i class="fas fa-map-marked-alt me-2"></i>
+      {{'UV.user_address_info' | translate}}
+    </h2>
+  </div>
+
+  <div *ngIf="staffAddresses && staffAddresses.length > 0" class="addresses-section">
+    <div class="row g-4">
+      <!-- Desktop Table View -->
+      <div class="col-12 d-none d-lg-block">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover addresses-table">
+                <thead>
+                  <tr>
+                    <th>{{'UV.no' | translate}}</th>
+                    <th>{{'UV.address_type' | translate}}</th>
+                    <th>{{'UV.city' | translate}}</th>
+                    <th>{{'UV.district' | translate}}</th>
+                    <th>{{'UV.village' | translate}}</th>
+                    <th>{{'UV.address' | translate}}</th>
+                    <th>{{'UV.created_date' | translate}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let address of staffAddresses; let i = index">
+                    <td><span class="badge bg-secondary">{{i + 1}}</span></td>
+                    <td>
+                      <span class="address-type-badge" [ngClass]="address?.address_type?.toLowerCase()?.replace(' ', '-')">
+                        {{ address?.address_type === 'CURRENT ADDRESS' ?
+                          ('GC.current_address' | translate) :
+                          ('GC.permanent_address' | translate) }}
+                      </span>
+                    </td>
+                    <td>
+                      <span *ngIf="currentLang==='en_US'">{{address?.city?.title}}</span>
+                      <span *ngIf="currentLang!='en_US'">{{address?.city?.province}}</span>
+                    </td>
+                    <td>{{address?.district}}</td>
+                    <td>{{address?.village}}</td>
+                    <td class="address-text">{{address?.addr}}</td>
+                    <td><small class="text-muted">{{address?.created_at | date:'shortDate'}}</small></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="col-12 d-lg-none">
+        <div class="row g-3">
+          <div class="col-12" *ngFor="let address of staffAddresses; let i = index">
+            <div class="address-card">
+              <div class="address-card-header">
+                <span class="address-type-badge" [ngClass]="address?.address_type?.toLowerCase()?.replace(' ', '-')">
+                  {{ address?.address_type === 'CURRENT ADDRESS' ?
+                    ('GC.current_address' | translate) :
+                    ('GC.permanent_address' | translate) }}
+                </span>
+                <span class="badge bg-secondary ms-2">#{{i + 1}}</span>
+              </div>
+              <div class="address-card-body">
+                <div class="row">
+                  <div class="col-6">
+                    <label>{{'UV.city' | translate}}</label>
+                    <p>
+                      <span *ngIf="currentLang==='en_US'">{{address?.city?.title}}</span>
+                      <span *ngIf="currentLang!='en_US'">{{address?.city?.province}}</span>
+                    </p>
+                  </div>
+                  <div class="col-6">
+                    <label>{{'UV.district' | translate}}</label>
+                    <p>{{address?.district}}</p>
+                  </div>
+                  <div class="col-6">
+                    <label>{{'UV.village' | translate}}</label>
+                    <p>{{address?.village}}</p>
+                  </div>
+                  <div class="col-6">
+                    <label>{{'UV.created_date' | translate}}</label>
+                    <p><small class="text-muted">{{address?.created_at | date:'shortDate'}}</small></p>
+                  </div>
+                  <div class="col-12">
+                    <label>{{'UV.address' | translate}}</label>
+                    <p class="address-text">{{address?.addr}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="staffAddresses && staffAddresses.length === 0" class="empty-state">
+    <div class="empty-state-content">
+      <i class="fas fa-map-marker-alt fa-3x text-muted mb-3"></i>
+      <h4>{{'UV.no_addresses_found' | translate}}</h4>
+      <p class="text-muted">{{'UV.staff_address_msg' | translate}}</p>
+    </div>
+  </div>
+
+  <!-- Documents Section -->
+  <div class="section-divider" id="documents">
+    <h2 class="section-title">
+      <i class="fas fa-file-alt me-2"></i>
+      {{'UV.user_docs' | translate}}
+    </h2>
+  </div>
+
+  <div *ngIf="staffMedia && staffMedia.length > 0" class="documents-section">
+    <div class="row g-4">
+      <!-- Desktop Table View -->
+      <div class="col-12 d-none d-lg-block">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover documents-table">
+                <thead>
+                  <tr>
+                    <th>{{'UV.no' | translate}}</th>
+                    <th>{{'UV.doc_type' | translate}}</th>
+                    <th>{{'UV.name' | translate}}</th>
+                    <th>{{'UV.preview' | translate}}</th>
+                    <!-- <th>{{'UV.actions' | translate}}</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngIf="staffData?.image">
+                    <td><span class="badge bg-secondary">1</span></td>
+                    <td>
+                      <span class="document-type-badge">{{'GC.image' | translate}}</span>
+                    </td>
+                    <td class="document-name">
+                      <i class="fas fa-file-image text-success"></i>
+                      <span class="ms-2">{{ staffData?.image?.split('/').pop() }}</span>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary btn-preview"
+                              (click)="previewDocument({ name: staffData?.image?.split('/').pop(), url: staffData?.image, document_type: 'PROFILE' })">
+                        <i class="fas fa-eye me-1"></i>
+                        {{'UV.preview' | translate}}
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr *ngFor="let media of staffMedia; let i = index">
+                    <td><span class="badge bg-secondary">{{i + 2}}</span></td>
+                    <td>
+                      <span class="document-type-badge">
+                        {{ media?.document_type === 'TAZKIRA' ? ('GC.tazkira' | translate) :
+                           media?.document_type === 'PASSPORT' ? ('GC.passport' | translate) :
+                           media?.document_type === 'VISA' ? ('GC.visa' | translate) : media?.document_type }}
+                      </span>
+                    </td>
+                    <td class="document-name">
+                      <i class="fas"
+                         [ngClass]="getFileIcon(media.name)"></i>
+                      {{media?.name}}
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary btn-preview"
+                              (click)="previewDocument(media)">
+                        <i class="fas fa-eye me-1"></i>
+                        {{'UV.preview' | translate}}
+                      </button>
+                    </td>
+                    <td>
+                      <div class="btn-group" dropdown>
+                        
+                        <div class="dropdown-menu" *dropdownMenu>
+                          <a class="dropdown-item" (click)="openMediaViewer(media)">
+                            <i class="fas fa-expand me-2"></i>
+                            {{'UV.view_fullscreen' | translate}}
+                          </a>
+                          <a class="dropdown-item" href="#" (click)="downloadDocument(media)">
+                            <i class="fas fa-download me-2"></i>
+                            {{'UV.download' | translate}}
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="col-12 d-lg-none">
+        <div class="row g-3">
+
+          <!-- ✅ Staff image appears as a normal document card -->
+          <div class="col-12" *ngIf="staffData?.image">
+            <div class="document-card">
+              <div class="document-card-header">
+                <span class="document-type-badge">PROFILE</span>
+                <span class="badge bg-secondary ms-2">#0</span>
+              </div>
+              <div class="document-card-body">
+                <div class="document-info">
+                  <div class="document-icon">
+                    <i class="fas fa-2x fa-file-image text-success"></i>
+                  </div>
+                  <div class="document-details">
+                    <h6>{{ staffData?.image?.split('/').pop() }}</h6>
+                    <small class="text-muted">{{ staffData?.created_at | date:'shortDate' }}</small>
+                  </div>
+                </div>
+
+                <div class="document-actions mt-3">
+                  <button class="btn btn-sm btn-outline-primary me-2"
+                          (click)="previewDocument({ name: staffData?.image?.split('/').pop(), url: staffData?.image, document_type: 'PROFILE' })">
+                    <i class="fas fa-eye me-1"></i>
+                    {{'UV.preview' | translate}}
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary"
+                          (click)="openMediaViewer({ name: staffData?.image?.split('/').pop(), url: staffData?.image, document_type: 'PROFILE' })">
+                    <i class="fas fa-expand me-1"></i>
+                    {{'UV.fullscreen' | translate}}
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Existing media cards -->
+          <div class="col-12" *ngFor="let media of staffMedia; let i = index">
+            <div class="document-card">
+              <div class="document-card-header">
+                <span class="document-type-badge">
+                  {{ media?.document_type === 'TAZKIRA' ? ('GC.tazkira' | translate) :
+                     media?.document_type === 'PASSPORT' ? ('GC.passport' | translate) :
+                     media?.document_type === 'VISA' ? ('GC.visa' | translate) : media?.document_type }}
+                </span>
+                <span class="badge bg-secondary ms-2">#{{i + 1}}</span>
+              </div>
+              <div class="document-card-body">
+                <div class="document-info">
+                  <div class="document-icon">
+                    <i class="fas fa-2x" [ngClass]="getFileIcon(media.name)"></i>
+                  </div>
+                  <div class="document-details">
+                    <h6>{{media?.name}}</h6>
+                    <small class="text-muted">{{media?.created_at | date:'shortDate'}}</small>
+                  </div>
+                </div>
+                <div class="document-actions mt-3">
+                  <button class="btn btn-sm btn-outline-primary me-2"
+                          (click)="previewDocument(media)">
+                    <i class="fas fa-eye me-1"></i>
+                    {{'UV.preview' | translate}}
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary"
+                          (click)="openMediaViewer(media)">
+                    <i class="fas fa-expand me-1"></i>
+                    {{'UV.fullscreen' | translate}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="staffMedia && staffMedia.length === 0" class="empty-state">
+    <div class="empty-state-content">
+      <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+      <h4>{{'UV.no_documents_found' | translate}}</h4>
+      <p class="text-muted">{{'UV.staff_doc_msg' | translate}}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Document Viewer -->
+<div class="modal fade" [class.show]="isModalOpen" [style.display]="isModalOpen ? 'block' : 'none'">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas" [ngClass]="getFileIcon(selectedMedia?.name)"></i>
+          {{ selectedMedia?.name }}
+        </h5>
+        <div class="modal-actions">
+          <button class="btn btn-sm btn-outline-secondary me-2"
+                  (click)="downloadDocument(selectedMedia)"
+                  *ngIf="selectedMedia">
+            <i class="fas fa-download"></i>
+          </button>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Image Viewer -->
+        <div *ngIf="!isPdf" class="image-viewer">
+          <img [src]="selectedMedia?.url | signedUrl | async"
+               [alt]="selectedMedia?.name"
+               class="img-fluid"
+               (load)="onImageLoad($event)">
+        </div>
+
+        <!-- PDF Loader -->
+        <div *ngIf="isPdf && loadingPdf" class="pdf-loader">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">{{'UV.loading_pdf' | translate}}...</span>
+          </div>
+          <p class="mt-3">{{'UV.preparing_document' | translate}}...</p>
+        </div>
+
+        <!-- PDF Viewer -->
+        <div *ngIf="isPdf && !loadingPdf && pdfUrl" class="pdf-viewer">
+          <iframe [src]="pdfUrl"
+                  width="100%"
+                  [style.height]="pdfIframeHeight"
+                  style="border: none;"
+                  frameborder="0"
+                  (load)="onPdfLoad()">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          {{'UV.close' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

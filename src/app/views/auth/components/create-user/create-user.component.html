@@ -1,0 +1,268 @@
+<div class="card">
+    <div class="card-body">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a cu  class="nav-link" [ngClass]="{'active': currentTab === 'profile', 'cursor-pointer': true}"
+                    (click)="selectTab('profile')">{{'UC.profile' | translate}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" [ngClass]="{'active': currentTab === 'permanentAddress' , 'cursor-pointer': true}"
+                    (click)="selectTab('permanentAddress')">{{'UC.permanent_address' | translate}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" [ngClass]="{'active': currentTab === 'currentAddress' , 'cursor-pointer': true}"
+                    (click)="selectTab('currentAddress')">{{'UC.current_address' | translate}}</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" [ngClass]="{'active': currentTab === 'documents' , 'cursor-pointer': true}"
+                    (click)="selectTab('documents')">{{'UC.documents' | translate}}</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content mt-3">
+            <!-- Profile Tab -->
+            <div *ngIf="currentTab === 'profile'" class="tab-pane fade show active">
+                <div class="mb-3 d-flex  justify-content-between">
+                    <h4 class="text-muted">{{'UC.complete_profile' | translate}}</h4>
+                    <div class="col-md-7"></div>
+                    <div class="mb-2">
+                        <input type="email" class="form-control mb-3" placeholder="{{'UC.enter_email' | translate}}"
+                            (keydown.enter)="getUserByemail($event)" (keydown.tab)="getUserByemail($event)" />
+                    </div>
+                </div>
+                <br>
+                <form [formGroup]="userForm">
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.first_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="first_name" placeholder="{{'UC.first_name' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.last_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="last_name" placeholder="{{'UC.last_name' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.email' | translate}}</label>
+                            <input type="email" class="form-control" formControlName="email" placeholder="{{'UC.email' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.phone' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="phone" placeholder="+93 700 00 0000">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.father_name' |translate}}</label>
+                            <input type="text" class="form-control" formControlName="father_name" placeholder="{{'UC.father_name' |translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.grand_father_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="grand_father_name" placeholder="{{'UC.grand_father_name' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.nid' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="tazkira" placeholder="0000-0000-00000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.occupation' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="occupation" placeholder="{{'UC.occupation' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.date_of_birth' | translate}}</label>
+                            <input type="text" class="form-control" placeholder="{{'UC.date_of_birth' | translate}}" formControlName="date_of_birth"
+                                bsDatepicker>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.role' | translate}}</label>
+                            <ng-select class="mt-2" [items]="roles" bindLabel="name" bindValue="id" formControlName="role"
+                                [(ngModel)]="selectedRole">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div  class="form-group row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">{{'UV.access' | translate}}</label>
+                            <ng-select 
+                              class="mt-2" 
+                              [items]="translatedCanSeeOptions" 
+                              [multiple]="true" 
+                              bindLabel="label" 
+                              bindValue="value" 
+                              formControlName="can_see"
+                              [(ngModel)]="selectedCanSee"
+                              >
+                            </ng-select>
+                          </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.password' | translate}}</label>
+                            <input type="password" class="form-control" formControlName="password" placeholder="{{'UC.password' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.confirm_password' | translate}}</label>
+                            <input type="password" class="form-control" formControlName="confirm_password" placeholder="{{'UC.confirm_password' | translate}}">
+                        </div>
+                    </div>
+                
+                    <div class="row mb-3">
+                        <!-- Upload Image Input -->
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.upload' |translate}}</label>
+                            <input type="file" class="form-control" (change)="uploadImage($event)">
+                        </div>
+                
+                        <!-- Hotel Input -->
+                        <div class="col-md-6">
+                            <form [formGroup]="hotelForm">
+                                <div class="form-group">
+                                    <label class="form-label">{{'UC.hotel' | translate}}</label>
+                                    <ng-select class="mt-2" [items]="hotels" bindLabel="title" bindValue="id" formControlName="hotel"> 
+                                    </ng-select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </form>
+
+                <div *ngIf="profile" class="row mb-3 mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'UC.save' | translate}}</button>
+                      <button class="btn btn-outline-danger" (click)="close()">{{'UC.close' | translate}}</button>
+                    </div>
+                  </div>
+                
+              
+            </div>
+            <!-- Permanent Address Tab -->
+            <div *ngIf="currentTab == 'permanentAddress'" class="tab-pane fade show active">
+                <!-- Step 3: Address -->
+                <h4 class="text-muted">{{'UC.permanent_address_details' | translate}}</h4>
+                <br>
+                <form [formGroup]="permanentAddressForm">
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.city' | translate}}</label>
+                            <ng-select class="mt-2" [items]="cities" bindLabel="province" bindValue="id"
+                                formControlName="city">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.district' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="district" placeholder="{{'UC.district' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.village' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="village" placeholder="{{'UC.village' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.address' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="addr" placeholder="{{'UC.address' | translate}}">
+                        </div>
+                    </div>
+
+
+                </form>
+                <div *ngIf="permanentAddress" class="row mb-3 mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'UC.save' | translate}}</button>
+                      <button class="btn btn-outline-danger" (click)="close()">{{'UC.close' | translate}}</button>
+                    </div>
+                  </div>
+                <!-- Add structure here as needed -->
+            </div>
+            <!-- Current Address Tab -->
+            <div *ngIf="currentTab === 'currentAddress'" class="tab-pane fade show active">
+                <h4 class="text-muted">{{'UC.current_address_details' | translate}}</h4>
+                <br>
+                <form [formGroup]="currentAddressForm">
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.city' | translate}}</label>
+                            <ng-select class="mt-2" [items]="cities" bindLabel="province" bindValue="id"
+                                formControlName="city">
+                            </ng-select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.district' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="district" placeholder="{{'UC.district' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.village' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="village" placeholder="{{'UC.village' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.address' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="addr" placeholder="{{'UC.address' | translate}}">
+                        </div>
+                    </div>
+
+
+                </form>
+                <div *ngIf="currentAddress" class="row mb-3 mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'UC.save' | translate}}</button>
+                      <button class="btn btn-outline-danger" (click)="close()">{{'UC.close' | translate}}</button>
+                    </div>
+                  </div>
+                <!-- Add structure here as needed -->
+            </div>
+            <!-- Documents Tab -->
+            <div *ngIf="currentTab === 'documents'" class="tab-pane fade show active">
+                <h4 class="text-muted">{{'UC.uplod_docs_msg' | translate}}</h4>
+                <br>
+                <div class="form-group row mb-3">
+                    <div class="col-md-8">
+                        <label class="form-label">{{'UC.uplod_docs_msg' | translate}}</label>
+                        <div class="row">
+                            <!-- Dropdown for document type -->
+                            <div class="col-md-3">
+                                <select class="form-select" [(ngModel)]="selectedDocType" required>
+                                    <option value="" disabled selected>{{'UC.doc_type' | translate}}</option>
+                                    <option *ngFor="let type of documentTypes" [value]="type.value">{{
+                                        currentLang == 'en_US' ? type.label : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+                                </select>
+                            </div>
+                            <!-- File input field -->
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" (change)="onFileSelected($event)" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Display the uploaded file name -->
+                <div *ngIf="uploadedFiles.length > 0" class="form-group row mb-3">
+                    <div class="col-md-9">
+                        <label class="form-label">{{'UC.uploaded_docs' | translate}}</label>
+                        <div class="uploaded-files-list">
+                            <span *ngFor="let file of uploadedFiles" class="badge bg-success me-2">
+                                {{ file.document_type }}: {{ file.name }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="document" class="row mb-3 mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'UC.final_save' | translate}}</button>
+                      <button class="btn btn-outline-danger" (click)="close()">{{'UC.close' |translate }}</button>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <!-- Form actions -->
+
+    </div>
+</div>

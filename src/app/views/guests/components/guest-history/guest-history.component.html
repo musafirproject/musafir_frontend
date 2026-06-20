@@ -1,0 +1,62 @@
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <h5 class="text-muted">{{'GL.history' | translate}}</h5>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{{'UV.no' | translate}}</th>
+                        <th>{{'UV.first_name' | translate}}</th>
+                        <th>{{'UV.last_name' | translate}}</th>
+                        <th>{{'UL.nid' | translate}}</th>
+                        <th>{{'UL.phone' | translate}}</th>
+                        <th>{{'UC.hotel' | translate}}</th>
+                        <th>{{'HL.hotel_type' | translate}}</th>
+                        <th>{{'GV.check_in_date' | translate}}</th>
+                        <th>{{'GV.checkout_date' | translate}}</th>
+                        <th>{{'UV.created_date' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let guest of guestsHistory; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{guest?.guest?.first_name}}</td>
+                        <td>{{guest?.guest?.last_name}}</td>
+                        <td>{{guest?.nid}}</td>
+                        <td>{{guest?.phone}}</td>
+                        <td>{{guest?.guest?.hotel?.title}}</td>
+
+                        <td><span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'HOTEL'">
+                            {{ 'GL.hotel' | translate }}</span>
+                          <span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'HOSTEL'">
+                            {{ 'GL.hostel' | translate }}</span>
+                          <span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'GUEST_HOUSE'">
+                            {{ 'GL.guest_house' | translate }}</span>
+                          <span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'MUSAFIR_KHANA'">
+                            {{ 'GL.musafir_khana' | translate }}</span>
+                          <span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'HOUSE'">
+                            {{ 'GL.house' | translate }}</span>
+                          <span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'RENT_ROOM'">
+                            {{ 'GL.rent_room' | translate }}</span>
+                          <span class="text-capitalize"*ngIf="guest?.guest?.hotel?.hotel_type === 'COMPANY'">
+                            {{ 'GL.company' | translate }}</span>
+
+                        </td>
+
+
+                        <td>{{guest?.guest?.date_of_entry | date}}</td>
+                        <td>{{guest?.guest?.date_of_exit | date}}</td>
+                        <td>{{guest?.created_at | date}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-outline-primary" type="button" (click)="print()">{{'GV.print' | translate}}</button>
+            <button class="btn btn-outline-danger mx-1" type="button" (click)="close()">{{'UV.close' | translate}}</button>
+          </div>
+
+    </div>
+</div>
+

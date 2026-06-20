@@ -1,0 +1,119 @@
+<div class="container-fluid p-0" style="width: 100%;">
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-3 d-flex justify-content-between flex-wrap">
+          <h4 class="mb-2 fw-bolder">{{'HL.district_list' | translate}}</h4>
+          <div class="col-md-7"></div>
+          <div class="mb-2 ">
+              <div class="input-group">
+                  <input class="form-control"  type="text" placeholder="{{ 'HL.search_name' | translate }}" [(ngModel)]="searchTerm" (keydown.enter)="searchDistrict()">
+                  <button class="btn btn-primary btn-icon" type="button" id="button-search-addon" (click)="searchDistrict()"><i class="feather icon-search"></i></button>
+              </div>
+          </div>
+          
+        </div>
+  
+        <div class="table-responsive">
+          <ngx-datatable #table [rows]="districtData" [columnMode]="columnMode" [headerHeight]="50" [footerHeight]="50"
+            
+            [rowHeight]="rowHeight" [scrollbarH]="true">
+  
+            <!-- ID Column -->
+            <ngx-datatable-column name="{{'HL.id' | translate}}" [width]="50">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="d-flex align-items-center">
+                  <div class="text-dark fw-bold">{{row['id']}}</div>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+  
+            <!-- Name Column -->
+            <ngx-datatable-column name="{{'HL.name' | translate}}" [width]="50">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="text-dark fw-bold">{{row['title']}}</div>
+              </ng-template>
+            </ngx-datatable-column>
+  
+           
+  
+            <!-- Hotel Type Column -->
+            <ngx-datatable-column name="{{'HL.city' | translate}}" [width]="50">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="text-dark fw-bold">
+
+                  <span *ngIf="currentLang==='en_US'">{{row['city']['title']}}</span>
+                                <span *ngIf="currentLang!='en_US'">{{row['city']['province']}}</span>
+                  </div>
+              </ng-template>
+            </ngx-datatable-column>
+  
+            <!-- Email Column -->
+            <ngx-datatable-column name="{{'HL.created_at' | translate}}" [width]="50">
+              <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <div class="text-dark fw-bold">{{row['created_at'] | date}}</div>
+              </ng-template>
+            </ngx-datatable-column>
+  
+            
+           
+  
+          </ngx-datatable>
+  
+          <div class="card-footer" *ngIf="showPagination">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center"></div>
+                </div>
+                <div class="col-md-4">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item" [ngClass]="{disabled: currentPage === 1}">
+                                <a class="page-link" style="cursor: pointer;" (click)="firstPage()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg></a>
+                            </li>
+                            <li class="page-item" [ngClass]="{ disabled: currentPage === 1 }">
+                                <a class="page-link" style="cursor: pointer;" (click)="previous()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left">
+                          <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                                </a>
+                            </li>
+  
+                            <li *ngFor="let page of getPaginationArray()" class="page-item" [ngClass]="{ active: currentPage === page }">
+                                <a *ngIf="page !== '...'" class="page-link" style="cursor: pointer;" (click)="setPage(page)">{{ page }}</a>
+                                <span *ngIf="page === '...'" class="page-link">{{ page }}</span>
+                            </li>
+  
+                            <li class="page-item" [ngClass]="{ disabled: currentPage === totalPages }">
+                                <a class="page-link" style="cursor: pointer;" (click)="next()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                                </a>
+                            </li>
+                            <li class="page-item" [ngClass]="{disabled: currentPage === totalPages}">
+                                <a class="page-link" style="cursor: pointer;" (click)="lastPage()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg></a>
+                            </li>
+  
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-4" style="padding-left: 255px;">
+                    <select class="form-select mb-3" aria-label="Default select example" (change)="itemsPerPage($event)">
+                  <option selected="">Items Per Page</option>
+                  <option *ngFor="let size of pageSizeOptions">{{size}}</option>
+                </select>
+                </div>
+            </div>
+  </div>
+        </div>
+  
+  
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  

@@ -1,0 +1,666 @@
+<div class="container-fluid p-0">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-2 p-md-3 p-lg-4">
+      <!-- Header Section - Mobile First -->
+      <div class="d-flex flex-column gap-2 mb-3">
+        <!-- Title Section -->
+        <div class="mb-2">
+          <h4 class="h5 fw-bold text-primary mb-0">{{'GL.guest_list' | translate}}</h4>
+          <p class="text-muted small d-none d-md-block mb-0 mt-1">{{'GL.guest_list_description' | translate}}</p>
+        </div>
+
+        <!-- Top Controls - Stack on mobile -->
+        <div class="d-flex flex-column flex-md-row gap-2 align-items-stretch">
+          <!-- Checkout Filter - Full width on mobile -->
+          <div class="order-1 order-md-0">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-light border-end-0 py-2 px-3">
+                <i class="feather icon-filter"></i>
+              </span>
+              <select id="checkoutFilter" class="form-select border-start-0 py-2" [(ngModel)]="checkoutFilter"
+                (change)="applyCheckoutFilter()">
+                <option value="all">{{ 'GL.all' | translate }}</option>
+                <option value="checkedOut">{{ 'GL.checked_out' | translate }}</option>
+                <option value="notCheckedOut">{{ 'GL.not_checked_out' | translate }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Action Buttons - Row on mobile, auto width on desktop -->
+          <div class="d-flex flex-row flex-wrap gap-2 order-0 order-md-1 ms-md-auto">
+            <!-- Search Toggle Button -->
+            <button type="button"
+              class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 flex-grow-1 flex-md-grow-0"
+              (click)="toggleSearchFields()">
+              <i class="feather icon-search"></i>
+              <span class="d-none d-sm-inline">{{ 'GL.search_btn' | translate }}</span>
+            </button>
+
+            <!-- Create Button -->
+            <button *ngIf="role === 'guest_care'" type="button"
+              class="btn btn-primary btn-sm d-flex align-items-center gap-1 flex-grow-1 flex-md-grow-0"
+              (click)="create()">
+              <i class="feather icon-plus"></i>
+              <span class="d-none d-sm-inline">{{ 'GL.create' | translate }}</span>
+            </button>
+
+            <!-- Report Button -->
+            <button *ngIf="role==='sub_admin'" type="button"
+              class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 flex-grow-1 flex-md-grow-0"
+              (click)="guestReport()">
+              <i class="feather icon-file-text"></i>
+              <span class="d-none d-sm-inline">{{ 'UL.report' | translate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Search Panel -->
+      <div *ngIf="showSearchFields" class="search-panel card mb-3 border-primary">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2 py-md-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="feather icon-search"></i>
+            <h5 class="mb-0 fs-6">{{ 'GL.advanced_search' | translate }}</h5>
+          </div>
+          <button class="btn btn-sm btn-light p-1" (click)="toggleSearchFields()">
+            <i class="feather icon-x"></i>
+          </button>
+        </div>
+
+        <div class="card-body p-2 p-md-3">
+          <form [formGroup]="searchForm" class="row g-2 g-md-3">
+            <!-- Personal Information Section -->
+            <div class="col-12">
+              <h6 class="border-bottom pb-1 mb-2 text-primary fs-6">
+                <i class="feather icon-user me-2"></i>{{ 'GL.personal_info' | translate }}
+              </h6>
+            </div>
+
+            <!-- Name Fields - Stack on mobile -->
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{ 'GC.first_name' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-user small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="first_name"
+                  placeholder="{{ 'GC.first_name' | translate }}">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{ 'GC.last_name' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-user small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="last_name"
+                  placeholder="{{ 'GC.last_name' | translate }}">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{ 'GC.father_name' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-users small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="father_name"
+                  placeholder="{{ 'GC.father_name' | translate }}">
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{ 'GC.grand_father_name' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-users small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="grand_father_name"
+                  placeholder="{{ 'GC.grand_father_name' | translate }}">
+              </div>
+            </div>
+
+            <!-- ID & Contact Section -->
+            <div class="col-12 mt-3">
+              <h6 class="border-bottom pb-1 mb-2 text-primary fs-6">
+                <i class="feather icon-id-card me-2"></i>{{ 'GL.id_contact' | translate }}
+              </h6>
+            </div>
+
+            <div *ngIf="isNidEnabled" class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{ 'GC.nid' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-credit-card small"></i>
+                </span>
+                <input type="text" class="form-control py-2" formControlName="tazkira" placeholder="0000-0000-00000"
+                  (input)="onTazkiraInput($event)" inputmode="numeric" autocomplete="off" maxlength="17">
+              </div>
+              <small class="text-danger small mt-1 d-block"
+                *ngIf="searchForm?.get('tazkira')?.invalid && searchForm?.get('tazkira')?.touched">
+                {{ 'GL.invalid_format' | translate }}
+              </small>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{ 'GC.phone' | translate }}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-phone small"></i>
+                </span>
+                <input type="tel" class="form-control py-2" formControlName="phone" placeholder="+93 700 00 0000"
+                  inputmode="tel" autocomplete="tel" maxlength="15">
+              </div>
+              <small class="text-danger small mt-1 d-block"
+                *ngIf="searchForm?.get('phone')?.invalid && searchForm?.get('phone')?.touched">
+                {{ 'GL.invalid_format' | translate }}
+              </small>
+            </div>
+
+            <!-- Gender & Guest Type -->
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{'GC.gender' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-users small"></i>
+                </span>
+                <select class="form-select py-2" formControlName="gender">
+                  <option value="" selected disabled>{{ 'GL.select_gender' | translate }}</option>
+                  <option *ngFor="let gender of genders" [value]="gender.value">
+                    {{ currentLang == 'en_US' ? gender.label : currentLang == 'ps_AF' ? gender.ps : gender.dr }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{'GC.guest_type' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-globe small"></i>
+                </span>
+                <select class="form-select py-2" formControlName="guest_type">
+                  <option value="" selected disabled>{{ 'GL.select_guest_type' | translate }}</option>
+                  <option *ngFor="let type of guestTypes" [value]="type.value">
+                    {{ currentLang == 'en_US' ? type.label : currentLang == 'ps_AF' ? type.ps : type.dr }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dates Section -->
+            <div class="col-12 mt-3">
+              <h6 class="border-bottom pb-1 mb-2 text-primary fs-6">
+                <i class="feather icon-calendar me-2"></i>{{ 'GL.dates' | translate }}
+              </h6>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{'GL.date_of_entry' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-log-in small"></i>
+                </span>
+                <input type="text" class="form-control py-2" placeholder="{{'GL.date_of_entry' | translate}}"
+                  formControlName="date_of_entry" bsDatepicker>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label class="form-label small fw-bold mb-1">{{'GL.date_of_exit' | translate}}</label>
+              <div class="input-group input-group-sm">
+                <span class="input-group-text py-2 px-3">
+                  <i class="feather icon-log-out small"></i>
+                </span>
+                <input type="text" class="form-control py-2" placeholder="{{'GL.date_of_exit' | translate}}"
+                  formControlName="date_of_exit" bsDatepicker>
+              </div>
+            </div>
+
+            <!-- Additional Filters - Collapsible on mobile -->
+            <div class="col-12 mt-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <h6 class="border-bottom pb-1 mb-2 text-primary fs-6">
+                  <i class="feather icon-filter me-2"></i>{{ 'GL.additional_filters' | translate }}
+                </h6>
+                <button type="button" class="btn btn-link btn-sm text-decoration-none d-md-none"
+                  data-bs-toggle="collapse" data-bs-target="#additionalFilters" aria-expanded="false"
+                  aria-controls="additionalFilters">
+                  <i class="feather icon-chevron-down"></i>
+                </button>
+              </div>
+            </div>
+
+            <div id="additionalFilters" class="collapse show col-12 row g-2 g-md-3">
+              <!-- Passport & Visa -->
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.passport_number' | translate}}</label>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text py-2 px-3">
+                    <i class="feather icon-book small"></i>
+                  </span>
+                  <input type="text" class="form-control py-2" formControlName="passport_number"
+                    placeholder="{{'GL.passport_number' | translate}}">
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.passport_country' | translate}}</label>
+                <ng-select class="form-control-sm" [items]="countries" formControlName="passport_issue_country"
+                  bindLabel="title" bindValue="title" placeholder="{{'GL.select_country' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.visa_number' | translate}}</label>
+                <div class="input-group input-group-sm">
+                  <span class="input-group-text py-2 px-3">
+                    <i class="feather icon-file-text small"></i>
+                  </span>
+                  <input type="text" class="form-control py-2" formControlName="visa_number"
+                    placeholder="{{'GL.visa_number' | translate}}">
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.visa_country' | translate}}</label>
+                <ng-select class="form-control-sm" [items]="countries" formControlName="visa_issue_country"
+                  bindLabel="title" bindValue="title" placeholder="{{'GL.select_country' | translate}}">
+                </ng-select>
+              </div>
+
+              <!-- Location Filters -->
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.current_city' | translate}}</label>
+                <ng-select class="form-control-sm" [items]="cities" formControlName="current_city" bindLabel="title"
+                  bindValue="id" placeholder="{{'GL.select_city' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.permanent_city' | translate}}</label>
+                <ng-select class="form-control-sm" [items]="cities" formControlName="permanent_city" bindLabel="title"
+                  bindValue="id" placeholder="{{'GL.select_city' | translate}}">
+                </ng-select>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.hotel' | translate}}</label>
+                <ng-select class="form-control-sm" [items]="hotels" formControlName="hotel" bindLabel="title"
+                  bindValue="id" placeholder="{{'GL.select_hotel' | translate}}" [appendTo]="'body'"
+                  [dropdownPosition]="'auto'">
+                </ng-select>
+              </div>
+
+              <!-- Status Filters -->
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.expired_passport' | translate}}</label>
+                <select class="form-control" formControlName="expired_passport">
+                  <option value="" selected disabled>{{ 'GL.select_option' | translate }}</option>
+                  <option *ngFor="let option of options" [value]="option.value">
+                    {{ currentLang == 'en_US' ? option.label : currentLang == 'ps_AF' ? option.ps : option.dr }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.expired_visa' | translate}}</label>
+                <select class="form-control" formControlName="expired_visa">
+                  <option value="" selected disabled>{{ 'GL.select_option' | translate }}</option>
+                  <option *ngFor="let option of options" [value]="option.value">
+                    {{ currentLang == 'en_US' ? option.label : currentLang == 'ps_AF' ? option.ps : option.dr }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.is_checkout' | translate}}</label>
+                <select class="form-control" formControlName="checked_out_value">
+                  <option value="" selected disabled>{{ 'GL.select_option' | translate }}</option>
+                  <option *ngFor="let option of options" [value]="option.value">
+                    {{ currentLang == 'en_US' ? option.label : currentLang == 'ps_AF' ? option.ps : option.dr }}
+                  </option>
+                </select>
+              </div>
+
+              <div *ngIf="role =='super_admin'" class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label small fw-bold mb-1">{{'GL.is_blacklisted' | translate}}</label>
+                <select class="form-control" formControlName="is_blacklist">
+                  <option value="" selected disabled>{{ 'GL.select_option' | translate }}</option>
+                  <option *ngFor="let option of options" [value]="option.value">
+                    {{ currentLang == 'en_US' ? option.label : currentLang == 'ps_AF' ? option.ps : option.dr }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="col-12 mt-3 pt-2 border-top">
+              <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-end">
+                <button
+                  class="btn btn-primary btn-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0"
+                  type="submit" (click)="advanceSearch()">
+                  <i class="feather icon-search"></i>
+                  {{'GL.search' | translate}}
+                </button>
+                <button
+                  class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0"
+                  (click)="reset()">
+                  <i class="feather icon-refresh-cw"></i>
+                  {{'GL.reset' | translate}}
+                </button>
+                <button
+                  class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1 flex-sm-grow-0"
+                  (click)="toggleSearchFields()">
+                  <i class="feather icon-x"></i>
+                  {{'GC.close' | translate}}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Data Table - Mobile Responsive -->
+      <div class="table-responsive rounded border">
+        <!-- Mobile Card View -->
+        <div *ngIf="isSmallScreen" class="d-flex flex-column gap-2 p-2">
+          <div *ngFor="let row of guests" class="mobile-guest-card p-3 border rounded bg-white">
+            <!-- Guest Header -->
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div class="d-flex align-items-center">
+                <div
+                  class="avatar-placeholder bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-2"
+                  style="width: 36px; height: 36px;">
+                  <i class="feather icon-user"></i>
+                </div>
+                <div>
+                  <div class="fw-bold text-dark">{{row['first_name']}} {{row['last_name']}}</div>
+                  <small class="text-muted">#{{row['id']}}</small>
+                </div>
+              </div>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary border-0" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="feather icon-more-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index: 1050;">
+                  <li><a class="dropdown-item" (click)="viewGuest(row.id)"><i
+                        class="feather icon-eye me-2"></i>{{'GL.view' | translate}}</a></li>
+                  <li *ngIf="role==='guest_care'"><a class="dropdown-item" (click)="editGuest(row['id'])"><i
+                        class="feather icon-edit me-2"></i>{{'GL.edit' | translate}}</a></li>
+                  <li *ngIf="role==='super_admin'"><a class="dropdown-item"
+                      (click)="guestHistory(row['tazkira'], row['phone'], row['id'])"><i
+                        class="feather icon-book me-2"></i>{{'GL.history' | translate}}</a></li>
+                  <li *ngIf="role=='super_admin'"><a class="dropdown-item text-danger" (click)="openModal(row['id'])"><i
+                        class="feather icon-trash-2 me-2"></i>{{'GL.delete' | translate}}</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Guest Details -->
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'GL.nid' | translate }}</small>
+                <span [ngClass]="{'text-danger fw-bold': row.is_blacklisted, 'text-dark': !row.is_blacklisted}">
+                  {{ row['tazkira'] || 'N/A' }}
+                </span>
+                <span *ngIf="row.is_blacklisted" class="badge bg-danger ms-1">BL</span>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'GL.guest_type' | translate }}</small>
+                <span *ngIf="row['guest_type'] === 'FOREIGN'" class="badge bg-info">{{ 'GL.foreign' | translate
+                  }}</span>
+                <span *ngIf="row['guest_type'] === 'NATIONAL'" class="badge bg-success">{{ 'GL.national' | translate
+                  }}</span>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'GL.gender' | translate }}</small>
+                <span *ngIf="row['gender'] === 'MALE'" class="badge bg-primary">{{ 'GL.male' | translate }}</span>
+                <span *ngIf="row['gender'] === 'FEMALE'" class="badge bg-pink">{{ 'GL.female' | translate }}</span>
+              </div>
+              <div class="col-6">
+                <small class="text-muted d-block">{{ 'GL.phone' | translate }}</small>
+                <span class="text-dark">{{ row['phone'] || 'N/A' }}</span>
+              </div>
+            </div>
+
+            <!-- Status & Actions -->
+            <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+              <div>
+                <span *ngIf="!row['date_of_exit']" class="badge bg-success">
+                  <i class="feather icon-check-circle"></i> {{ 'GL.checked_in' | translate }}
+                </span>
+                <span *ngIf="row['date_of_exit']" class="badge bg-warning">
+                  <i class="feather icon-log-out"></i> {{ 'GL.checked_out' | translate }}
+                </span>
+              </div>
+              <div class="d-flex gap-1">
+                <button *ngIf="!row['date_of_exit'] && role =='guest_care'" class="btn btn-sm btn-outline-danger"
+                  (click)="checkout(row.id)" title="{{ 'GL.checkout' | translate }}">
+                  <i class="feather icon-log-out"></i>
+                </button>
+                <button *ngIf="row['date_of_exit'] && role==='guest_care'" class="btn btn-sm btn-outline-success"
+                  (click)="checkin_again(row)" title="{{ 'GL.checkin_again' | translate }}">
+                  <i class="feather icon-log-in"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" (click)="viewGuest(row.id)"
+                  title="{{ 'GL.view' | translate }}">
+                  <i class="feather icon-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Table View -->
+        <ngx-datatable *ngIf="!isSmallScreen" #table [rows]="guests" [columnMode]="'force'" [headerHeight]="50"
+          [footerHeight]="120" [selected]="selected" [rowHeight]="'force'" [scrollbarV]="false" [scrollbarH]="false">
+
+          <!-- ID Column -->
+          <ngx-datatable-column name="{{'GL.id' | translate}}" [width]="70" [minWidth]="70">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <span class="badge bg-light text-dark fw-bold">#{{row['id']}}</span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Guest Info -->
+          <ngx-datatable-column name="{{'GL.guest_info' | translate}}" [width]="250" [minWidth]="200">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex align-items-center">
+                <div
+                  class="avatar-placeholder bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                  style="width: 40px; height: 40px;">
+                  <i class="feather icon-user"></i>
+                </div>
+                <div>
+                  <div class="fw-bold text-dark">{{row['first_name']}} {{row['last_name']}}</div>
+                  <div class="small text-muted">{{row['father_name']}} {{row['grand_father_name']}}</div>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="{{'GL.contact_info' | translate}}" [width]="180" [minWidth]="150">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div>
+                <div class="small text-muted">{{ 'GL.phone' | translate }}</div>
+                <div class="fw-medium">
+                  <a *ngIf="row['phone']" href="tel:{{row['phone']}}" class="text-decoration-none">
+                    <i class="feather icon-phone me-1 small"></i>
+                    {{row['phone'] || 'N/A'}}
+                  </a>
+                  <span *ngIf="!row['phone']" class="text-muted">N/A</span>
+                </div>
+                <div class="small text-muted mt-2">{{ 'GV.guest_email' | translate }}</div>
+                <div class="fw-medium">{{ row['email'] || 'N/A' }}</div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Type & Gender -->
+          <ngx-datatable-column name="{{'GL.type_gender' | translate}}" [width]="150" [minWidth]="120">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex flex-wrap gap-1">
+                <span *ngIf="row['guest_type'] === 'FOREIGN'" class="badge bg-info">{{ 'GL.foreign' | translate
+                  }}</span>
+                <span *ngIf="row['guest_type'] === 'NATIONAL'" class="badge bg-success">{{ 'GL.national' | translate
+                  }}</span>
+                <span *ngIf="row['gender'] === 'MALE'" class="badge bg-primary">{{ 'GL.male' | translate }}</span>
+                <span *ngIf="row['gender'] === 'FEMALE'" class="badge bg-pink">{{ 'GL.female' | translate }}</span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- NID -->
+          <ngx-datatable-column name="{{'GL.nid' | translate}}" [width]="160" [minWidth]="140">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex align-items-center">
+                <span [ngClass]="{'text-danger fw-bold': row.is_blacklisted, 'text-dark': !row.is_blacklisted}">
+                  {{ row['tazkira'] || 'N/A' }}
+                </span>
+                <span *ngIf="row.is_blacklisted" class="badge bg-danger ms-2">Blacklisted</span>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Dates -->
+          <ngx-datatable-column name="{{'GL.dates' | translate}}" [width]="200" [minWidth]="180">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div>
+                <div class="small text-muted">{{ 'GL.checkin_date' | translate }}</div>
+                <div class="fw-medium">{{ row['created_at'] | date:'shortDate' }}</div>
+
+                <div class="small text-muted mt-2">{{ 'GL.checkout_date' | translate }}</div>
+                <div class="fw-medium">
+                  <span *ngIf="row['date_of_exit']" class="text-warning">{{ row['date_of_exit'] | date:'shortDate'
+                    }}</span>
+                  <span *ngIf="!row['date_of_exit']" class="text-success">{{ 'GL.active' | translate }}</span>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Status -->
+          <ngx-datatable-column name="{{'GL.status' | translate}}" [width]="120" [minWidth]="100">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex flex-column gap-1">
+                <div>
+                  <span *ngIf="!row['date_of_exit']" class="badge bg-success">{{ 'GL.checked_in' | translate }}</span>
+                  <span *ngIf="row['date_of_exit']" class="badge bg-warning">{{ 'GL.checked_out' | translate }}</span>
+                </div>
+                <div *ngIf="row['date_of_exit']" class="small text-muted">
+                  {{ row['date_of_exit'] | date:'shortTime' }}
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <!-- Actions -->
+          <ngx-datatable-column name="{{'GL.actions' | translate}}" [width]="140" [minWidth]="120">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <div class="d-flex gap-1">
+                <button *ngIf="!row['date_of_exit'] && role =='guest_care'" class="btn btn-sm btn-outline-danger"
+                  (click)="checkout(row.id)" title="{{ 'GL.checkout' | translate }}">
+                  <i class="feather icon-log-out"></i>
+                </button>
+                <button *ngIf="row['date_of_exit'] && role==='guest_care'" class="btn btn-sm btn-outline-success"
+                  (click)="checkin_again(row)" title="{{ 'GL.checkin_again' | translate }}">
+                  <i class="feather icon-log-in"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-primary" (click)="viewGuest(row.id)"
+                  title="{{ 'GL.view' | translate }}">
+                  <i class="feather icon-eye"></i>
+                </button>
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="true">
+                    <i class="feather icon-more-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index: 1050;">
+                    <li><a class="dropdown-item" (click)="viewGuest(row.id)"><i
+                          class="feather icon-eye me-2"></i>{{'GL.view' | translate}}</a></li>
+                    <li *ngIf="role==='guest_care'"><a class="dropdown-item" (click)="editGuest(row['id'])"><i
+                          class="feather icon-edit me-2"></i>{{'GL.edit' | translate}}</a></li>
+                    <li *ngIf="role==='super_admin'"><a class="dropdown-item"
+                        (click)="guestHistory(row['tazkira'], row['phone'], row['id'])"><i
+                          class="feather icon-book me-2"></i>{{'GL.history' | translate}}</a></li>
+                    <li *ngIf="role=='super_admin'"><a class="dropdown-item text-danger"
+                        (click)="openModal(row['id'])"><i class="feather icon-trash-2 me-2"></i>{{'GL.delete' |
+                        translate}}</a></li>
+                  </ul>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+        </ngx-datatable>
+
+        <!-- Pagination -->
+        <div class="card-footer bg-light py-2 py-md-3" *ngIf="showPagination">
+          <div class="d-flex col-12 flex-column flex-md-row justify-content-between align-items-center gap-2">
+            <!-- Items Per Page -->
+            <div class="d-flex align-items-center gap-1 order-3 order-md-1">
+              <span class="text-muted small">{{ 'GL.show' | translate }}</span>
+              <select class="form-control ms-md-auto order-md-2" style="min-width: 40px;"
+                (change)="itemsPerPage($event)">
+                <option *ngFor="let size of pageSizeOptions" [value]="size">{{size}}</option>
+              </select>
+              <span class="text-muted small text-nowrap ms-md-auto order-md-3">{{ 'GL.per_page' | translate }}</span>
+            </div>
+
+            <!-- Page Info -->
+            <div class="text-center order-1 order-md-2">
+              <span class="text-muted small">
+                {{ 'GL.page' | translate }} {{currentPage}} {{ 'GL.of' | translate }} {{totalPages}}
+              </span>
+              <div class="small text-success">
+                {{ 'GL.total_records' | translate }}: {{totalItems}}
+              </div>
+            </div>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Page navigation" class="order-3">
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item" [ngClass]="{disabled: currentPage === 1}">
+                  <a class="page-link" style="cursor: pointer;" (click)="firstPage()"
+                    title="{{ 'GL.first_page' | translate }}">
+                    <i class="feather icon-chevrons-left"></i>
+                  </a>
+                </li>
+                <li class="page-item" [ngClass]="{ disabled: currentPage === 1 }">
+                  <a class="page-link" style="cursor: pointer;" (click)="previous()"
+                    title="{{ 'GL.previous_page' | translate }}">
+                    <i class="feather icon-chevron-left"></i>
+                  </a>
+                </li>
+
+                <li *ngFor="let page of getPaginationArray()" class="page-item"
+                  [ngClass]="{ active: currentPage === page }">
+                  <a *ngIf="page !== '...'" class="page-link" style="cursor: pointer;" (click)="setPage(page)">{{ page
+                    }}</a>
+                  <span *ngIf="page === '...'" class="page-link">{{ page }}</span>
+                </li>
+
+                <li class="page-item" [ngClass]="{ disabled: currentPage === totalPages }">
+                  <a class="page-link" style="cursor: pointer;" (click)="next()"
+                    title="{{ 'GL.next_page' | translate }}">
+                    <i class="feather icon-chevron-right"></i>
+                  </a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled: currentPage === totalPages}">
+                  <a class="page-link" style="cursor: pointer;" (click)="lastPage()"
+                    title="{{ 'GL.last_page' | translate }}">
+                    <i class="feather icon-chevrons-right"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

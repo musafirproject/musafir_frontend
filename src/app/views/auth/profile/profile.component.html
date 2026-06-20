@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="container-fluid">
+    <div class="row content-min-height">
+      <!-- Sidebar Menu (Using Bootstrap for Responsiveness) -->
+      <div class="col-lg-3 col-md-4 col-sm-12 p-0">
+        <div class="card shadow-sm">
+          <h4 class="mb-3 ms-3 mt-3">{{'UP.profile' | translate}}</h4>
+          <div class="columns-panel-item-group">
+            <a
+              class="columns-panel-item columns-panel-item-link"
+              [class.active]="currentPanel === item.title"
+              *ngFor="let item of panelMenu"
+              (click)="onPanelChange(item.title)"
+            >
+              <div class="d-flex align-items-center">
+                <i class="feather font-size-lg" [ngClass]="item.icon"></i>
+                <span class="ms-3">{{ 'UPT.' + item.title | translate }}</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content (Dynamic Panel) -->
+      <div class="col-lg-9 col-md-8 col-sm-12">
+        <div class="card-body">
+          <profile-personal *ngIf="currentPanel === 'Personal'"></profile-personal>
+          <profile-security *ngIf="currentPanel === 'Security'"></profile-security>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

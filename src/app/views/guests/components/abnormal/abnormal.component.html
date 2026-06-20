@@ -1,0 +1,321 @@
+<section class="card shadow-sm mb-4">
+  <!-- Header -->
+  <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2 bg-light">
+    <div>
+      <h5 class="mb-0 fw-bold text-primary">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ 'ABNORMAL_GUESTS.title' | translate }}
+      </h5>
+      <small class="text-muted">{{ 'ABNORMAL_GUESTS.subtitle' | translate }}</small>
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <!-- Search -->
+      <div class="position-relative" style="width: 220px">
+        <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"></i>
+        <input
+          type="text"
+          class="form-control form-control-sm ps-4"
+          [placeholder]="'ABNORMAL_GUESTS.search_placeholder' | translate"
+          [ngModel]="searchText"
+          (ngModelChange)="onSearchInput($event)"
+        />
+      </div>
+
+      <!-- Filters -->
+      <select class="form-select form-select-sm" [(ngModel)]="reasonFilter" (change)="applyReasonFilter()" style="width: 220px">
+        <option *ngFor="let r of reasonsList" [value]="r.value">{{ r.label }}</option>
+      </select>
+
+      <select class="form-select form-select-sm" [(ngModel)]="levelFilter" (change)="applyLevelFilter()" style="width: 150px">
+        <option value="">{{ 'ABNORMAL_GUESTS.all_levels' | translate }}</option>
+        <option value="High" class="text-danger">{{ 'ABNORMAL_GUESTS.high' | translate }}</option>
+        <option value="Low" class="text-warning">{{ 'ABNORMAL_GUESTS.low' | translate }}</option>
+      </select>
+
+      <select class="form-select form-select-sm" [(ngModel)]="genderFilter" (change)="applyGenderFilter()" style="width: 150px">
+        <option value="">{{ 'ABNORMAL_GUESTS.all_genders' | translate }}</option>
+        <option value="male">{{ 'ABNORMAL_GUESTS.male' | translate }}</option>
+        <option value="female">{{ 'ABNORMAL_GUESTS.female' | translate }}</option>
+        <option value="other">{{ 'ABNORMAL_GUESTS.other' | translate }}</option>
+      </select>
+
+      <select class="form-select form-select-sm" [(ngModel)]="pageSize" (change)="changePageSize(pageSize)" style="width: 110px">
+        <option *ngFor="let size of pageSizes" [value]="size">{{ size }}/page</option>
+      </select>
+
+      <button class="btn btn-sm btn-primary d-flex align-items-center gap-1" (click)="exportCurrentPageCSV()">
+        <i class="bi bi-download"></i>{{ 'ABNORMAL_GUESTS.export_csv' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Analytics -->
+  <div class="card-body border-bottom bg-light-subtle">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-3">
+            <div class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.total_abnormal' | translate }}</div>
+            <div class="h4 fw-bold text-primary mb-0">{{ total }}</div>
+            <small class="text-muted">{{ 'ABNORMAL_GUESTS.guests_flagged' | translate }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-3">
+            <div class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.high_risk' | translate }}</div>
+            <div class="h4 fw-bold text-danger mb-0">{{ totalHigh }}</div>
+            <small class="text-muted">{{ 'ABNORMAL_GUESTS.multiple_patterns' | translate }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-3">
+            <div class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.low_risk' | translate }}</div>
+            <div class="h4 fw-bold text-warning mb-0">{{ totalLow }}</div>
+            <small class="text-muted">{{ 'ABNORMAL_GUESTS.single_pattern' | translate }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-3">
+            <div class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.selected' | translate }}</div>
+            <div class="h4 fw-bold text-success mb-0">{{ selectedIds.size }}</div>
+            <small class="text-muted">{{ 'ABNORMAL_GUESTS.for_action' | translate }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="card-body p-0">
+    <div *ngIf="isLoading" class="text-center py-5 bg-light">
+      <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">{{ 'ABNORMAL_GUESTS.loading' | translate }}</span>
+      </div>
+      <div class="mt-3 text-muted">{{ 'ABNORMAL_GUESTS.analyzing' | translate }}</div>
+    </div>
+
+    <div *ngIf="!isLoading" class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary">
+          <tr>
+            <th class="w-1 ps-3">
+              <input type="checkbox" class="form-check-input"
+                     [checked]="allOnPageSelected()"
+                     (change)="toggleSelectAllOnPage($event.target.checked)" />
+            </th>
+            <th>{{ 'ABNORMAL_GUESTS.name' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.phone' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.gender' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.guest_type' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.residence' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.entry_date' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.exit_date' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.created_by' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.risk_level' | translate }}</th>
+            <th>{{ 'ABNORMAL_GUESTS.patterns' | translate }}</th>
+            <th class="w-1 text-center pe-3">{{ 'ABNORMAL_GUESTS.actions' | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="let g of guests; trackBy: trackById; let i = index">
+            <tr [class.table-warning]="g.abnormal_level === 'High'" [class.bg-light]="i % 2 === 0">
+              <td class="ps-3">
+                <input type="checkbox" class="form-check-input"
+                       [checked]="selectedIds.has(g.id)"
+                       (change)="toggleRow(g.id, $event.target.checked)" />
+              </td>
+
+              <td><div class="fw-semibold">{{ g.name }}</div><small class="text-muted">ID: {{ g.id }}</small></td>
+              <td>{{ g.phone || '—' }}</td>
+              <td><span class="badge bg-secondary">{{ (g.gender || '—') | titlecase }}</span></td>
+              <td>{{ g.guest_type || '—' }}</td>
+              <td><span class="badge bg-light text-dark border">{{ g.residence || '—' }}</span></td>
+              <td><div class="small text-nowrap">{{ g.date_of_entry | date:'MMM dd, yyyy' }}</div></td>
+              <td><div class="small text-nowrap">{{ g.date_of_exit | date:'MMM dd, yyyy' }}</div></td>
+              <td><small class="text-muted">{{ g.created_by_name || '—' }}</small></td>
+
+              <td>
+                <span class="badge d-flex align-items-center gap-1"
+                      [ngClass]="{
+                        'bg-danger': g.abnormal_level === 'High',
+                        'bg-warning text-dark': g.abnormal_level === 'Low'
+                      }">
+                  <i [class]="g.abnormal_level === 'High' ? 'bi bi-exclamation-triangle-fill' : 'bi bi-info-circle-fill'"></i>
+                  {{ g.abnormal_level }}
+                </span>
+              </td>
+
+              <td>
+                <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let r of g.reasons"
+                        class="badge"
+                        [ngClass]="{
+                          'bg-primary': r === 'same_day',
+                          'bg-info': r === 'weekly',
+                          'bg-warning text-dark': r === 'streak',
+                          'bg-dark': r === 'shared_phone'
+                        }"
+                        [title]="getReasonTooltip(r)">
+                    {{ getPatternDescription(r) }}
+                  </span>
+                </div>
+              </td>
+
+              <td class="text-center pe-3">
+                <div class="btn-group btn-group-sm" role="group">
+                  <button class="btn btn-outline-secondary d-flex align-items-center gap-1"
+                          (click)="g.expanded = !g.expanded">
+                    <i [class]="g.expanded ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
+                    {{ g.expanded ? ('ABNORMAL_GUESTS.hide' | translate) : ('ABNORMAL_GUESTS.view' | translate) }}
+                  </button>
+                  <button class="btn btn-outline-primary d-flex align-items-center gap-1"
+                          (click)="viewHistory(g)">
+                    <i class="bi bi-clock-history"></i>{{ 'ABNORMAL_GUESTS.history' | translate }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Expanded details -->
+            <tr *ngIf="g.expanded" class="bg-light">
+              <td></td>
+              <td colspan="11" class="p-4">
+                <div class="row g-4">
+                  <div class="col-12">
+                    <h6 class="border-bottom pb-2 mb-3 text-primary">
+                      <i class="bi bi-person-badge me-2"></i>{{ 'ABNORMAL_GUESTS.guest_details' | translate }}
+                    </h6>
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.full_name' | translate }}</label>
+                    <div class="fw-semibold">{{ g.name }}</div>
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.phone_number' | translate }}</label>
+                    <div class="fw-semibold">{{ g.phone || '—' }}</div>
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.stay_duration' | translate }}</label>
+                    <div class="fw-semibold">
+                      {{ g.date_of_entry | date:'mediumDate' }} → {{ g.date_of_exit | date:'mediumDate' }}
+                      <span *ngIf="g.nights" class="text-muted">• {{ g.nights }} {{ 'ABNORMAL_GUESTS.nights' | translate }}</span>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-3">
+                    <label class="text-muted small mb-1">{{ 'ABNORMAL_GUESTS.record_created_by' | translate }}</label>
+                    <div class="fw-semibold">{{ g.created_by_name || '—' }}</div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="text-muted small mb-2">{{ 'ABNORMAL_GUESTS.patterns_detected' | translate }}</label>
+                    <div class="d-flex flex-wrap gap-2">
+                      <span *ngFor="let r of g.reasons"
+                            class="badge py-2 px-3 d-flex align-items-center gap-2"
+                            [ngClass]="{
+                              'bg-primary': r === 'same_day',
+                              'bg-info': r === 'weekly',
+                              'bg-warning text-dark': r === 'streak',
+                              'bg-dark': r === 'shared_phone'
+                            }">
+                        <i [class]="getPatternIcon(r)"></i>
+                        {{ getPatternDescription(r) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- ✅ Residence History -->
+                  <div class="col-12 mt-3">
+                    <label class="text-muted small mb-2">
+                      <i class="bi bi-building me-1 text-primary"></i>{{ 'ABNORMAL_GUESTS.residences_history' | translate }}
+                    </label>
+
+                    <div *ngIf="g.residences?.length; else noResidences">
+                      <div class="table-responsive">
+                        <table class="table table-sm table-bordered align-middle mb-0">
+                          <thead class="table-light">
+                            <tr>
+                              <th>{{ 'ABNORMAL_GUESTS.residence' | translate }}</th>
+                              <th>{{ 'ABNORMAL_GUESTS.entry_date' | translate }}</th>
+                              <th>{{ 'ABNORMAL_GUESTS.exit_date' | translate }}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let r of g.residences">
+                              <td>{{ r.hotel || '—' }}</td>
+                              <td>{{ r.date_of_entry | date:'mediumDate' }}</td>
+                              <td>{{ r.date_of_exit | date:'mediumDate' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <ng-template #noResidences>
+                      <div class="text-muted small fst-italic">
+                        {{ 'ABNORMAL_GUESTS.no_residences_found' | translate }}
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+
+          <tr *ngIf="!isLoading && guests.length === 0">
+            <td colspan="12" class="text-center py-5">
+              <div class="py-4">
+                <i class="bi bi-check-circle display-4 text-success mb-3"></i>
+                <h5 class="text-muted">{{ 'ABNORMAL_GUESTS.no_abnormal_found' | translate }}</h5>
+                <p class="text-muted mb-0">{{ 'ABNORMAL_GUESTS.normal_message' | translate }}</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-3 bg-light">
+    <div class="text-muted small d-flex align-items-center gap-2">
+      <i class="bi bi-info-circle"></i>
+      {{ 'ABNORMAL_GUESTS.showing' | translate }}
+      {{ showingFrom() }}–{{ showingTo() }}
+      {{ 'ABNORMAL_GUESTS.of' | translate }}
+      {{ total }}
+      {{ 'ABNORMAL_GUESTS.abnormal_guests' | translate }}
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+              [disabled]="page <= 1"
+              (click)="prevPage()">
+        <i class="bi bi-chevron-left"></i>{{ 'ABNORMAL_GUESTS.previous' | translate }}
+      </button>
+
+      <div class="px-3 small">
+        {{ 'ABNORMAL_GUESTS.page_x_of_y' | translate:{ x: page, y: totalPages() } }}
+      </div>
+
+      <button class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+              [disabled]="page * pageSize >= total"
+              (click)="nextPage()">
+        {{ 'ABNORMAL_GUESTS.next' | translate }}<i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</section>

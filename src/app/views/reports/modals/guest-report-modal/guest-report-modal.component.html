@@ -1,0 +1,139 @@
+<div style="z-index: 1050 !important;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header mt-2">
+                        <h4 *ngIf="guest_type" class="text-primary">{{'RE.report_by_type' | translate}}</h4>
+                        <h4 *ngIf="guest_gender" class="text-primary">{{'RE.guest_by_gender' | translate}}</h4>
+                        <h4 *ngIf="guest_hotel" class="text-primary">{{'RE.guest_by_hotel' |translate}}</h4>
+                        <h4 *ngIf="guest_city" class="text-primary">{{'RE.guest_by_city' |translate}}</h4>
+                        <h4 *ngIf="guest_resident" class="text-primary">{{'RE.guest_by_residence' |translate}}</h4>
+                        <h4 *ngIf="guest_user" class="text-primary">{{'RE.guest_by_user' |translate}}</h4>
+                        <h4 *ngIf="staff" class="text-primary">{{'RE.staff' |translate}}</h4>
+                        <h4 *ngIf="staff_hotel" class="text-primary">{{'RE.staff_hotel' |translate}}</h4>
+                        <h4 *ngIf="staff_hotel_type" class="text-primary">{{'RE.staff_hotel_type' |translate}}</h4>
+                        <h4 *ngIf="staff_gender" class="text-primary">{{'RE.staff_gender' |translate}}</h4>
+                        <h4 *ngIf="hotel" class="text-primary">{{'RE.hotel' |translate}}</h4>
+                        <h4 *ngIf="zone" class="text-primary">{{'RE.guest_by_zone' |translate}}</h4>
+                        <h4 *ngIf="guest_country" class="text-primary">{{'RE.guest_by_country' |translate}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="text-primary text-center">{{'RE.select_criteria' |translate}}</h5>
+                        <form [formGroup]="guestForm">
+                            <div class="form-group mb-3">
+                                <label class="control-label">{{'RE.start_date' |translate}}</label>
+                                <input type="text"
+                                placeholder="{{'UC.datepicker'|translate}}"
+                                class="form-control"
+                                formControlName="start_date"
+                                bsDatepicker>                            </div>
+                            <div class="form-group mb-3">
+                                <label class="control-label">{{'RE.end_date' |translate}}</label>
+                                <input type="text"
+                                placeholder="{{'UC.datepicker'|translate}}"
+                                class="form-control"
+                                formControlName="end_date"
+                                bsDatepicker>
+                            </div>
+
+
+                            <div *ngIf="guest_type" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_type' |translate}}</label>
+
+                                <select class="form-select" [(ngModel)]="selectedGuestType" formControlName="guest_type">
+                                    <option value="" disabled selected>{{'GL.guest_type' | translate}}</option>
+                                    <option *ngFor="let type of guest_types" [value]="type.key">{{
+                                        currentLang == 'en_US' ? type.value : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+                                </select>
+                            </div>
+                            <div *ngIf="guest_gender || staff_gender" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.gender' | translate}}</label>
+                                <select class="form-select" [(ngModel)]="selectedGender" formControlName="guest_gender">
+                                    <option value="" disabled selected>{{'UC.gender' | translate}}</option>
+                                    <option *ngFor="let type of genders" [value]="type.key">{{
+                                        currentLang == 'en_US' ? type.value : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+                                </select>
+
+
+                            </div>
+                            <div *ngIf="guest_hotel || staff_hotel" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_hotel' | translate}}</label>
+                                <ng-select  class="mt-2" [items]="hotels" bindLabel="title" bindValue="id"
+                                    formControlName="guest_hotel" placeholder="Hotel" >
+                                </ng-select>
+                            </div>
+                            <div *ngIf="guest_city" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_city' | translate}}</label>
+                                <ng-select  class="mt-2" [items]="cities" bindLabel="province" bindValue="id"
+                                    formControlName="city" placeholder="City" >
+                                </ng-select>
+                            </div>
+                            <div *ngIf="guest_country" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_country' | translate}}</label>
+                                <ng-select  class="mt-2" [items]="countries" bindLabel="title" bindValue="id"
+                                    formControlName="country" placeholder="country" >
+                                </ng-select>
+                            </div>
+                            <div *ngIf="guest_city || guest_country" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_address_type' | translate}} </label>
+                                <select class="form-select" [(ngModel)]="selectedAddress" formControlName="address_type">
+                                    <option value="" disabled selected>{{'UV.address_type' | translate}}</option>
+                                    <option *ngFor="let type of address_types" [value]="type.key">{{
+                                        currentLang == 'en_US' ? type.value : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+                                </select>
+
+                            
+                            </div>
+
+                            <div *ngIf="guest_resident || staff_hotel_type  || hotel" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_residence' | translate}}</label>
+                                <select class="form-select" [(ngModel)]="selectedAddress" formControlName="guest_resident">
+                                    <option value="" disabled selected>{{'UC.residence' | translate}}</option>
+                                    <option *ngFor="let type of residencies" [value]="type.key">{{
+                                        currentLang == 'en_US' ? type.value : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+                                </select>
+
+                            
+                            </div>
+                            <div *ngIf="guest_user" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_user' | translate}}</label>
+                                <ng-select  class="mt-2" [items]="users" bindLabel="first_name" bindValue="id"
+                                    formControlName="user" placeholder="Select User">
+                                </ng-select>
+                            </div>
+                            <div *ngIf="zone" class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_zone' | translate}}</label>
+                                <ng-select  class="mt-2" [items]="zones" bindLabel="title" bindValue="id"
+                                    formControlName="zone" placeholder="Select zone">
+                                </ng-select>
+                            </div>
+
+
+
+                            <div class="form-group mb-3" [customErrorMessages]="nameError">
+                                <label class="control-label">{{'RE.select_format' |translate}}</label>
+                                <ng-select  class="mt-2" [items]="reportType" bindLabel="value" bindValue="key"
+                                    formControlName="format" placeholder="Report Format" [(ngModel)]="selectedReport">
+                                </ng-select>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-light me-2" type="button" (click)="onReset()">{{'RE.reset' |translate}}</button>
+                                <button class="btn btn-outline-primary me-2" (click)="getUserReport()">{{'RE.download' | translate}}</button>
+                                <button class="btn btn-outline-danger" (click)="close()">{{'RE.close' |translate}}</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-7"></div>
+                            <div class="col-md-5 mb-2">
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1171 @@
+<div class="container-fluid" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user']; currentRole: role">
+  <div *ngIf="loading" class="py-5 text-center text-muted">
+    <div class="spinner-border" role="status"></div>
+    <div class="mt-2">{{ 'DASH.loading' | translate }}</div>
+  </div>
+
+  <div *ngIf="!loading && error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+    <!-- KPI Cards -->
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">{{ 'DASH.today_registrations' | translate }}</div>
+            <div class="display-6 fw-bold">{{ todayRegistrations | number }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">{{ 'DASH.today_checkouts' | translate }}</div>
+            <div class="display-6 fw-bold">{{ todayCheckouts | number }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">{{ 'DASH.active_now' | translate }}</div>
+            <div class="display-6 fw-bold">{{ activeNow | number }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <div class="text-muted small">{{ 'DASH.avg_stay_30d' | translate }}</div>
+            <div class="display-6 fw-bold">
+              {{ avgStay30 | number:'1.0-0' }} <span class="fs-6 text-muted">{{ 'DASH.days' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Split row -->
+    <div class="row g-3 mt-1">
+      <!-- Nationals vs Foreigners -->
+      <div class="col-12 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title text-primary mb-3">{{ 'DASH.national_vs_foreign' | translate }} ({{ windowDays }} {{
+              'DASH.days' | translate }})</h6>
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <div class="fw-semibold">{{ 'GUEST_TYPE.NATIONAL' | translate }}</div>
+                <div class="fs-4">{{ nationalsPct | number:'1.0-1' }}%</div>
+              </div>
+              <div class="vr mx-3" style="height: 42px;"></div>
+              <div>
+                <div class="fw-semibold">{{ 'GUEST_TYPE.FOREIGN' | translate }}</div>
+                <div class="fs-4">{{ foreignersPct | number:'1.0-1' }}%</div>
+              </div>
+            </div>
+            <div class="text-muted small mt-2">{{ 'DASH.last_x_days' | translate:{x: windowDays} }}</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Top performers -->
+      <div class="col-12 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title text-success">{{ 'DASH.top_performers' | translate }} ({{ topN }})</h6>
+            <ul class="list-group list-group-flush small">
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let h of topPerformers; trackBy: trackById">
+                <span class="text-truncate" style="max-width: 70%">{{ h.hotel__title }}</span>
+                <span class="badge bg-success rounded-pill">{{ h.total }}</span>
+              </li>
+            </ul>
+          </div>
+          <div *appHasAnyRole="['super_admin']; currentRole: role" class="card-footer d-flex justify-content-center">
+            <a type="button" role="button" (click)="performanceFullList('top')">{{'DASH.see_top_performer_list' |
+              translate}}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom performers -->
+      <div class="col-12 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title text-danger">{{ 'DASH.bottom_performers' | translate }} ({{ topN }})</h6>
+            <ul class="list-group list-group-flush small">
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let h of bottomPerformers; trackBy: trackById">
+                <span class="text-truncate" style="max-width: 70%">{{ h.hotel__title }}</span>
+                <span class="badge bg-danger rounded-pill">{{ h.total }}</span>
+              </li>
+            </ul>
+          </div>
+          <div *appHasAnyRole="['super_admin']; currentRole: role" class="card-footer d-flex justify-content-center">
+            <a type="button" role="button" (click)="performanceFullList('bottom')">{{'DASH.see_bottom_performer_list' |
+              translate}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visa Expiry -->
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="row g-3 mt-1">
+      <div class="col-12 col-lg-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title text-primary d-flex align-items-center justify-content-between">
+              <span>{{ 'DASH.visa_expiry_7d' | translate }}</span>
+              <!-- <span class="badge bg-primary">{{ expiring7Count }}</span> -->
+            </h6>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead class="text-muted small">
+                  <tr>
+                    <th>{{ 'DASH.guest' | translate }}</th>
+                    <th>{{ 'DASH.residence' | translate }}</th>
+                    <th>{{ 'DASH.expiry' | translate }}</th>
+                    <th class="text-end">{{ 'DASH.actions' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let v of list7; trackBy: trackById">
+                    <td>{{ v.guest_name }}</td>
+                    <td>{{ v.hotel_title || '—' }}</td>
+                    <td>{{ v.expiry_date | date }}</td>
+                    <td class="text-end">
+                      <a [routerLink]="v.actions.open_guest" class="btn btn-link btn-sm p-0 me-2">{{ 'DASH.open' |
+                        translate }}</a>
+                      <a [routerLink]="v.actions.extend_visa" class="btn btn-link btn-sm p-0 me-2">{{ 'DASH.extend' |
+                        translate }}</a>
+                      <a [routerLink]="v.actions.send_reminder" class="btn btn-link btn-sm p-0">{{ 'DASH.remind' |
+                        translate }}</a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!list7.length">
+                    <td colspan="4" class="text-center text-muted small py-3">{{ 'DASH.no_data' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-center ">
+            <a type="button" role="button" (click)="visaFullList('7')">{{'DASH.see_full_7_days_list' | translate}}</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title text-primary d-flex align-items-center justify-content-between">
+              <span>{{ 'DASH.visa_expiry_30d' | translate }}</span>
+              <!-- <span class="badge bg-primary">{{ expiring30Count }}</span> -->
+            </h6>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead class="text-muted small">
+                  <tr>
+                    <th>{{ 'DASH.guest' | translate }}</th>
+                    <th>{{ 'DASH.residence' | translate }}</th>
+                    <th>{{ 'DASH.expiry' | translate }}</th>
+                    <th class="text-end">{{ 'DASH.actions' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let v of list30; trackBy: trackById">
+                    <td>{{ v.guest_name }}</td>
+                    <td>{{ v.hotel_title || '—' }}</td>
+                    <td>{{ v.expiry_date | date }}</td>
+                    <td class="text-end">
+                      <a [routerLink]="v.actions.open_guest" class="btn btn-link btn-sm p-0 me-2">{{ 'DASH.open' |
+                        translate }}</a>
+                      <a [routerLink]="v.actions.extend_visa" class="btn btn-link btn-sm p-0 me-2">{{ 'DASH.extend' |
+                        translate }}</a>
+                      <a [routerLink]="v.actions.send_reminder" class="btn btn-link btn-sm p-0">{{ 'DASH.remind' |
+                        translate }}</a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!list30.length">
+                    <td colspan="4" class="text-center text-muted small py-3">{{ 'DASH.no_data' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-center ">
+            <a type="button" role="button" (click)="visaFullList('30')">{{'DASH.see_full_30_days_list' | translate}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="row g-3 mt-1">
+      <div class="col-12">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title text-danger d-flex align-items-center justify-content-between">
+              <span>{{ 'DASH.visa_expired_past' | translate }}</span>
+              <span class="badge bg-danger">{{ expiredPastCount }}</span>
+            </h6>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle">
+                <thead class="text-muted small">
+                  <tr>
+                    <th>{{ 'DASH.guest' | translate }}</th>
+                    <th>{{ 'DASH.residence' | translate }}</th>
+                    <th>{{ 'DASH.expiry' | translate }}</th>
+                    <th>{{ 'DASH.days_overdue' | translate }}</th>
+                    <th class="text-end">{{ 'DASH.actions' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let v of listExpiredPast; trackBy: trackById">
+                    <td>{{ v.guest_full_name }}</td>
+                    <td>{{ v.hotel_title || '—' }}</td>
+                    <td>{{ v.expiry_date | date }}</td>
+                    <td>
+                      <span class="badge bg-warning text-dark">{{ v.days_overdue }}</span>
+                    </td>
+                    <td class="text-end">
+                      <a [routerLink]="v.actions.open_guest" class="btn btn-link btn-sm p-0 me-2">{{ 'DASH.open' |
+                        translate }}</a>
+                      <a [routerLink]="v.actions.extend_visa" class="btn btn-link btn-sm p-0 me-2">{{ 'DASH.extend' |
+                        translate }}</a>
+                      <a [routerLink]="v.actions.send_reminder" class="btn btn-link btn-sm p-0">{{ 'DASH.remind' |
+                        translate }}</a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="!listExpiredPast.length">
+                    <td colspan="5" class="text-center text-muted small py-3">{{ 'DASH.no_data' | translate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-center">
+            <a type="button" role="button" (click)="visaFullList('expired')">{{'DASH.see_full_expired_list' |
+              translate}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<div class="container-fluid py-3">
+
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3 mb-3">
+    <div class="col" [routerLink]="['/guests/list']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_guests' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_guests || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/guests/list']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.male_guests' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_male_guests || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/guests/list']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.female_guests' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_female_guests || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/guests/list']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.national_guests' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_national_guests || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/guests/list']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.foreign_guests' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_foreign_guests || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="role == 'super_admin'" class="col" [routerLink]="['/guests/list']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body" style="background-color:black">
+          <h6 class="card-title text-light mb-2">{{ 'DASH.blacklisted' | translate }}</h6>
+          <p class="display-6 text-light mb-0">{{ statData?.total_blacklisted_guest || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="role == 'super_admin'" class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_residences' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_residence || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" [queryParams]="{type:'HOTEL'}" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_hotels' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_hotels || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_hostels' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_hostels || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_guest_houses' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_guest_houses || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_musafir_khana' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_musafir_khana || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_houses' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_houses || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_rent_roomes' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_rent_roomes || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" [routerLink]="['/settings/hotel']" style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_companies' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_companies || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/pages/users']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_users' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_users || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/pages/users']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.guest_care_users' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_guest_care_users || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/pages/users']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.sub_admins' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_sub_admins || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/pages/users']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.super_admins' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_super_admins || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/pages/users']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.inactive_users' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_inactive_users || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/staff/list']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_staff' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_staff || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/staff/list']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.male_staff' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_male_staff || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/staff/list']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.female_staff' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_female_staff || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/settings/zone']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_zones' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_zones || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *appHasAnyRole="['super_admin']; currentRole: role" class="col" [routerLink]="['/pages/activity']"
+      style="cursor:pointer;">
+      <div class="card h-100 text-center shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title text-primary mb-2">{{ 'DASH.total_logs' | translate }}</h6>
+          <p class="display-6 text-primary mb-0">{{ statData?.total_logs || 0 }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guest by city + hotel -->
+  <div class="row g-3">
+    <div class="col-12 col-lg-8">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.guest_by_city' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="guestProvinceChartOptions; else citySk">
+            <apx-chart [series]="guestProvinceChartOptions.series" [chart]="guestProvinceChartOptions.chart"
+              [dataLabels]="guestProvinceChartOptions.dataLabels" [plotOptions]="guestProvinceChartOptions.plotOptions"
+              [xaxis]="guestProvinceChartOptions.xaxis">
+            </apx-chart>
+          </div>
+          <ng-template #citySk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.guest_by_hotel' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="chartOptions; else hotelSk">
+            <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+              [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions">
+            </apx-chart>
+          </div>
+          <ng-template #hotelSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Treemap month -->
+  <div class="row g-3 my-2">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <!-- Residence Types Dropdown -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title text-primary mb-0">
+              {{ 'DASH.guest_by_hotel' | translate }} {{ ('MONTH.' + current_month) | translate }}
+            </h5>
+            <div class="form-group mb-0 col-md-3">
+              <select class="form-select form-select-sm" placeholder="Select Residence Type"
+                (change)="onResidenceTypeChange($event)">
+                <option value="null" selected disabled>{{'DASH.select_residence_type' | translate}}</option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Chart Section -->
+          <div class="chart-scroll-x">
+            <ng-container *ngIf="chartOptionsMonthly; else tmSkeleton">
+              <apx-chart #chart [series]="chartOptionsMonthly.series" [chart]="chartOptionsMonthly.chart"
+                [dataLabels]="chartOptionsMonthly.dataLabels" [plotOptions]="chartOptionsMonthly.plotOptions"
+                class="min-w-600">
+              </apx-chart>
+            </ng-container>
+            <ng-template #tmSkeleton>
+              <div class="placeholder-block min-w-600"></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Monthly line -->
+  <div class="row g-3" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user']; currentRole: role">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.guest_by_month' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="monthlyStatisticsChartOptions; else lineSk">
+            <apx-chart [series]="monthlyStatisticsChartOptions.series" [chart]="monthlyStatisticsChartOptions.chart"
+              [xaxis]="monthlyStatisticsChartOptions.xaxis" [dataLabels]="monthlyStatisticsChartOptions.dataLabels"
+              [stroke]="monthlyStatisticsChartOptions.stroke" [grid]="monthlyStatisticsChartOptions.grid">
+            </apx-chart>
+          </div>
+          <ng-template #lineSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gender + hotel guest radial -->
+  <div class="row g-3 my-2">
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.guest_by_gender' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="genderChartOptionsYearly; else g1">
+            <apx-chart [series]="genderChartOptionsYearly.series" [chart]="genderChartOptionsYearly.chart"
+              [plotOptions]="genderChartOptionsYearly.plotOptions" [labels]="genderChartOptionsYearly.labels">
+            </apx-chart>
+          </div>
+          <ng-template #g1>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">
+            {{ 'DASH.guest_by_gender' | translate }} {{ ('MONTH.' + current_month) | translate }}
+          </h5>
+          <div class="chart-responsive" *ngIf="genderChartOptions; else g2">
+            <apx-chart [series]="genderChartOptions.series" [chart]="genderChartOptions.chart"
+              [plotOptions]="genderChartOptions.plotOptions" [labels]="genderChartOptions.labels">
+            </apx-chart>
+          </div>
+          <ng-template #g2>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.guest_by_hotel_type' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="guestHotelChartOptions; else gh">
+            <apx-chart [series]="guestHotelChartOptions.series" [chart]="guestHotelChartOptions.chart"
+              [plotOptions]="guestHotelChartOptions.plotOptions" [labels]="guestHotelChartOptions.labels">
+            </apx-chart>
+          </div>
+          <ng-template #gh>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staff bar -->
+  <div class="row g-3" *appHasAnyRole="['super_admin']; currentRole: role">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title text-primary">{{ 'DASH.staff_by_hotel' | translate }} {{ current_year }}</h5>
+
+            <div class="form-group mb-0 col-md-3">
+              <select class="form-select form-select-sm" placeholder="Select Residence Type"
+                (change)="onStaffResidenceTypeChange($event)">
+                <option value="null" selected disabled>{{'DASH.select_residence_type' | translate}}</option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-responsive" *ngIf="chartOptionsStaff; else staffSk">
+            <apx-chart [series]="chartOptionsStaff.series" [chart]="chartOptionsStaff.chart"
+              [dataLabels]="chartOptionsStaff.dataLabels" [plotOptions]="chartOptionsStaff.plotOptions"
+              [xaxis]="chartOptionsStaff.xaxis">
+            </apx-chart>
+          </div>
+          <ng-template #staffSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guest type donuts + roles -->
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">
+            {{ 'DASH.guest_by_type' | translate }} {{ ('MONTH.' + current_month) | translate }}
+          </h5>
+          <div class="chart-responsive" *ngIf="guestTypeChartOptions; else d1">
+            <apx-chart [series]="guestTypeChartOptions.series" [chart]="guestTypeChartOptions.chart"
+              [labels]="guestTypeChartOptions.labels">
+            </apx-chart>
+          </div>
+          <ng-template #d1>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.guest_by_type_annually' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="guestTypeChartOptionsAnnulay; else d2">
+            <apx-chart [series]="guestTypeChartOptionsAnnulay.series" [chart]="guestTypeChartOptionsAnnulay.chart"
+              [labels]="guestTypeChartOptionsAnnulay.labels">
+            </apx-chart>
+          </div>
+          <ng-template #d2>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4" *appHasAnyRole="['super_admin']; currentRole: role">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.user_by_role' | translate }}</h5>
+          <div class="chart-responsive" *ngIf="userRolechartOptions; else d3">
+            <apx-chart [series]="userRolechartOptions.series" [chart]="userRolechartOptions.chart"
+              [labels]="userRolechartOptions.labels">
+            </apx-chart>
+          </div>
+          <ng-template #d3>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hotel type + Zones -->
+  <div class="row g-3 my-2" *appHasAnyRole="['super_admin']; currentRole: role">
+    <div class="col-12 col-lg-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.hotel_by_hotel_type' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="hotelTypeChartOptions; else htSk">
+            <apx-chart [series]="hotelTypeChartOptions.series" [chart]="hotelTypeChartOptions.chart"
+              [labels]="hotelTypeChartOptions.labels" [plotOptions]="hotelTypeChartOptions.plotOptions"
+              [dataLabels]="hotelTypeChartOptions.dataLabels">
+            </apx-chart>
+          </div>
+          <ng-template #htSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.user_by_zone' | translate }}</h5>
+          <div class="chart-responsive" *ngIf="userZoneChartOptions; else uzSk">
+            <apx-chart [series]="userZoneChartOptions.series" [chart]="userZoneChartOptions.chart"
+              [labels]="userZoneChartOptions.labels">
+            </apx-chart>
+          </div>
+          <ng-template #uzSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="row g-3 my-2" *appHasAnyRole="['super_admin']; currentRole: role">
+  <!-- Guests by zone (percentage) -->
+  <div class="col-12 col-lg-6">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-primary">
+          {{ 'DASH.guest_by_zone_percent' | translate }}
+        </h5>
+
+        <div class="chart-responsive" *ngIf="guestZonePercentChartOptions; else gzPercentSk">
+          <apx-chart
+            [series]="guestZonePercentChartOptions.series"
+            [chart]="guestZonePercentChartOptions.chart"
+            [labels]="guestZonePercentChartOptions.labels"
+            [stroke]="guestZonePercentChartOptions.stroke"
+            [fill]="guestZonePercentChartOptions.fill"
+            [legend]="guestZonePercentChartOptions.legend">
+          </apx-chart>
+        </div>
+
+        <ng-template #gzPercentSk>
+          <div class="placeholder-block"></div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guests by zone (count) -->
+  <div class="col-12 col-lg-6">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-primary">
+          {{ 'DASH.guest_by_zone_count' | translate }}
+        </h5>
+
+        <div class="chart-responsive" *ngIf="guestZoneCountChartOptions; else gzCountSk">
+          <apx-chart
+            [series]="guestZoneCountChartOptions.series"
+            [chart]="guestZoneCountChartOptions.chart"
+            [labels]="guestZoneCountChartOptions.labels"
+            [stroke]="guestZoneCountChartOptions.stroke"
+            [fill]="guestZoneCountChartOptions.fill"
+            [legend]="guestZoneCountChartOptions.legend">
+          </apx-chart>
+        </div>
+
+        <ng-template #gzCountSk>
+          <div class="placeholder-block"></div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Blacklisted -->
+  <div class="row g-3" *appHasAnyRole="['super_admin']; currentRole: role">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title text-primary">{{ 'DASH.blacklisted' | translate }} {{ current_year }}</h5>
+          <div class="chart-responsive" *ngIf="guestBlacklistedGuestsChartOptions; else blSk">
+            <apx-chart [series]="guestBlacklistedGuestsChartOptions.series"
+              [chart]="guestBlacklistedGuestsChartOptions.chart" [xaxis]="guestBlacklistedGuestsChartOptions.xaxis"
+              [plotOptions]="guestBlacklistedGuestsChartOptions.plotOptions"
+              [dataLabels]="guestBlacklistedGuestsChartOptions.dataLabels">
+            </apx-chart>
+          </div>
+          <ng-template #blSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Occupancy vs Capacity + Avg Stay -->
+  <div class="row g-3 my-2" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user']; currentRole: role">
+    <div class="col-12 col-lg-5" *appHasAnyRole="['super_admin', 'guest_user', 'sub_admin']; currentRole: role">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+
+          <h5 class="card-title text-primary">{{'DASH.average_stay_duration' | translate}}</h5>
+          <div class="chart-responsive" *ngIf="stayDurationOptions; else sdSk">
+            <apx-chart [series]="stayDurationOptions.series" [chart]="stayDurationOptions.chart"
+              [xaxis]="stayDurationOptions.xaxis" [dataLabels]="stayDurationOptions.dataLabels">
+            </apx-chart>
+          </div>
+          <ng-template #sdSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-12 col-lg-7" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user']; currentRole: role">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title text-primary mb-0">
+              {{ 'DASH.checkin_peaks' | translate }}
+            </h5>
+            <div class="form-group mb-0 col-md-3">
+              <select class="form-select form-select-sm" placeholder="Select Residence Type"
+                (change)="onCheckinResidenceTypeChange($event)">
+                <option value="null" selected disabled>{{'DASH.select_residence_type' | translate}}</option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="chart-responsive" *ngIf="checkinHeatmapOptions; else hmSk">
+            <apx-chart [series]="checkinHeatmapOptions.series" [chart]="checkinHeatmapOptions.chart"
+              [xaxis]="checkinHeatmapOptions.xaxis" [dataLabels]="checkinHeatmapOptions.dataLabels">
+            </apx-chart>
+          </div>
+          <ng-template #hmSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row g-3 my-2" *appHasAnyRole="['super_admin']; currentRole: role">
+    <div class="col-12 col-md-12">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title text-primary mb-0">
+              {{ 'DASH.guestcare_productivity_top' | translate }}
+            </h5>
+            <div class="form-group mb-0 col-md-3">
+              <select class="form-select form-select-sm" placeholder="Select Residence Type"
+                (change)="onGuestCareResidenceChange($event)">
+                <option value="null" selected disabled>{{'DASH.select_residence_type' | translate}}</option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="chart-responsive" *ngIf="productivityOptions; else prodSk">
+            <apx-chart [series]="productivityOptions.series" [chart]="productivityOptions.chart"
+              [plotOptions]="productivityOptions.plotOptions" [xaxis]="productivityOptions.xaxis"
+              [dataLabels]="productivityOptions.dataLabels">
+            </apx-chart>
+          </div>
+          <ng-template #prodSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nationality mix + API SLOs -->
+  <div class="row g-3 my-2" *appHasAnyRole="['super_admin', 'guest_user']; currentRole: role">
+    <div class="col-12 col-lg-12">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title text-primary mb-0">
+              {{ 'DASH.nationality_mix_top' | translate }} {{ ('MONTH.' + current_month) | translate }}
+            </h5>
+            <div class="form-group mb-0 col-md-3">
+              <select class="form-select form-select-sm" placeholder="Select Residence Type"
+                (change)="onNationalityMixResidencyType($event)">
+                <option value="null" selected disabled>{{ 'DASH.select_residence_type' | translate }}</option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+
+          </div>
+          <div class="chart-responsive" *ngIf="nationalityMixOptions; else natSk">
+            <apx-chart [series]="nationalityMixOptions.series" [chart]="nationalityMixOptions.chart"
+              [plotOptions]="nationalityMixOptions.plotOptions" [xaxis]="nationalityMixOptions.xaxis"
+              [colors]="nationalityMixOptions.colors" [title]="nationalityMixOptions.title"
+              [legend]="nationalityMixOptions.legend" [tooltip]="nationalityMixOptions.tooltip">
+            </apx-chart>
+
+
+          </div>
+          <ng-template #natSk>
+            <div class="placeholder-block"></div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-12 col-lg-12" *appHasAnyRole="['super_admin']; currentRole: role">
+    <div class="card h-100 shadow-sm">
+      <div class="card-header d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 gap-md-3">
+        <h5 class="card-title text-primary mb-0">
+          {{ 'DASH.occupancy_trend_top' | translate }}
+        </h5>
+
+        <div class="ms-md-auto w-50">
+          <div class="row g-2">
+            <!-- Residence Type -->
+            <div class="col-12 col-md-4">
+              <div class="form-group mb-0">
+                <select class="form-select form-select-sm w-100" (change)="onOccResidenceTypeChange($event)">
+                  <option value="null" selected disabled>
+                    {{ 'DASH.select_residence_type' | translate }}
+                  </option>
+                  <option *ngFor="let type of residenceTypes" [value]="type.key">
+                    {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Limit -->
+            <div class="col-12 col-md-4">
+              <div class="form-group mb-0">
+                <select class="form-select form-select-sm w-100" (change)="onOccLimitChange($event)">
+                  <option value="null" selected disabled>
+                    {{ 'DASH.select_limit' | translate }}
+                  </option>
+                  <option *ngFor="let n of [10, 20, 30, 40, 50]" [value]="n">
+                    {{ 'DASH.top_n' | translate:{ n: n } || ('Top ' + n) }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Period -->
+            <div class="col-12 col-md-4">
+              <div class="form-group mb-0">
+                <select class="form-select form-select-sm w-100" (change)="onOccPeriodChange($event)">
+                  <option value="null" selected disabled>
+                    {{ 'DASH.select_period' | translate }}
+                  </option>
+                  <option value="weekly">
+                    {{ 'GL.last_7_days' | translate }}
+                  </option>
+                  <option value="monthly">
+                    {{ 'GL.this_month' | translate }}
+                  </option>
+                  <option value="yearly">
+                    {{ 'GL.this_year' | translate }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="chart-responsive" *ngIf="residencyOccTrendOptions; else occTSk">
+          <apx-chart [series]="residencyOccTrendOptions.series" [chart]="residencyOccTrendOptions.chart"
+            [xaxis]="residencyOccTrendOptions.xaxis" [stroke]="residencyOccTrendOptions.stroke"
+            [dataLabels]="residencyOccTrendOptions.dataLabels" [yaxis]="residencyOccTrendOptions.yaxis">
+          </apx-chart>
+        </div>
+        <ng-template #occTSk>
+          <div class="placeholder-block"></div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="col-12 col-lg-12" *appHasAnyRole="['super_admin']; currentRole: role">
+  <div class="card h-100 shadow-sm">
+    <!-- Responsive header -->
+    <div class="card-header d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 gap-md-3">
+      <h5 class="card-title text-primary mb-0 w-200">
+        {{ 'DASH.checkout_peaks' | translate }}
+      </h5>
+
+      <div class="ms-md-auto w-100">
+        <div class="row g-2">
+          <div class="col-12 col-md-6 col-lg-4 ms-md-auto">
+            <div class="form-group mb-0">
+              <select class="form-select form-select-sm w-100" (change)="onCheckoutResidenceTypeChange($event)">
+                <option value="null" selected disabled>
+                  {{ 'DASH.select_residence_type' | translate }}
+                </option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body with chart -->
+    <div class="card-body">
+      <div class="chart-responsive" *ngIf="checkoutHeatmapOptions; else checkoutSk">
+        <apx-chart [series]="checkoutHeatmapOptions.series" [chart]="checkoutHeatmapOptions.chart"
+          [xaxis]="checkoutHeatmapOptions.xaxis" [plotOptions]="checkoutHeatmapOptions.plotOptions"
+          [dataLabels]="checkoutHeatmapOptions.dataLabels" [tooltip]="checkoutHeatmapOptions.tooltip">
+        </apx-chart>
+      </div>
+      <ng-template #checkoutSk>
+        <div class="placeholder-block"></div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+
+<div class="col-12" *appHasAnyRole="['super_admin']; currentRole: role">
+  <div class="card h-100 shadow-sm">
+    <div class="card-header d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 gap-md-3">
+      <h5 class="card-title text-primary mb-0">
+        {{ 'DASH.blacklist_trend' | translate }} {{ current_year }}
+      </h5>
+
+      <div class="ms-md-auto w-100">
+        <div class="row g-2">
+          <div class="col-12 col-md-6 col-lg-4 ms-md-auto">
+            <div class="form-group mb-0">
+              <select class="form-select form-select-sm w-100" (change)="onBlacklistResidenceTypeChange($event)">
+                <option value="null" selected disabled>
+                  {{ 'DASH.select_residence_type' | translate }}
+                </option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="chart-responsive" *ngIf="blacklistTrendOptions; else blSk">
+        <apx-chart [series]="blacklistTrendOptions.series" [chart]="blacklistTrendOptions.chart"
+          [xaxis]="blacklistTrendOptions.xaxis" [plotOptions]="blacklistTrendOptions.plotOptions"
+          [dataLabels]="blacklistTrendOptions.dataLabels" [tooltip]="blacklistTrendOptions.tooltip">
+        </apx-chart>
+      </div>
+      <ng-template #blSk>
+        <div class="placeholder-block"></div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div class="col-12" *appHasAnyRole="['super_admin']; currentRole: role">
+  <div class="card h-100 shadow-sm">
+    <div class="card-header d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 gap-md-3">
+      <!-- Title -->
+      <h5 class="card-title text-primary mb-0">
+        {{ 'DASH.staff_workload' | translate }}
+      </h5>
+
+      <div class="ms-md-auto w-100">
+        <div class="row g-2 justify-content-md-end">
+          <!-- Residence Type -->
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="form-group mb-0">
+              <select class="form-select form-select-sm w-100" (change)="onWorkloadResidenceTypeChange($event)">
+                <option value="null" selected disabled>
+                  {{ 'DASH.select_residence_type' | translate }}
+                </option>
+                <option *ngFor="let type of residenceTypes" [value]="type.key">
+                  {{ ('RESIDENCE_TYPE.' + type.key) | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Limit -->
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="form-group mb-0">
+              <select class="form-select form-select-sm w-100" (change)="onWorkloadLimitChange($event)">
+                <option value="10" selected>
+                  {{ 'DASH.top_n' | translate:{ n: 10 } || 'Top 10' }}
+                </option>
+                <option *ngFor="let n of [5,15,20,30,40,50]" [value]="n">
+                  {{ 'DASH.top_n' | translate:{ n: n } || ('Top ' + n) }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="chart-responsive" *ngIf="staffWorkloadOptions; else swSk">
+        <apx-chart [series]="staffWorkloadOptions.series" [chart]="staffWorkloadOptions.chart"
+          [xaxis]="staffWorkloadOptions.xaxis" [plotOptions]="staffWorkloadOptions.plotOptions"
+          [dataLabels]="staffWorkloadOptions.dataLabels" [tooltip]="staffWorkloadOptions.tooltip">
+        </apx-chart>
+      </div>
+      <ng-template #swSk>
+        <div class="placeholder-block"></div>
+      </ng-template>
+    </div>
+  </div>
+</div>

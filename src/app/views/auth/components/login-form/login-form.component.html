@@ -1,0 +1,40 @@
+<div class="alert alert-danger text-center" *ngIf="showError">
+  <strong>{{showErrorMsg}}</strong>
+</div>
+
+<form [formGroup]="formGroup" (ngSubmit)="login()">
+  <div class="form-group mb-3">
+    <label class="form-label">{{'AU.user_name' | translate}}</label>
+    <input type="text" class="form-control no-validation-icon no-success-validation" formControlName="email">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label d-flex justify-content-between">
+      <span>{{'AU.password' | translate}}</span>
+    </label>
+
+    <div class="form-group input-affix position-relative">
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        class="form-control no-validation-icon no-success-validation pe-5"
+        formControlName="password"
+        placeholder="Enter your password"
+      />
+
+      <i
+        class="feather"
+        [ngClass]="showPassword ? 'icon-eye-off' : 'icon-eye'"
+        (click)="togglePasswordVisibility()"
+        style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #6c757d;">
+      </i>
+    </div>
+
+    <label class="form-label d-flex justify-content-between">
+      <a class="text-primary font" [routerLink]="['/forget-password']">{{'AU.forget_password' | translate}}</a>
+    </label>
+  </div>
+
+  <button class="btn btn-primary w-100" type="submit">
+    {{'AU.sign_in' | translate}}
+  </button>
+</form>

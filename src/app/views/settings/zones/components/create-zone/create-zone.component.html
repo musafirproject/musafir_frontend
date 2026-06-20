@@ -1,0 +1,38 @@
+<div class="card">
+    <div class="card-body">
+        <h4 class="text-muted">{{'HU.create_zone' |translate}}</h4>
+        <br>
+        <form [formGroup]="zoneForm">
+            <!-- Title and City -->
+            <div class="form-group row mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">{{'HU.title' |translate}}</label>
+                    <input type="text" class="form-control" formControlName="title" placeholder="{{'HU.title' |translate}}">
+                </div>
+                <div class="col-md-9">
+                    <label class="form-label">{{ 'HL.districts' | translate }}</label>
+                    <ng-select 
+                        class="mt-2" 
+                        [items]="districts" 
+                        bindLabel="title" 
+                        bindValue="id" 
+                        formControlName="district" 
+                        [multiple]="true" 
+                        [closeOnSelect]="false" 
+                        [hideSelected]="true">
+                    </ng-select>
+                </div>
+                
+            </div>
+  
+           
+  
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-end mt-4">
+                <button class="btn btn-outline-primary me-2" type="submit" (click)="createZone()">{{'HU.save' |translate}}</button>
+                <button class="btn btn-outline-danger" (click)="close()">{{'HU.close' |translate}}</button>
+            </div>
+        </form>
+    </div>
+  </div>
+  

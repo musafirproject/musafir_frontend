@@ -1,0 +1,8 @@
+<li 
+    class="nav-menu-item" 
+    (click)="clickHandle()" 
+    #list
+    [class.is-disabled]="navItemDisabled">
+    <ng-content></ng-content>
+</li>
+

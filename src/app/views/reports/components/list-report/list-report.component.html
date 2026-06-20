@@ -1,0 +1,319 @@
+<div class="container-fluid p-0">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-2 p-md-3 p-lg-4">
+      <!-- Header Section - Mobile First -->
+      <div class="d-flex flex-column gap-2 mb-4">
+        <div class="mb-2">
+          <h4 class="h4 fw-bold text-primary mb-0">{{'RE.reports_dashboard' | translate}}</h4>
+          <p class="text-muted small d-none d-md-block mb-0 mt-1">{{'RE.reports_description' | translate}}</p>
+        </div>
+      </div>
+
+      <!-- Reports Grid - Mobile Responsive -->
+      <div class="row g-2 g-md-3">
+        <!-- Guest Reports Section -->
+        <div class="col-12 mt-3">
+          <h5 class="border-bottom pb-2 mb-3 text-primary">
+            <i class="feather icon-users me-2"></i>{{'RE.guest_reports' | translate}}
+          </h5>
+        </div>
+
+        <!-- Report by Type -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user', 'guest_care']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-globe fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.report_by_type' | translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.report_by_type_msg' | translate}}</p>
+              <button (click)="guestByTypeReport()"
+                      class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by Gender -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user', 'guest_care']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-pink bg-opacity-10 text-pink rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-user fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_gender' | translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_gender_msg' | translate}}</p>
+              <button (click)="guestByGenderReport()"
+                      class="btn btn-outline-pink btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by Hotel -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user', 'guest_care']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-home fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_hotel' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_hotel_msg' |translate}}</p>
+              <button (click)="guestByHotel()"
+                      class="btn btn-outline-info btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by City -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-map-pin fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_city' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_city_msg' |translate}}</p>
+              <button (click)="guestByCity()"
+                      class="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by Country -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin', 'guest_user']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-flag fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_country' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_country_msg' |translate}}</p>
+              <button (click)="guestByCountry()"
+                      class="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by Residence -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-purple bg-opacity-10 text-purple rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-building fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_residence' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_residence_msg' |translate}}</p>
+              <button (click)="guestByResidence()"
+                      class="btn btn-outline-purple btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by User -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-indigo bg-opacity-10 text-indigo rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-user-check fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_user' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_user_msg' |translate}}</p>
+              <button (click)="guestByUser()"
+                      class="btn btn-outline-indigo btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest by Zone -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-teal bg-opacity-10 text-teal rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-navigation fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.guest_by_zone' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.guest_by_zone_msg' |translate}}</p>
+              <button (click)="guestByZone()"
+                      class="btn btn-outline-teal btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Residences -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-orange bg-opacity-10 text-orange rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-award fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{ 'RE.top_residences' | translate }}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{ 'RE.top_residences_msg' | translate }}</p>
+              <button (click)="topResidencesReport()"
+                      class="btn btn-outline-orange btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{ 'RE.download_btn' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff Reports Section -->
+        <div class="col-12 mt-5">
+          <h5 class="border-bottom pb-2 mb-3 text-primary">
+            <i class="feather icon-briefcase me-2"></i>{{'RE.staff_reports' | translate}}
+          </h5>
+        </div>
+
+        <!-- Staff Report -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-blue bg-opacity-10 text-blue rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-users fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.staff' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.staff_msg' |translate}}</p>
+              <button (click)="Staff()"
+                      class="btn btn-outline-blue btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff by Hotel -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-cyan bg-opacity-10 text-cyan rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-home fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.staff_hotel' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.staff_hotel_msg' |translate}}</p>
+              <button (click)="StaffbyHotel()"
+                      class="btn btn-outline-cyan btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff by Hotel Type -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-grape bg-opacity-10 text-grape rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-tag fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.staff_hotel_type' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.staff_hotel_type_msg' |translate}}</p>
+              <button (click)="StaffbyHotelType()"
+                      class="btn btn-outline-grape btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff by Gender -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-pink bg-opacity-10 text-pink rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-user fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.staff_gender' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.staff_gender_msg' |translate}}</p>
+              <button (click)="StaffbyGender()"
+                      class="btn btn-outline-pink btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hotel Reports Section -->
+        <div class="col-12 mt-5">
+          <h5 class="border-bottom pb-2 mb-3 text-primary">
+            <i class="feather icon-home me-2"></i>{{'RE.hotel_reports' | translate}}
+          </h5>
+        </div>
+
+        <!-- Hotel Report -->
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *appHasAnyRole="['super_admin', 'sub_admin']; currentRole:role">
+          <div class="report-card card h-100 border-0 shadow-sm hover-lift">
+            <div class="card-body d-flex flex-column p-3">
+              <div class="report-icon bg-red bg-opacity-10 text-red rounded-circle d-flex align-items-center justify-content-center mb-3"
+                   style="width: 48px; height: 48px;">
+                <i class="feather icon-hotel fs-4"></i>
+              </div>
+              <h6 class="card-title fw-bold text-dark mb-2">{{'RE.hotel' |translate}}</h6>
+              <p class="card-text text-muted small flex-grow-1">{{'RE.hotel_msg' |translate}}</p>
+              <button (click)="hotelReport()"
+                      class="btn btn-outline-red btn-sm d-flex align-items-center justify-content-center gap-2 mt-auto">
+                <i class="feather icon-download"></i>
+                {{'RE.download_btn' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Statistics Section (Optional) -->
+      <div class="row mt-5 d-none d-md-flex">
+        <div class="col-12">
+          <div class="card border-0 bg-light">
+            <div class="card-body p-3">
+              <div class="d-flex align-items-center gap-2">
+                <i class="feather icon-info text-primary"></i>
+                <span class="small text-muted">{{'RE.report_note' | translate}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

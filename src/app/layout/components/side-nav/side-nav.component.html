@@ -1,0 +1,19 @@
+
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="nav-logo d-flex justify-content-center">
+          <logo
+              [logoType]="!collapse || quickExpand ? 'logo' : 'fold' "
+              [height]="!collapse || quickExpand ? 80 : 40"
+              [width]="!collapse || quickExpand ? 80 : 40"  
+              [white]="color === 'dark'"
+              class="w-100"
+          ></logo>
+        </div>
+      </div>
+      <div class="col-md-12 text-center mt-2" *ngIf="!collapse || quickExpand">
+        <h6>{{'APP.MUSAFIR' | translate}}</h6>
+      </div>
+    </div>
+    <vertical-menu-content></vertical-menu-content>
+    

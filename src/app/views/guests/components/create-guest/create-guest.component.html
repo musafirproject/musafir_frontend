@@ -1,0 +1,424 @@
+<div class="card">
+  <div class="card-body">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'guest' , 'cursor-pointer': true}"
+          (click)="selectTab('guest')">{{'GC.guest' | translate}}</a>
+      </li>
+
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'permanentAddress' , 'cursor-pointer': true}"
+          (click)="selectTab('permanentAddress')">{{'GC.permanent_address'| translate}}</a>
+      </li>
+      <li *ngIf="isAddressTabEnabled" class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'currentAddress' , 'cursor-pointer': true}"
+          (click)="selectTab('currentAddress')">{{'GC.current_address' | translate}}</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'occupation' , 'cursor-pointer': true}"
+          (click)="selectTab('occupation')">{{'GC.occupation' | translate}}</a>
+      </li>
+      <li *ngIf="isPassportTabEnabled" class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'passport' , 'cursor-pointer': true}"
+          (click)="selectTab('passport')">{{'GC.passport'| translate}}</a>
+      </li>
+      <li *ngIf="isVisaTabEnabled" class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'visa' , 'cursor-pointer': true}"
+          (click)="selectTab('visa')">{{'GC.visa' | translate}}</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" [ngClass]="{'active': currentTab === 'documents' , 'cursor-pointer': true}"
+          (click)="selectTab('documents')">{{'GC.documents' | translate}}</a>
+      </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content mt-3">
+      <!-- Profile Tab -->
+      <div *ngIf="currentTab === 'guest'" class="tab-pane fade show active">
+        <div class="mb-3 d-flex  justify-content-between">
+          <h4 class="text-muted">{{'GC.complete_guest_info' | translate}} </h4>
+        </div>
+        <br>
+        <form [formGroup]="guestForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.guest_type' | translate}}</label>
+              <select class="form-select" [(ngModel)]="selectedGuestType" (change)="onGuestTypeChange($event)" required
+                formControlName="guest_type">
+                <option value="" disabled selected>{{'GC.guest_type' | translate}}</option>
+                <option *ngFor="let type of guestTypes" [value]="type.value">{{
+                  currentLang == 'en_US' ? type.label : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.gender' | translate}}</label>
+              <select class="form-select" [(ngModel)]="selectedGender" required formControlName="gender">
+                <option value="" disabled selected>{{'GC.gender' | translate}}</option>
+                <option *ngFor="let gender of genders" [value]="gender.value">{{
+                  currentLang == 'en_US' ? gender.label : currentLang == 'ps_AF' ? gender.ps : gender.dr }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.first_name' | translate}}</label>
+              <input type="text" class="form-control" formControlName="first_name"
+                placeholder="{{'GC.first_name' | translate}}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.last_name' |translate}}</label>
+              <input type="text" class="form-control" formControlName="last_name"
+                placeholder="{{'GC.last_name' |translate}}">
+            </div>
+          </div>
+
+
+          <!-- Show father/grandfather ONLY for NATIONAL -->
+          <div class="form-group row mb-3" *ngIf="guestForm.get('guest_type')?.value === 'NATIONAL'">
+            <div class="col-md-6">
+              <label class="form-label">{{ 'GC.father_name' | translate }}</label>
+              <input type="text" class="form-control" formControlName="father_name"
+                placeholder="{{ 'GC.father_name' | translate }}"
+                [class.is-invalid]="guestForm.get('father_name')?.touched && guestForm.get('father_name')?.invalid" />
+              <div class="invalid-feedback" *ngIf="guestForm.get('father_name')?.touched">
+                <span *ngIf="guestForm.get('father_name')?.hasError('required')">
+                  {{ 'VALIDATION.required' | translate }}
+                </span>
+                <span *ngIf="guestForm.get('father_name')?.hasError('minlength')">
+                  {{ 'VALIDATION.min_length' | translate:{min:2} }}
+                </span>
+                <span *ngIf="guestForm.get('father_name')?.hasError('maxlength')">
+                  {{ 'VALIDATION.max_length' | translate:{max:50} }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">{{ 'GC.grand_father_name' | translate }}</label>
+              <input type="text" class="form-control" formControlName="grand_father_name"
+                placeholder="{{ 'GC.grand_father_name' | translate }}"
+                [class.is-invalid]="guestForm.get('grand_father_name')?.touched && guestForm.get('grand_father_name')?.invalid" />
+              <div class="invalid-feedback" *ngIf="guestForm.get('grand_father_name')?.touched">
+                <span *ngIf="guestForm.get('grand_father_name')?.hasError('required')">
+                  {{ 'VALIDATION.required' | translate }}
+                </span>
+                <span *ngIf="guestForm.get('grand_father_name')?.hasError('minlength')">
+                  {{ 'VALIDATION.min_length' | translate:{min:2} }}
+                </span>
+                <span *ngIf="guestForm.get('grand_father_name')?.hasError('maxlength')">
+                  {{ 'VALIDATION.max_length' | translate:{max:50} }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row mb-3">
+           
+            <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+              <label class="form-label">{{ 'GC.phone' | translate }}</label>
+              <input type="tel" class="form-control" formControlName="phone" placeholder="+93 700 00 0000"
+                inputmode="tel" autocomplete="tel" maxlength="15" (focus)="prefillAfCode()"
+                (input)="onPhoneInput($event)" />
+              <small class="text-danger" *ngIf="guestForm?.get('phone')?.invalid && guestForm?.get('phone')?.touched">
+                {{ 'GL.invalid_format' | translate }} (+93 700 00 0000)
+              </small>
+            </div>
+            <div *ngIf="isNidEnabled" class="col-md-6">
+              <label class="form-label">{{ 'GC.nid' | translate }}</label>
+              <input type="text" class="form-control" formControlName="tazkira" placeholder="0000-0000-00000"
+                (input)="onTazkiraInput($event)" inputmode="numeric" autocomplete="off" maxlength="17" />
+              <small class="text-danger"
+                *ngIf="guestForm?.get('tazkira')?.invalid && guestForm?.get('tazkira')?.touched">
+                {{ 'GL.invalid_format' | translate }} (0000-0000-00000)
+              </small>
+            </div>
+
+
+          </div>
+
+
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.email' | translate}}</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="{{'GC.email' | translate}}">
+            </div>
+          </div>
+
+        </form>
+        <div *ngIf="guest" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save' |
+              translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' | translate}}</button>
+          </div>
+        </div>
+
+
+      </div>
+      <!-- Permanent Address Tab -->
+      <div *ngIf="currentTab == 'permanentAddress'" class="tab-pane fade show active">
+        <!-- Step 3: Address -->
+        <h4 class="text-muted">{{'GC.permanent_address' |translate}}</h4>
+        <br>
+        <form [formGroup]="permanentAddressForm">
+          <div class="form-group row mb-3">
+            <div *ngIf="foreingerAddress" class="col-md-6">
+              <label class="form-label">{{'HV.country' |translate}}</label>
+              <ng-select class="mt-2" [items]="countries" (change)="onCountryChange($event)" bindLabel="title"
+                bindValue="id">
+              </ng-select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.city' | translate}}</label>
+              <ng-select class="mt-2" (change)="onCityChange($event)" [items]="cities" bindLabel="province" bindValue="id" formControlName="city"
+                >
+              </ng-select>
+            </div>
+            <div class="col-md-6" *ngIf="guestForm.get('guest_type')?.value === 'NATIONAL'">
+              <label class="form-label">{{'GC.district' | translate}}</label>
+              <ng-select class="mt-2" [items]="districts" bindLabel="name" bindValue="name" formControlName="district">
+              </ng-select>
+            </div>
+            <div class="col-md-6" *ngIf="guestForm.get('guest_type')?.value === 'FOREIGN'">
+              <label class="form-label">{{'GC.district' | translate}}</label>
+              <input type="text" class="form-control" formControlName="district"
+                placeholder="{{'GC.district' | translate}}">
+            </div>
+          </div>
+          <div class="form-group row mb-3">
+
+            <div *ngIf="!foreingerAddress" class="col-md-6">
+              <label class="form-label">{{'GC.village' | translate}}</label>
+              <input type="text" class="form-control" formControlName="village"
+                placeholder="{{'GC.village' | translate}}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.address' | translate}}</label>
+              <input type="text" class="form-control" formControlName="addr" placeholder="{{'GC.address' | translate}}">
+            </div>
+          </div>
+
+
+        </form>
+
+        <div *ngIf="permanentAddress" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save'
+              |translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' |translate}}</button>
+          </div>
+        </div>
+        <!-- Add structure here as needed -->
+      </div>
+      <!-- Current Address Tab -->
+      <div *ngIf="currentTab === 'currentAddress'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'GC.current_address' |translate}}</h4>
+        <br>
+        <form [formGroup]="currentAddressForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.city' | translate}}</label>
+              <ng-select class="mt-2" [items]="cities" bindLabel="province" bindValue="id" formControlName="city"
+                (change)="onCityChange($event)">
+              </ng-select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.district' | translate}}</label>
+              <ng-select class="mt-2" [items]="districts" bindLabel="name" bindValue="name" formControlName="district">
+              </ng-select>
+            </div>
+           
+          </div>
+          <div class="form-group row mb-3">
+
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.village' | translate}}</label>
+              <input type="text" class="form-control" formControlName="village"
+                placeholder="{{'GC.village' | translate}}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.address'| translate}}</label>
+              <input type="text" class="form-control" formControlName="addr" placeholder="{{'GC.address'| translate}}">
+            </div>
+          </div>
+
+
+        </form>
+
+        <div *ngIf="currentAddress" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save' |
+              translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' | translate}}</button>
+          </div>
+        </div>
+        <!-- Add structure here as needed -->
+      </div>
+      <div *ngIf="currentTab === 'passport'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'GC.passport_details' |translate}}</h4>
+        <br>
+        <form [formGroup]="passportForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.passport_number'| translate}}</label>
+              <input type="text" class="form-control" formControlName="number"
+                placeholder="{{'GC.passport_number'| translate}}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.country' | translate}}</label>
+              <ng-select class="mt-2" [items]="countries" bindLabel="title" bindValue="title"
+                formControlName="issue_country">
+              </ng-select>
+            </div>
+
+          </div>
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.issue_date' | translate}} </label>
+              <input type="text" class="form-control" placeholder="{{'GC.issue_date' | translate}}"
+                formControlName="issue_date" bsDatepicker>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.expiry_date' | translate}}</label>
+              <input type="text" class="form-control" placeholder="{{'GC.expiry_date' | translate}}"
+                formControlName="expiry_date" bsDatepicker>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="passport" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save' |
+              translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' | translate}}</button>
+          </div>
+        </div>
+        <!-- Add structure here as needed -->
+      </div>
+      <div *ngIf="currentTab === 'visa'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'GC.visa_details' | translate}}</h4>
+        <br>
+        <form [formGroup]="visaForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.visa_number' | translate}}</label>
+              <input type="text" class="form-control" formControlName="number"
+                placeholder="{{'GC.visa_number' | translate}}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.country' | translate}}</label>
+              <ng-select class="mt-2" [items]="countries" bindLabel="title" bindValue="title"
+                formControlName="issue_country">
+              </ng-select>
+            </div>
+
+          </div>
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.issue_date' | translate}}</label>
+              <input type="text" class="form-control" placeholder="{{'GC.issue_date' | translate}}"
+                formControlName="issue_date" bsDatepicker>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.expiry_date' | translate}}</label>
+              <input type="text" class="form-control" placeholder="{{'GC.expiry_date' | translate}}"
+                formControlName="expiry_date" bsDatepicker>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="visa" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save' |
+              translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' |translate}}</button>
+          </div>
+        </div>
+        <!-- Add structure here as needed -->
+      </div>
+
+      <div *ngIf="currentTab === 'occupation'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'GC.occupation_details' |translate}}</h4>
+        <br>
+        <form [formGroup]="occupationForm">
+          <div class="form-group row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.title' | translate}}</label>
+              <input type="text" class="form-control" formControlName="title" placeholder="{{'GC.title' | translate}}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.organization' |translate}}</label>
+              <input type="text" class="form-control" formControlName="organization"
+                placeholder="{{'GC.organization' |translate}}">
+            </div>
+
+
+          </div>
+          <div class="form-group row mb-3">
+
+            <div class="col-md-6">
+              <label class="form-label">{{'GC.location' |translate}}</label>
+              <input type="text" class="form-control" formControlName="location"
+                placeholder="{{'GC.location' |translate}}">
+            </div>
+
+
+          </div>
+
+        </form>
+        <div *ngIf="occupation" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save'
+              |translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' |translate}}</button>
+          </div>
+        </div>
+        <!-- Add structure here as needed -->
+      </div>
+      <!-- Documents Tab -->
+      <div *ngIf="currentTab === 'documents'" class="tab-pane fade show active">
+        <h4 class="text-muted">{{'GC.upload_msg' |translate}}</h4>
+        <br>
+        <div class="form-group row mb-3">
+          <div class="col-md-8">
+            <label class="form-label">{{'GC.doc_type' | translate}}</label>
+            <div class="row">
+              <!-- Dropdown for document type -->
+              <div class="col-md-3">
+                <select class="form-select" [(ngModel)]="selectedDocType" required>
+                  <option value="" disabled selected>{{'GC.doc_type' | translate}}</option>
+                  <option *ngFor="let type of documentTypes" [value]="type.value">{{
+                    currentLang == 'en_US' ? type.label : currentLang == 'ps_AF' ? type.ps : type.dr }}</option>
+                </select>
+              </div>
+              <!-- File input field -->
+              <div class="col-md-6">
+                <input type="file" class="form-control" (change)="onFileSelected($event)" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Display the uploaded file name -->
+        <div *ngIf="uploadedFiles.length > 0" class="form-group row mb-3">
+          <div class="col-md-9">
+            <label class="form-label">{{'GC.uploaded_docs' |translate}}</label>
+            <div class="uploaded-files-list">
+              <span *ngFor="let file of uploadedFiles" class="badge bg-success me-2">
+                {{ file.document_type }}: {{ file.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="documents" class="row mb-3 mt-4">
+          <div class="col-sm-12 d-flex justify-content-end">
+            <button class="btn btn-outline-primary me-2" type="submit" (click)="onSubmit()">{{'GC.save'
+              |translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'GC.close' |translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Form actions -->
+
+  </div>
+</div>

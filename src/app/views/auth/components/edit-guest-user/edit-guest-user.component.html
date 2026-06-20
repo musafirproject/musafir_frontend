@@ -1,0 +1,82 @@
+<div class="card">
+    <div class="card-body">
+        <div class="tab-content mt-3">
+            <!-- Profile Tab -->
+            <div class="tab-pane fade show active">
+                <div class="mb-3 d-flex  justify-content-between">
+                    <h4 class="text-muted">{{'UC.profile_guest_user' | translate}}</h4>
+                </div>
+                <br>
+                <form [formGroup]="userForm">
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.first_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="first_name" placeholder="{{'UC.first_name' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.last_name' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="last_name" placeholder="{{'UC.last_name' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.email' | translate}}</label>
+                            <input type="email" class="form-control" formControlName="email" placeholder="{{'UC.email' | translate}}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.phone' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="phone" placeholder="+93 700 00 0000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.nid' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="tazkira" placeholder="0000-0000-00000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.occupation' | translate}}</label>
+                            <input type="text" class="form-control" formControlName="occupation" placeholder="{{'UC.occupation' | translate}}">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UV.access' | translate}}</label>
+                            <ng-select
+                              class="mt-2"
+                              [items]="translatedCanSeeOptions"
+                              [multiple]="true"
+                              bindLabel="label"
+                              bindValue="value"
+                              formControlName="can_see"
+                              [(ngModel)]="selectedCanSee"
+                              >
+                            </ng-select>
+                          </div>
+                        <div class="col-md-6">
+                            <label class="form-label">{{'UC.role' | translate}}</label>
+                            <ng-select class="mt-2" [items]="roles" bindLabel="name" bindValue="id" formControlName="role"
+                                [(ngModel)]="selectedRole">
+                            </ng-select>
+                        </div>
+                    </div>
+
+
+
+                </form>
+
+                <div  class="row mb-3 mt-4">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                      <button class="btn btn-outline-primary me-2" type="submit" (click)="update()">{{'UC.final_save' | translate}}</button>
+                      <button class="btn btn-outline-danger" (click)="close()">{{'UC.close' | translate}}</button>
+                    </div>
+                  </div>
+
+
+            </div>
+
+        </div>
+        <!-- Form actions -->
+
+    </div>
+</div>

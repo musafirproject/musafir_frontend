@@ -1,0 +1,39 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="">Edit Notification</h2>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12 col-md-offset-3">
+        <form [formGroup]="notificationFormGroup">
+          <div class="form-group mb-3" [customErrorMessages]="error">
+            <label class="control-label">Title</label>
+            <input type="text" class="form-control" formControlName="title">
+          </div>
+          <div class="form-group mb-3" [customErrorMessages]="error">
+            <div class="col-sm-12">
+              <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+              <ngx-editor [editor]="editor" [ngModel]="html" [disabled]="false" [placeholder]="'Message...'"
+                formControlName="message"></ngx-editor>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <ng-select [items]="customers$" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+            bindLabel="first_name" placeholder="Select people" [(ngModel)]="selectedCustomers" (change)="onChange($event)">
+          </ng-select>
+          </div>
+
+
+          <div class="mt-3">
+            <button class="btn btn-light me-2" type="button" (click)="onReset()">Reset</button>
+            <button class="btn btn-outline-primary me-2" (click)="editNotification()">Save</button>
+            <button class="btn btn-outline-danger" (click)="close()">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

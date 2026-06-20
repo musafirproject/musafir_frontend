@@ -1,0 +1,25 @@
+<div style="z-index: 1050 !important;">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header mt-2">
+                  <h4 class="text-danger">Alert!</h4>
+              </div>
+              <div class="card-body">
+                <h5 class="text-warning text-center">Are You Sure You Want to Delete This Record ?</h5>
+              </div>
+                <div class="card-footer" >
+                  <div class="row">
+                    <div class="col-md-7"></div>
+                    <div class="col-md-5 mb-2">
+                      <button class="btn btn-outline-danger me-1" (click)="deleteNotification('Yes')">Yes</button>
+                      <button class="btn btn-outline-primary" (click)="deleteNotification('No')" >No</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>

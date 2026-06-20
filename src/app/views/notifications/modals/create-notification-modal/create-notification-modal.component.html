@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="">{{'NC.create_notification' |translate}}</h2>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12 col-md-offset-3">
+        <form [formGroup]="notificationFormGroup">
+          <div class="form-group mb-3" [customErrorMessages]="error">
+            <label class="control-label">{{'NC.title'|translate}}</label>
+            <input type="text" class="form-control" formControlName="title" placeholder="{{'NC.title'|translate}}">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-label">{{'NC.type' |translate}}</label>
+            <select class="form-select" [(ngModel)]="selectedNotification" required formControlName="notification_type">
+                <option value="" disabled selected>{{'NC.select_type' |translate}}</option>
+                <option *ngFor="let notfi of notificationTypes" [value]="notfi.value">
+                  {{
+                    currentLang == 'en_US' ? notfi.label : currentLang == 'ps_AF' ? notfi.ps : notfi.dr }}
+                  
+                  </option>
+            </select>
+        </div>
+
+
+
+
+          <div class="form-group mb-3" [customErrorMessages]="error">
+            <label class="form-label">{{'NC.message' |translate}}</label>
+            <div class="col-sm-12">
+              <textarea
+                class="form-control"
+                placeholder="{{'NC.message' |translate}}"
+                formControlName="description"
+              ></textarea>
+            </div>
+          </div>
+
+        
+
+
+          <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-primary me-2" (click)="createNotification()">{{'NC.save' |translate}}</button>
+            <button class="btn btn-light me-2" type="button" (click)="onReset()">{{'NC.reset' |translate}}</button>
+            <button class="btn btn-outline-danger" (click)="close()">{{'NC.close' |translate}}</button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

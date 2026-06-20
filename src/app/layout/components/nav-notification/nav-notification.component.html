@@ -1,0 +1,44 @@
+<dropdown dropdownClass="header-nav-item-select nav-notification" (click)="navNotification.toggle($event)">
+  <div class="toggle-wrapper position-relative">
+    <i class="header-nav-item-select nav-icon feather icon-bell"></i>
+    <!-- Unread notifications badge -->
+    <span *ngIf="unreadCount > 0" class="badge badge-danger position-absolute top-0 start-100 translate-middle p-2 rounded-circle">
+      {{ unreadCount }}
+    </span>
+  </div>
+  <dropdown-menu #navNotification alignment="right">
+    <div class="nav-notification-header">
+      <h5 class="mb-0">{{'NV.notifications' | translate}}</h5>
+      <a class="font-size-sm" href="#" (click)="markAllAsRead(); $event.preventDefault()">{{'NV.mark_all_read' | translate}}</a>
+    </div>
+    <perfect-scrollbar class="nav-notification-body">
+      <div class="nav-notification-item" *ngFor="let item of notifications" (click)="markAsRead(item); $event.stopPropagation()">
+        <div *ngIf="item.notification_type === 'order'" style="padding-right: 10px;">
+          <img style="padding-left: 5px; padding-right: 5px;" src="../../../../assets/images/notification-icons/cart-notification.svg" width="35" height="35" alt="">
+        </div>
+        <div *ngIf="item.notification_type === 'mail'" style="padding-right: 10px;">
+          <img style="padding-left: 5px; padding-right: 5px;" src="../../../../assets/images/notification-icons/mail-notification-2.svg" width="35" height="35" alt="">
+        </div>
+        <div *ngIf="item.notification_type === 'info'" style="padding-right: 10px;">
+          <img style="padding-left: 5px; padding-right: 5px;" src="../../../../assets/images/notification-icons/info_notification_2.svg" width="35" height="35" alt="">
+        </div>
+        <div class="ms-2">
+          <span>
+            <span *ngIf="item.status === 'DELIVERED'" class="fw-bolder text-warning me-2" style="display: block;" [innerHtml]="item.notification_type | titlecase"></span>
+            <span *ngIf="item.status === 'SEEN'" class="fw-bolder text-primary me-2" style="display: block;" [innerHtml]="item.notification_type | titlecase"></span>
+            <span *ngIf="item.status === 'DELIVERED'" style="font-weight: bolder;" class="me-2" [innerHtml]="item.message.slice(0, 20) + (item.message.length > 20 ? '...' : '')"></span>
+            <span *ngIf="item.status === 'SEEN'" style="font-weight: normal;" class="me-2" [innerHtml]="item.message.slice(0, 20) + (item.message.length > 20 ? '...' : '')"></span>
+          </span>
+          <div class="font-size-sm fw-bold mt-1">
+            <i class="feather icon-clock"></i>
+            <span class="ms-1">{{item.title}}</span>
+            <span class="ms-1">{{getTimeDistance(item.created_at)}}</span>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+    <div class="nav-notification-footer">
+      <a [routerLink]="['/Notifications/notification-list']" routerLinkActive="router-link-active" class="font-size-sm">{{'NV.view_all' | translate}}</a>
+    </div>
+  </dropdown-menu>
+</dropdown>

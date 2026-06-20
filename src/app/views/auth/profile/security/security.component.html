@@ -1,0 +1,55 @@
+<div>
+    <h4>{{'UP.security_setting' | translate}}</h4>
+    <p>{{'UP.security_setting_msg' | translate}}</p>
+</div>
+
+<div class="my-4">
+    <h5 class="mb-3">{{'UP.login' | translate}}</h5>
+    <row-content
+        title="{{'UP.change_password' | translate}}"
+        icon="icon-lock"
+        description="{{'UP.change_password_msg' | translate}}"
+        [handler]="changePasswordBtn"
+    >
+        <div class="mt-4" *ngIf="showEdit" style="max-width: 800px;">
+            <form [formGroup]="form" (keydown.enter)="onSubmit()">
+                <!-- Password Input Group -->
+                <div class="mb-3 row">
+                    <label class="col-form-label col-12 col-md-3">{{'UP.password' | translate}}</label>
+                    <div class="col-12 col-md-9">
+                        <input type="password" class="form-control" formControlName="old_password">
+                    </div>
+                </div>
+
+                <!-- New Password Input Group -->
+                <div class="mb-3 row">
+                    <label class="col-form-label col-12 col-md-3">{{'UP.new_password' | translate}}</label>
+                    <div class="col-12 col-md-9">
+                        <input type="password" class="form-control" formControlName="new_password">
+                    </div>
+                </div>
+
+                <!-- Confirm Password Input Group -->
+                <div class="mb-3 row">
+                    <label class="col-form-label col-12 col-md-3">{{'UP.confirm_password' | translate}}</label>
+                    <div class="col-12 col-md-9">
+                        <input type="password" class="form-control" formControlName="confirm_password">
+                    </div>
+                </div>
+
+                <!-- Buttons Row (Aligning buttons to the right) -->
+                <div class="row justify-content-end">
+                    <div class="col-auto">
+                        <button class="btn btn-light me-2" type="button" (click)="onReset()">{{'UP.reset' | translate}}</button>
+                        <button class="btn btn-outline-danger me-2" (click)="editForm()">{{'UP.close' | translate}}</button>
+                        <button type="submit" class="btn btn-outline-primary" (click)="onSubmit()">{{'UP.save' | translate}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </row-content>
+</div>
+
+<ng-template #changePasswordBtn>
+    <button class="btn btn-outline-primary" *ngIf="!showEdit" (click)="editForm()">{{'UP.change' | translate}}</button>
+</ng-template>

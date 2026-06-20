@@ -1,0 +1,22 @@
+<div>
+    <h4>Notification Setting</h4>
+    <p >Allow notification for the enabled section. </p>
+</div>
+<div class="mt-4">
+    <div class="mb-4" *ngFor="let obj of notificationModel | keyvalue">
+        <h5 class="mb-3">{{obj.key}}</h5>
+        <ng-container *ngFor="let item of obj.value; let last = last">
+            <ng-template #action>
+                <switch name="switch" [(ngModel)]="item.value"></switch>
+            </ng-template>
+            <row-content
+                [title]="item.title"
+                [description]="item.description"
+                [icon]="item.icon"
+                [border]="!last"
+                [handler]="action"
+            >
+            </row-content>
+        </ng-container>
+    </div>
+</div>

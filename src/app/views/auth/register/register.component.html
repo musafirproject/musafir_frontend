@@ -1,0 +1,304 @@
+<div class="auth-full-height d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="m-2">
+                            <div class="d-flex justify-content-center mt-3">
+                                <logo class="text-center" logoType="fold"></logo>
+                                
+                            </div>
+                            <div class="text-center mt-3">
+                                    <dropdown dropdownClass="header-nav-item-select" (click)="navI18n.toggle($event)">
+                                        <div class="toggle-wrapper">
+                                            <avatar [size]="22" [src]="'/assets/images/thumbs/' + currentLang + '.png'"></avatar>
+                                        </div>
+                                        <dropdown-menu #navI18n alignment="center">
+                                            <a href="javascript:void(0)" dropdownItem *ngFor="let language of languageList" (click)="setLanguage(language.key)">
+                                                <div class="d-flex align-items-center">
+                                                    <avatar [size]="18" [src]="'/assets/images/thumbs/' + language.key + '.png'"></avatar>
+                                                    <span class="ms-2">{{language.lang}}</span>
+                                                </div>
+                                            </a>
+                                        </dropdown-menu>
+                                    </dropdown>
+                                
+                                <h3 class="fw-bolder">{{'RG.registration' |translate}}</h3>
+                                <h5 class="text-muted">
+                                    {{'RG.registration_info'|translate}}
+                                    <a data-bs-toggle="tooltip" data-bs-placement="top" 
+                                       title="
+                                           {{'RG.tooltip_msg' |translate}}
+                                       ">
+                                
+                                        <i class="feather icon-alert-triangle cursor-pointer"></i> <!-- Info icon with a margin -->
+                                    </a>
+                                </h5>
+                                
+                            </div>
+
+                            <!-- Progress Bar -->
+                            <div class="progress-container">
+                                <div class="progress-bar-step" [class.active]="currentStep >= 1">
+                                    <div class="circle">1</div>
+                                </div>
+                                <div class="progress-bar-step" [class.active]="currentStep >= 2">
+                                    <div class="circle">2</div>
+                                </div>
+                                <div class="progress-bar-step" [class.active]="currentStep >= 3">
+                                    <div class="circle">3</div>
+                                </div>
+                                <div class="progress-bar-step" [class.active]="currentStep >= 4">
+                                    <div class="circle">4</div>
+                                </div>
+                                <div class="progress-bar-step" [class.active]="currentStep >= 5">
+                                    <div class="circle">5</div>
+                                </div>
+                            </div>
+
+                            <!-- Step 1: Basic Info -->
+
+                            <div *ngIf="currentStep===1">
+                                <form [formGroup]="step1Form" >
+                                    <div class="form-group row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.first_name' |translate}}</label>
+                                            <input type="text" class="form-control" formControlName="first_name"
+                                                placeholder="First Name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.last_name' |translate}}</label>
+                                            <input type="text" class="form-control" formControlName="last_name"
+                                                placeholder="Last Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.email' |translate}}</label>
+                                            <input type="email" class="form-control" formControlName="email"
+                                                placeholder="Email">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.phone' |translate}}</label>
+                                            <input type="text" class="form-control" formControlName="phone"
+                                                placeholder="+93 700 00 0000">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.password' |translate}}</label>
+                                            <input type="password" class="form-control" formControlName="password"
+                                                placeholder="Password">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.confirm_password' |translate}}</label>
+                                            <input type="password" class="form-control" formControlName="confirm_password"
+                                                placeholder="Confirm Password">
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                                <form [formGroup]="hotelForm">
+                                    <div class="form-group row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">{{'RG.hotel' |translate}}</label>
+                                            <ng-select class="mt-2" [items]="hotels" bindLabel="title" bindValue="id"
+                                                formControlName="hotel">
+                                            </ng-select>
+                                        </div>
+                                       
+                                    </div>
+                                    
+
+                                </form>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-secondary" (click)="prevStep()"
+                                        *ngIf="currentStep > 1">{{'RG.back' |translate}}</button>
+                                    <button type="button" class="btn btn-primary" (click)="saveStep1()">{{'RG.next' |translate}}</button>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <a [routerLink]="['/login']" >{{'AU.login' |translate}}</a>
+
+                                </div>
+
+                            </div>
+                        
+
+                            <!-- Step 2: Profile Info -->
+                            <form [formGroup]="step2Form" *ngIf="currentStep === 2">
+                                <div class="form-group row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.father_name' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="father_name"
+                                            placeholder="Father Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.g_f_name' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="grand_father_name"
+                                            placeholder="Grand Father Name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.nid' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="tazkira"
+                                            placeholder="0000-0000-00000">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.occupation' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="occupation"
+                                            placeholder="Occupation">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.dob' |translate}}</label>
+                                        <input type="text" placeholder="Datepicker" class="form-control"
+                                            Placeholder="Date of Birth" formControlName="date_of_birth" bsDatepicker>
+                                    </div>
+                                  
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.upload_image' |translate}}</label>
+                                        <input type="file" class="form-control" (change)="uploadImage($event)">
+                                    </div>
+                                </div>
+
+                              
+
+
+
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-secondary" (click)="prevStep()">{{'RG.back' |translate}}</button>
+                                    <button type="button" class="btn btn-primary" (click)="nextStep()">{{'RG.next' |translate}}</button>
+                                </div>
+                            </form>
+
+                            <!-- Step 3: Address -->
+                            <form [formGroup]="step3Form" *ngIf="currentStep === 3">
+                                <h4>{{'RG.permanent_add_msg' |translate}}</h4>
+                                <div class="form-group row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.city' |translate}}</label>
+                                        <ng-select class="mt-2" [items]="cities" bindLabel="title" bindValue="id"
+                                            formControlName="city">
+                                        </ng-select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.district' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="district"
+                                            placeholder="District">
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.village' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="village"
+                                            placeholder="Village">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.address' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="addr"
+                                            placeholder="Address">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-secondary" (click)="prevStep()">{{'RG.back' |translate}}</button>
+                                    <button type="button" class="btn btn-primary" (click)="nextStep()">{{'RG.next' |translate}}</button>
+                                </div>
+                            </form>
+
+                            <!-- Step 4: Permanent Address -->
+                            <form [formGroup]="step4Form" *ngIf="currentStep === 4">
+                                <h4>{{'RG.current_add_msg' | translate}}</h4>
+                                <div class="form-group row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.city' |translate}}</label>
+                                        <ng-select class="mt-2" [items]="cities" bindLabel="title" bindValue="id"
+                                            formControlName="city">
+                                        </ng-select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.district' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="district"
+                                            placeholder="District">
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.village'|translate}}</label>
+                                        <input type="text" class="form-control" formControlName="village"
+                                            placeholder="Village">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{'RG.address' |translate}}</label>
+                                        <input type="text" class="form-control" formControlName="addr"
+                                            placeholder="Address">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-secondary" (click)="prevStep()">{{'RG.back' |translate}}</button>
+                                    <button type="button" class="btn btn-primary" (click)="nextStep()">{{'RG.next' |translate}}</button>
+                                </div>
+                            </form>
+
+                            <!-- Step 5: Documents -->
+                            <div *ngIf="currentStep === 5">
+                                <div class="form-group row mb-3">
+                                    <div class="col-md-8">
+                                        <label class="form-label">{{'RG.upload_doc' |translate}}</label>
+                                        <div class="row">
+                                            <!-- Dropdown for document type -->
+                                            <div class="col-md-3">
+                                                <select class="form-select" [(ngModel)]="selectedDocType" required>
+                                                    <option value="" disabled selected>Document Type</option>
+                                                    <option *ngFor="let type of documentTypes" [value]="type.value">{{
+                                                        type.label }}</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- File input field -->
+                                            <div class="col-md-6">
+                                                <input type="file" class="form-control"
+                                                    (change)="onFileSelected($event)" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Display the uploaded file name -->
+                                <div *ngIf="uploadedFiles.length > 0" class="form-group row mb-3">
+                                    <div class="col-md-9">
+                                        <label class="form-label">{{'RG.uploaded_doc' |translate}}</label>
+                                        <div class="uploaded-files-list">
+                                            <span *ngFor="let file of uploadedFiles" class="badge bg-success me-2">
+                                                {{ file.document_type }}: {{ file.name }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Always visible buttons -->
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-secondary" (click)="prevStep()">{{'RG.back' |translate}}</button>
+                                    <button type="submit" class="btn btn-primary"
+                                        (click)="submitFinalStep()">{{'RG.submit' |translate}}</button>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+

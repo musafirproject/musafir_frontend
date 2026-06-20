@@ -1,0 +1,137 @@
+.hotel-card {
+    border: none; 
+    box-shadow: none; 
+    background-color: white; 
+    transition: background-color 0.3s, border-color 0.3s;
+    cursor: pointer; 
+  }
+  
+  .hotel-card:hover {
+    background-color: #e7f3ff; 
+  }
+  
+  .hotel-card.selected {
+    border: 2px solid #007bff; 
+    background-color: #e7f3ff; 
+  }
+  
+  .card-title {
+    font-size: 1rem; 
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-text {
+    font-size: 0.875rem; 
+  }
+  
+  .text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+  }
+  
+
+  .icon-size {
+    font-size: 2rem; 
+    transition: transform 0.3s, color 0.3s;
+}
+
+.hotel-card:hover .icon-size {
+    transform: scale(1.2); 
+}
+
+
+.black-icon {
+    color: rgb(9, 231, 64); /* For hotels */
+}
+
+
+.orange-icon {
+    color: orange; /* For hostels */
+}
+
+.yellow-icon {
+    color: #eaee06; /* For guest houses */
+}
+
+.teal-icon {
+    color: #04d3f3; /* For Musafir Khana */
+}
+
+
+.purple-icon {
+
+    color: #5904f7; /* For houses */
+}
+
+.red-icon {
+    color: #ee051d; /* For rent rooms */
+}
+
+.orange-dark-icon {
+    color: #f06e04; /* For companies */
+}
+
+
+.select-all-container {
+  background-color: #f8f9fa; 
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.styled-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #007bff; 
+}
+
+/* Label styling */
+.select-all-container .form-check-label {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Hover effect */
+.select-all-container:hover {
+  background-color: #e9ecef; 
+}
+
+/* Checkbox focus ring */
+.styled-checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); 
+}
+
+
+.styled-checkbox {
+  appearance: none; 
+  background-color: white;
+  border: 2px solid #007bff;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.styled-checkbox:checked {
+  background-color: #007bff;
+  border-color: #007bff;
+  position: relative;
+}
+
+.styled-checkbox:checked::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 3px auto;
+  background: white;
+  border-radius: 2px;
+}
+
+

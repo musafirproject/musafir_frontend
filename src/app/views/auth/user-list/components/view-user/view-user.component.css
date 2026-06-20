@@ -1,0 +1,820 @@
+/* User View Container */
+.user-view-container {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .user-view-container {
+    padding: 1rem;
+  }
+}
+
+/* Header Styles */
+.user-header {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .user-header {
+    padding: 1.5rem;
+  }
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 0.375rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-active {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+  border: 1px solid #28a745;
+}
+
+.status-inactive {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+.user-role-badge {
+  padding: 0.375rem 1rem;
+  border-radius: 50px;
+  background-color: rgba(77, 171, 247, 0.1);
+  color: #4dabf7;
+  border: 1px solid #4dabf7;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-activate {
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-close {
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-activate,
+  .btn-close {
+    width: 100%;
+  }
+}
+
+/* Card Styles */
+.personal-info-card,
+.access-info-card,
+.summary-card,
+.quick-actions-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.card-header {
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.25rem 1.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Info Table */
+.info-table {
+  margin: 0;
+}
+
+.info-table th {
+  width: 20%;
+  font-weight: 600;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem;
+}
+
+.info-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.info-table tr:last-child th,
+.info-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  .info-table th,
+  .info-table td {
+    padding: 0.75rem;
+  }
+}
+
+/* Mobile Card View */
+.info-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-card-item {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.info-card-item label {
+  display: block;
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.info-card-item p {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Access Badges */
+.access-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.access-badges .badge {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+/* Hotels List */
+.hotels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hotel-item a {
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s;
+}
+
+.hotel-item a:hover {
+  background: #e9ecef;
+  text-decoration: none;
+}
+
+/* Summary Stats */
+.summary-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.stat-content h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.stat-content p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* User Activity */
+.user-activity {
+  padding-top: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.activity-item strong {
+  color: #2c3e50;
+  margin-left: auto;
+}
+
+/* Quick Actions */
+.quick-actions-card .btn {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+/* Section Divider */
+.section-divider {
+  margin: 3rem 0 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+}
+
+/* Address Type Badge */
+.address-type-badge {
+  padding: 0.375rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.address-type-badge.current {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #17a2b8;
+  border: 1px solid #17a2b8;
+}
+
+.address-type-badge.permanent {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+
+/* Address Card (Mobile) */
+.address-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.address-card-header {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.address-card-body {
+  padding: 1rem;
+}
+
+.address-card-body label {
+  display: block;
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.address-card-body p {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.address-text {
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+/* Document Type Badge */
+.document-type-badge {
+  padding: 0.375rem 1rem;
+  border-radius: 50px;
+  background-color: rgba(111, 66, 193, 0.1);
+  color: #6f42c1;
+  border: 1px solid #6f42c1;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Document Card (Mobile) */
+.document-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.document-card-header {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.document-card-body {
+  padding: 1rem;
+}
+
+.document-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.document-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6f42c1;
+  font-size: 1.25rem;
+}
+
+.document-details h6 {
+  margin: 0;
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.document-details small {
+  font-size: 0.75rem;
+}
+
+.document-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.empty-state-content {
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-state-content i {
+  color: #dee2e6;
+}
+
+.empty-state-content h4 {
+  color: #6c757d;
+  margin: 1rem 0;
+}
+
+.empty-state-content p {
+  color: #adb5bd;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Modal Styles */
+.modal-content {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #659992;
+  color: white;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.modal-title {
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-body {
+  padding: 0;
+  min-height: 70vh;
+}
+
+.image-viewer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 2rem;
+}
+
+.image-viewer img {
+  max-width: 100%;
+  max-height: 65vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.pdf-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+
+.pdf-viewer {
+  height: 70vh;
+  background: #f8f9fa;
+}
+
+/* Responsive Grid */
+@media (max-width: 992px) {
+  .user-view-container .row {
+    gap: 1.5rem;
+  }
+
+  .col-xl-8,
+  .col-xl-4 {
+    width: 100%;
+  }
+}
+
+/* File Icon Colors */
+.fa-file-pdf {
+  color: #dc3545;
+}
+
+.fa-file-image {
+  color: #28a745;
+}
+
+.fa-file-alt {
+  color: #6f42c1;
+}
+
+/* Hover Effects */
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover,
+.btn-outline-warning:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-view-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+.user-view-container {
+  padding: 1.5rem;
+}
+
+.section-divider {
+  margin: 3rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #343a40;
+  margin-bottom: 0;
+}
+
+/* Grid Cards Styling */
+.hotel-grid-card,
+.address-grid-card,
+.document-grid-card {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.hotel-grid-card:hover,
+.address-grid-card:hover,
+.document-grid-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-color: #adb5bd;
+}
+
+.hotel-card-header,
+.address-card-header,
+.document-card-header {
+  padding: 1rem 1rem 0.5rem;
+  background: #f8f9fa;
+}
+
+.hotel-card-body,
+.address-card-body,
+.document-card-body {
+  padding: 1rem;
+  flex: 1;
+}
+
+.hotel-card-footer,
+.address-card-footer,
+.document-card-footer {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Hotel Grid Specific */
+.hotel-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.hotel-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.info-item i {
+  min-width: 20px;
+}
+
+/* Address Grid Specific */
+.address-details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.address-text {
+  line-height: 1.4;
+  color: #495057;
+  word-break: break-word;
+}
+
+
+
+/* Document Grid Specific */
+.document-preview {
+  cursor: pointer;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 0.375rem;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.document-preview:hover {
+  background: #e9ecef;
+}
+
+.preview-icon {
+  margin-bottom: 1rem;
+  color: #6c757d;
+}
+
+.document-name {
+  font-weight: 500;
+  color: #495057;
+  word-break: break-word;
+}
+
+.document-type-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e7f1ff;
+  color: #0d6efd;
+}
+
+/* Collapsible Sections */
+.hotels-section,
+.addresses-section,
+.documents-section {
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.hotels-section.collapsed,
+.addresses-section.collapsed,
+.documents-section.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.hotels-section.expanded,
+.addresses-section.expanded,
+.documents-section.expanded {
+  max-height: 5000px;
+  opacity: 1;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.empty-state-content i {
+  opacity: 0.5;
+}
+
+.empty-state h4 {
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+}
+
+/* Collapse button */
+.collapse-toggle {
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.collapse-toggle:hover {
+  color: #495057;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .user-view-container {
+    padding: 1rem;
+  }
+
+  .section-divider {
+    margin: 2rem 0 1rem;
+  }
+
+  .hotel-grid-card,
+  .address-grid-card,
+  .document-grid-card {
+    margin-bottom: 1rem;
+  }
+
+  .btn-group.w-100 {
+    flex-direction: column;
+  }
+
+  .btn-group.w-100 .btn {
+    margin-bottom: 0.25rem;
+    width: 100%;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .row-cols-md-2 > * {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .row-cols-lg-3 > * {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+}

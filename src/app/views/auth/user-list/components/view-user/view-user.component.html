@@ -1,0 +1,541 @@
+<div class="user-view-container">
+  <!-- Header Section -->
+  <div class="user-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="page-title mb-2">{{'UV.user_profile_info' | translate}}</h1>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+          <span class="status-badge" [ngClass]="{
+            'status-active': userData.is_active,
+            'status-inactive': !userData.is_active
+          }">
+            {{ userData.is_active ? ('UL.active' | translate) : ('UL.in_active' | translate) }}
+          </span>
+          <span class="user-role-badge">{{ userData.role?.name }}</span>
+          <span class="text-muted">{{ userData.created_at | date:'mediumDate' }}</span>
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button *ngIf="!userData.is_active && (role=='super_admin' || role=='sub_admin')"
+                class="btn btn-success btn-activate"
+                (click)="activate()">
+          <i class="feather icon-check-circle me-2"></i>
+          {{'UV.activate' | translate}}
+        </button>
+        <button class="btn btn-outline-secondary btn-close" (click)="close(userData?.role?.name)">
+          <i class="feather icon-x me-2"></i>
+          <!-- {{'UV.close' | translate}} -->
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="row g-4">
+    <!-- Left Column: Personal Information -->
+    <div class="col-xl-8">
+      <div class="card personal-info-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="feather icon-user me-2"></i>
+            {{'UV.personal_information' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Desktop Table View -->
+            <div class="col-md-12 d-none d-md-block">
+              <div class="table-responsive">
+                <table class="table info-table">
+                  <tbody>
+                    <tr>
+                      <th scope="row">{{'UV.first_name' | translate}}</th>
+                      <td>{{userData.first_name}}</td>
+                      <th scope="row">{{'UV.last_name' | translate}}</th>
+                      <td>{{userData.last_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.father_name' | translate}}</th>
+                      <td>{{userData.father_name}}</td>
+                      <th scope="row">{{'UV.grand_father_name' | translate}}</th>
+                      <td>{{userData.grand_father_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.email' | translate}}</th>
+                      <td class="text-primary">{{userData.email}}</td>
+                      <th scope="row">{{'UV.phone' | translate}}</th>
+                      <td>{{userData.phone}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.nid' | translate}}</th>
+                      <td>{{userData.tazkira}}</td>
+                      <th scope="row">{{'UV.date_of_birth' | translate}}</th>
+                      <td>{{userData.date_of_birth | date:'mediumDate'}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">{{'UV.occupation' | translate}}</th>
+                      <td>{{userData.occupation}}</td>
+                      <th scope="row" >{{'UV.role' | translate}}</th>
+                      <td class="text-primary">{{userData.role?.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Mobile Card View -->
+            <div class="col-12 d-md-none">
+              <div class="info-card-list">
+                <div class="info-card-item">
+                  <label>{{'UV.first_name' | translate}}</label>
+                  <p>{{userData.first_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.last_name' | translate}}</label>
+                  <p>{{userData.last_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.father_name' | translate}}</label>
+                  <p>{{userData.father_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.grand_father_name' | translate}}</label>
+                  <p>{{userData.grand_father_name}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.email' | translate}}</label>
+                  <p class="text-primary">{{userData.email}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.phone' | translate}}</label>
+                  <p>{{userData.phone}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.nid' | translate}}</label>
+                  <p>{{userData.tazkira}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.date_of_birth' | translate}}</label>
+                  <p>{{userData.date_of_birth | date:'mediumDate'}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.occupation' | translate}}</label>
+                  <p>{{userData.occupation}}</p>
+                </div>
+                <div class="info-card-item">
+                  <label>{{'UV.role' | translate}}</label>
+                  <p>{{userData.role?.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Access & Hotels Information Card -->
+      <div class="card access-info-card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="feather icon-shield me-2"></i>
+            {{'UV.access_and_hotels' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row g-4">
+            <!-- Access Rights -->
+            <div class="col-md-6">
+              <h5 class="mb-3">{{'UV.access_rights' | translate}}</h5>
+              <div class="access-badges">
+                <span *ngFor="let access of userData?.can_see" class="badge"
+                      [ngClass]="access === 'NATIONAL' ? 'bg-success' : 'bg-info'">
+                  {{ access === 'NATIONAL' ? ('GL.national' | translate) : ('GL.foreign' | translate) }}
+                </span>
+                <span *ngIf="!userData?.can_see || userData?.can_see.length === 0" class="text-muted">
+                  {{'UV.no_access_rights' | translate}}
+                </span>
+              </div>
+            </div>
+
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Quick Stats & Actions -->
+    <div class="col-xl-4">
+      <div class="card summary-card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="feather icon-pie-chart me-2"></i>
+            {{'UV.quick_summary' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="summary-stats">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="feather icon-map-pin text-primary"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ userAddresses?.length || 0 }}</h4>
+                <p>{{'UV.addresses' | translate}}</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="feather icon-file-text text-success"></i>
+              </div>
+              <div class="stat-content">
+                <h4>{{ userMedia?.length || 0 }}</h4>
+                <p>{{'UV.documents' | translate}}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Activity -->
+          <div class="user-activity mt-4 pt-3 border-top">
+            <h6 class="text-muted mb-3">{{'UV.user_activity' | translate}}</h6>
+            <div class="activity-item">
+              <i class="feather icon-calendar text-info me-2"></i>
+              <span>{{'UV.created_on' | translate}}:</span>
+              <strong>{{ userData.created_at | date:'shortDate' }}</strong>
+            </div>
+            <div class="activity-item mt-2">
+              <i class="feather icon-refresh-cw text-warning me-2"></i>
+              <span>{{'UV.last_updated' | translate}}:</span>
+              <strong>{{ userData.updated_at | date:'short' }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="card quick-actions-card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="feather icon-zap me-2"></i>
+            {{'UV.quick_actions' | translate}}
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" (click)="toggleSection('hotels')">
+              <i class="feather" [ngClass]="{'icon-eye': !hotelsCollapsed, 'icon-eye-off': hotelsCollapsed}"></i>
+              {{ hotelsCollapsed ? ('UV.show_hotels' | translate) : ('UV.hide_hotels' | translate) }}
+            </button>
+            <button class="btn btn-outline-primary" (click)="toggleSection('addresses')">
+              <i class="feather" [ngClass]="{'icon-eye': !addressesCollapsed, 'icon-eye-off': addressesCollapsed}"></i>
+              {{ addressesCollapsed ? ('UV.show_addresses' | translate) : ('UV.hide_addresses' | translate) }}
+            </button>
+            <button class="btn btn-outline-primary" (click)="toggleSection('documents')">
+              <i class="feather" [ngClass]="{'icon-eye': !documentsCollapsed, 'icon-eye-off': documentsCollapsed}"></i>
+              {{ documentsCollapsed ? ('UV.show_documents' | translate) : ('UV.hide_documents' | translate) }}
+            </button>
+           
+            <button *ngIf="userData.email" class="btn btn-outline-info" (click)="emailUser()">
+              <i class="feather icon-mail me-2"></i>
+              {{'UV.email_user' | translate}}
+            </button>
+            <button *ngIf="role=='super_admin' || role=='sub_admin'"
+                    class="btn btn-outline-warning" (click)="openPasswordReset(userData.id)">
+              <i class="feather icon-refresh-cw me-2"></i>
+              {{'TR.reset_btn' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced Hotels Section with Grid Layout -->
+  <div class="section-divider">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="section-title mb-0">
+        <i class="feather icon-home me-2"></i>
+        {{'UV.assigned_hotels' | translate}}
+        <span class="badge bg-secondary ms-2">{{ userHotel?.length || 0 }}</span>
+      </h2>
+      <button class="btn btn-sm btn-outline-secondary" (click)="toggleSection('hotels')">
+        <i class="feather" [ngClass]="{'icon-chevron-up': !hotelsCollapsed, 'icon-chevron-down': hotelsCollapsed}"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="userHotel && userHotel.length > 0" class="hotels-section" [@collapse]="hotelsCollapsed ? 'collapsed' : 'expanded'">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" *ngFor="let hotel of userHotel">
+        <div class="hotel-grid-card">
+          <div class="hotel-card-header">
+            <div class="d-flex justify-content-between align-items-start">
+              <h5 class="hotel-name mb-0">
+                <i class="feather icon-home text-primary me-2"></i>
+                {{ hotel.title }}
+              </h5>
+              <span class="badge" [ngClass]="{
+                'bg-success': hotel.status === 'ACTIVE',
+                'bg-warning': hotel.status === 'INACTIVE',
+                'bg-secondary': hotel.status === 'PENDING'
+              }">
+                {{ hotel.status }}
+              </span>
+            </div>
+          </div>
+
+
+
+          <div class="hotel-card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                <i class="feather icon-calendar me-1"></i>
+                {{ hotel.created_at | date:'shortDate' }}
+              </small>
+              <a [routerLink]="['/settings/hotel', hotel.id, 'view']"
+                 class="btn btn-sm btn-outline-primary">
+                <i class="feather icon-external-link me-1"></i>
+                {{'UV.view_details' | translate}}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="(!userHotel || userHotel.length === 0) && !hotelsCollapsed" class="empty-state">
+    <div class="empty-state-content">
+      <i class="feather icon-home fa-3x text-muted mb-3"></i>
+      <h4>{{'UV.no_hotels_assigned' | translate}}</h4>
+      <p class="text-muted">{{'UV.hotel_msg' | translate}}</p>
+    </div>
+  </div>
+
+  <!-- Addresses Section with Grid Layout -->
+  <div class="section-divider">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="section-title mb-0">
+        <i class="feather icon-map-pin me-2"></i>
+        {{'UV.user_address_info' | translate}}
+        <span class="badge bg-secondary ms-2">{{ userAddresses?.length || 0 }}</span>
+      </h2>
+      <button class="btn btn-sm btn-outline-secondary" (click)="toggleSection('addresses')">
+        <i class="feather" [ngClass]="{'icon-chevron-up': !addressesCollapsed, 'icon-chevron-down': addressesCollapsed}"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="userAddresses && userAddresses.length > 0" class="addresses-section" [@collapse]="addressesCollapsed ? 'collapsed' : 'expanded'">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" *ngFor="let address of userAddresses; let i = index">
+        <div class="address-grid-card">
+          <div class="address-card-header">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="address-type-badge"
+                    [ngClass]="address?.address_type === 'CURRENT ADDRESS' ? 'current' : 'permanent'">
+                {{ address?.address_type === 'CURRENT ADDRESS' ?
+                  ('GC.current_address' | translate) :
+                  ('GC.permanent_address' | translate) }}
+              </span>
+              <span class="badge bg-secondary">#{{i + 1}}</span>
+            </div>
+          </div>
+
+          <div class="address-card-body">
+            <div class="address-details-grid">
+              <div class="detail-item">
+                <i class="feather icon-map-pin text-primary me-2"></i>
+                <div>
+                  <small class="text-muted">{{'UV.city' | translate}}</small>
+                  <p class="mb-0">
+                    <span *ngIf="currentLang==='en_US'">{{address?.city?.title || '—'}}</span>
+                    <span *ngIf="currentLang!='en_US'">{{address?.city?.province || '—'}}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <i class="feather icon-navigation text-primary me-2"></i>
+                <div>
+                  <small class="text-muted">{{'UV.district' | translate}}</small>
+                  <p class="mb-0">{{address?.district || '—'}}</p>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <i class="feather icon-home text-primary me-2"></i>
+                <div>
+                  <small class="text-muted">{{'UV.village' | translate}}</small>
+                  <p class="mb-0">{{address?.village || '—'}}</p>
+                </div>
+              </div>
+
+              <div class="detail-item full-width">
+                <i class="feather icon-file-text text-primary me-2 align-self-start"></i>
+                <div>
+                  <small class="text-muted">{{'UV.address' | translate}}</small>
+                  <p class="mb-0 address-text">{{address?.addr || '—'}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="address-card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                <i class="feather icon-calendar me-1"></i>
+                {{ address?.created_at | date:'shortDate' }}
+              </small>
+              <small class="text-muted">
+                <i class="feather icon-clock me-1"></i>
+                {{ address?.updated_at | date:'shortTime' }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="(!userAddresses || userAddresses.length === 0) && !addressesCollapsed" class="empty-state">
+    <div class="empty-state-content">
+      <i class="feather icon-map-pin fa-3x text-muted mb-3"></i>
+      <h4>{{'UV.no_addresses_found' | translate}}</h4>
+      <p class="text-muted">{{'UV.address_msg' | translate}}</p>
+    </div>
+  </div>
+
+  <!-- Documents Section with Grid Layout -->
+  <div class="section-divider">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="section-title mb-0">
+        <i class="feather icon-file-text me-2"></i>
+        {{'UV.user_docs' | translate}}
+        <span class="badge bg-secondary ms-2">{{ userMedia?.length || 0 }}</span>
+      </h2>
+      <button class="btn btn-sm btn-outline-secondary" (click)="toggleSection('documents')">
+        <i class="feather" [ngClass]="{'icon-chevron-up': !documentsCollapsed, 'icon-chevron-down': documentsCollapsed}"></i>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="userMedia && userMedia.length > 0" class="documents-section" [@collapse]="documentsCollapsed ? 'collapsed' : 'expanded'">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" *ngFor="let media of userMedia; let i = index">
+        <div class="document-grid-card">
+          <div class="document-card-header">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="document-type-badge">
+                {{ media?.document_type === 'TAZKIRA' ? ('GC.tazkira' | translate) :
+                   media?.document_type === 'PASSPORT' ? ('GC.passport' | translate) :
+                   media?.document_type === 'JAWAZ' ? ('GC.jawaz' | translate) : media?.document_type }}
+              </span>
+              <span class="badge bg-secondary">#{{i + 1}}</span>
+            </div>
+          </div>
+
+          <div class="document-card-body">
+            <div class="document-preview" (click)="previewDocument(media)">
+              <div class="preview-icon">
+                <i class="feather fa-3x" [ngClass]="getFileIcon(media.name)"></i>
+              </div>
+              <div class="document-info">
+                <h6 class="document-name mb-1">{{media?.name}}</h6>
+                <small class="text-muted">
+                  <i class="feather icon-calendar me-1"></i>
+                  {{ media?.created_at | date:'shortDate' }}
+                </small>
+                <small class="text-muted d-block mt-1">
+                  <i class="feather icon-file me-1"></i>
+                  {{ getFileSize(media.size) }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="document-card-footer">
+            <div class="btn-group w-100">
+              <button class="btn btn-sm btn-outline-primary" (click)="openMediaViewer(media)">
+                <i class="feather icon-eye me-1"></i>
+                {{'UV.preview' | translate}}
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="openMediaViewer(media)">
+                <i class="feather icon-maximize me-1"></i>
+                {{'UV.fullscreen' | translate}}
+              </button>
+              <button *ngIf="role=='super_admin'" class="btn btn-sm btn-outline-success" (click)="downloadDocument(media)">
+                <i class="feather icon-download me-1"></i>
+                {{'UV.download' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="(!userMedia || userMedia.length === 0) && !documentsCollapsed" class="empty-state">
+    <div class="empty-state-content">
+      <i class="feather icon-file-text fa-3x text-muted mb-3"></i>
+      <h4>{{'UV.no_documents_found' | translate}}</h4>
+      <p class="text-muted">{{'UV.doc_msg' | translate}}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Document Viewer -->
+<div class="modal fade" [class.show]="isModalOpen" [style.display]="isModalOpen ? 'block' : 'none'">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="feather me-2" [ngClass]="getFileIcon(selectedMedia?.name)"></i>
+          {{ selectedMedia?.name }}
+        </h5>
+        <div class="modal-actions">
+          <button  class="btn btn-sm btn-outline-secondary me-2"
+                  (click)="downloadDocument(selectedMedia)"
+                  *ngIf="selectedMedia && role == 'super_admin'">
+            <i class="feather icon-download"></i>
+          </button>
+          <button type="button" class="btn-close d-flex justify-content-end" (click)="closeModal()"></button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Image Viewer -->
+        <div *ngIf="!isPdf" class="image-viewer">
+          <img [src]="selectedMedia?.url | signedUrl | async"
+               [alt]="selectedMedia?.name"
+               class="img-fluid"
+               (load)="onImageLoad($event)">
+        </div>
+
+        <!-- PDF Loader -->
+        <div *ngIf="isPdf && loadingPdf" class="pdf-loader">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">{{'UV.loading_pdf' | translate}}...</span>
+          </div>
+          <p class="mt-3">{{'UV.preparing_document' | translate}}...</p>
+        </div>
+
+        <!-- PDF Viewer -->
+        <div *ngIf="isPdf && !loadingPdf && pdfUrl" class="pdf-viewer">
+          <iframe [src]="pdfUrl"
+                  width="100%"
+                  [style.height]="pdfIframeHeight"
+                  style="border: none;"
+                  frameborder="0"
+                  (load)="onPdfLoad()">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          {{'UV.close' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
